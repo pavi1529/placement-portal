@@ -1,0 +1,86 @@
+/* Remove all white gaps from the screen completely */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  overflow-x: hidden;
+}
+/* ✨ PREMIUM RECTIFY ANIMATION EFFECTS */
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.sidebar-animation {
+  animation: slideIn 0.5s ease-out;
+}
+
+.floating-cap {
+  animation: float 3s ease-in-out infinite;
+}
+
+.hover-nav-btn {
+  transition: all 0.3s ease;
+}
+.hover-nav-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.05);
+  padding-left: 30px !important;
+  border-radius: 8px;
+}
+
+.stat-card {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+
+.welcome-hero {
+  transition: all 0.4s ease;
+}
+.welcome-hero:hover {
+  box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4) !important;
+}
+/* Smooth content transition on left navigation click */
+.fade-in-animation {
+  animation: fadeInEffect 0.4s ease-in-out;
+}
+
+@keyframes fadeInEffect {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Card Animations */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Animated Progress Bar */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.bg-primary, .bg-success, .bg-danger, .bg-warning {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}

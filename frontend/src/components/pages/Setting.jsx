@@ -1,0 +1,418 @@
+import React, { useState } from 'react';
+import { 
+  Mail, Save, Lock, User, Bell, Shield, 
+  Eye, EyeOff, CheckCircle, AlertCircle,
+  Smartphone, Key, Globe, Moon, Sun,
+  Sparkles, ArrowRight, RefreshCw
+} from 'lucide-react';
+
+export default function Settings({ studentProfile }) {
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [settings, setSettings] = useState({
+    email: studentProfile.email,
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    twoFactorAuth: false,
+    emailNotifications: true,
+    darkMode: true
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setSettings(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSave = () => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    
+    // Simulate save
+    setTimeout(() => {
+      setIsSaving(false);
+      setSaveSuccess(true);
+      
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    }, 1500);
+  };
+
+  // Password strength indicator
+  const getPasswordStrength = (password) => {
+    if (!password) return { label: 'None', color: 'secondary', width: '0%' };
+    if (password.length < 6) return { label: 'Weak', color: 'danger', width: '25%' };
+    if (password.length < 10) return { label: 'Medium', color: 'warning', width: '50%' };
+    if (password.length < 14) return { label: 'Strong', color: 'info', width: '75%' };
+    return { label: 'Very Strong', color: 'success', width: '100%' };
+  };
+
+  const strength = getPasswordStrength(settings.newPassword);
+
+  return (
+    <div>
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          {/* Main Settings Card */}
+          <div 
+            className="card border-0 shadow-lg rounded-4 overflow-hidden"
+            style={{ 
+              background: '#ffffff',
+              border: '1px solid #e9ecef',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.06)'
+            }}
+          >
+            <div className="card-body p-4 p-md-5">
+              {/* Header */}
+              <div className="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom" style={{ borderColor: '#e9ecef !important' }}>
+                <div className="p-3 rounded-3" style={{ background: 'rgba(59, 130, 246, 0.08)', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
+                  <Shield className="text-primary" style={{ width: '1.5rem', height: '1.5rem' }} />
+                </div>
+                <div>
+                  <h5 className="fw-bold text-dark m-0">Security Settings</h5>
+                  <p className="text-secondary small m-0">Manage your account security and preferences</p>
+                </div>
+                <Sparkles className="text-warning ms-auto" style={{ width: '1rem', height: '1rem' }} />
+              </div>
+
+              {/* Success Message */}
+              {saveSuccess && (
+                <div className="alert alert-success d-flex align-items-center gap-2 p-3 mb-4" style={{ 
+                  background: 'rgba(34, 197, 94, 0.08)',
+                  border: '1px solid rgba(34, 197, 94, 0.15)',
+                  borderRadius: '12px',
+                  color: '#16a34a'
+                }}>
+                  <CheckCircle style={{ width: '1rem', height: '1rem' }} />
+                  <span style={{ fontSize: '0.75rem' }}>Settings updated successfully!</span>
+                </div>
+              )}
+
+              {/* Email Section */}
+              <div className="mb-4">
+                <label className="text-secondary small fw-bold text-uppercase d-block mb-2" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                  <Mail className="me-1" style={{ width: '0.7rem', height: '0.7rem' }} />
+                  Email Address
+                </label>
+                <div className="d-flex align-items-center gap-2 p-3 rounded-3" style={{ 
+                  background: 'rgba(0,0,0,0.02)',
+                  border: '1px solid #e9ecef',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e9ecef';
+                }}
+                >
+                  <Mail className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={settings.email}
+                    onChange={handleInputChange}
+                    className="form-control form-control-sm bg-transparent border-0 text-dark" 
+                    style={{ fontSize: '0.8rem' }}
+                  />
+                  <span className="badge bg-primary bg-opacity-10 text-primary border border-primary" style={{ fontSize: '0.5rem' }}>
+                    Verified
+                  </span>
+                </div>
+              </div>
+
+              {/* Password Section */}
+              <div className="mb-4">
+                <label className="text-secondary small fw-bold text-uppercase d-block mb-2" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                  <Lock className="me-1" style={{ width: '0.7rem', height: '0.7rem' }} />
+                  Change Password
+                </label>
+                
+                {/* Current Password */}
+                <div className="d-flex align-items-center gap-2 p-3 rounded-3 mb-2" style={{ 
+                  background: 'rgba(0,0,0,0.02)',
+                  border: '1px solid #e9ecef',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e9ecef';
+                }}
+                >
+                  <Lock className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                  <input 
+                    type={showCurrentPassword ? 'text' : 'password'}
+                    name="currentPassword"
+                    value={settings.currentPassword}
+                    onChange={handleInputChange}
+                    placeholder="Current Password" 
+                    className="form-control form-control-sm bg-transparent border-0 text-dark" 
+                    style={{ fontSize: '0.75rem' }}
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    className="btn btn-sm p-0 text-secondary"
+                    style={{ background: 'transparent', border: 'none' }}
+                  >
+                    {showCurrentPassword ? (
+                      <EyeOff style={{ width: '0.8rem', height: '0.8rem' }} />
+                    ) : (
+                      <Eye style={{ width: '0.8rem', height: '0.8rem' }} />
+                    )}
+                  </button>
+                </div>
+
+                {/* New Password */}
+                <div className="d-flex align-items-center gap-2 p-3 rounded-3 mb-2" style={{ 
+                  background: 'rgba(0,0,0,0.02)',
+                  border: '1px solid #e9ecef',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e9ecef';
+                }}
+                >
+                  <Key className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                  <input 
+                    type={showNewPassword ? 'text' : 'password'}
+                    name="newPassword"
+                    value={settings.newPassword}
+                    onChange={handleInputChange}
+                    placeholder="New Password" 
+                    className="form-control form-control-sm bg-transparent border-0 text-dark" 
+                    style={{ fontSize: '0.75rem' }}
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="btn btn-sm p-0 text-secondary"
+                    style={{ background: 'transparent', border: 'none' }}
+                  >
+                    {showNewPassword ? (
+                      <EyeOff style={{ width: '0.8rem', height: '0.8rem' }} />
+                    ) : (
+                      <Eye style={{ width: '0.8rem', height: '0.8rem' }} />
+                    )}
+                  </button>
+                </div>
+
+                {/* Password Strength */}
+                {settings.newPassword && (
+                  <div className="px-2 mb-2">
+                    <div className="d-flex justify-content-between align-items-center mb-1">
+                      <span className="text-secondary" style={{ fontSize: '0.55rem' }}>Password Strength:</span>
+                      <span className={`text-${strength.color}`} style={{ fontSize: '0.55rem', fontWeight: 'bold' }}>
+                        {strength.label}
+                      </span>
+                    </div>
+                    <div className="rounded-pill" style={{ height: '4px', background: 'rgba(0,0,0,0.05)' }}>
+                      <div 
+                        className={`bg-${strength.color} rounded-pill h-100 transition-all duration-500`}
+                        style={{ width: strength.width }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Confirm Password */}
+                <div className="d-flex align-items-center gap-2 p-3 rounded-3" style={{ 
+                  background: 'rgba(0,0,0,0.02)',
+                  border: '1px solid #e9ecef',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e9ecef';
+                }}
+                >
+                  <CheckCircle className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                  <input 
+                    type="password"
+                    name="confirmPassword"
+                    value={settings.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="Confirm New Password" 
+                    className="form-control form-control-sm bg-transparent border-0 text-dark" 
+                    style={{ fontSize: '0.75rem' }}
+                  />
+                  {settings.confirmPassword && settings.newPassword === settings.confirmPassword && (
+                    <CheckCircle className="text-success" style={{ width: '0.8rem', height: '0.8rem' }} />
+                  )}
+                  {settings.confirmPassword && settings.newPassword !== settings.confirmPassword && (
+                    <AlertCircle className="text-danger" style={{ width: '0.8rem', height: '0.8rem' }} />
+                  )}
+                </div>
+              </div>
+
+              {/* Preferences Section */}
+              <div className="mb-4">
+                <label className="text-secondary small fw-bold text-uppercase d-block mb-2" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                  <User className="me-1" style={{ width: '0.7rem', height: '0.7rem' }} />
+                  Preferences
+                </label>
+                
+                <div className="space-y-2">
+                  {[
+                    { id: 'twoFactorAuth', label: 'Two-Factor Authentication', icon: Smartphone, description: 'Add an extra layer of security' },
+                    { id: 'emailNotifications', label: 'Email Notifications', icon: Bell, description: 'Receive important updates via email' },
+                    { id: 'darkMode', label: 'Dark Mode', icon: Moon, description: 'Enable dark theme' },
+                  ].map((pref) => {
+                    const Icon = pref.icon;
+                    return (
+                      <div key={pref.id} className="d-flex align-items-center gap-3 p-3 rounded-3" style={{ 
+                        background: 'rgba(0,0,0,0.02)',
+                        border: '1px solid #e9ecef',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,0,0,0.04)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,0,0,0.02)';
+                      }}
+                      >
+                        <div className="p-2 rounded-3" style={{ background: 'rgba(59, 130, 246, 0.05)' }}>
+                          <Icon className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                        </div>
+                        <div className="flex-grow-1">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span className="text-dark small fw-medium">{pref.label}</span>
+                            <div className="form-check form-switch m-0">
+                              <input 
+                                className="form-check-input"
+                                type="checkbox"
+                                id={pref.id}
+                                name={pref.id}
+                                checked={settings[pref.id]}
+                                onChange={handleInputChange}
+                                style={{ 
+                                  cursor: 'pointer',
+                                  backgroundColor: settings[pref.id] ? '#3b82f6' : '#d1d5db',
+                                  borderColor: settings[pref.id] ? '#3b82f6' : '#d1d5db',
+                                  width: '40px',
+                                  height: '22px'
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <span className="text-secondary" style={{ fontSize: '0.55rem' }}>{pref.description}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <button 
+                onClick={handleSave}
+                disabled={isSaving}
+                className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 py-3 rounded-3 fw-bold"
+                style={{ 
+                  fontSize: '0.8rem',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 8px 30px rgba(59, 130, 246, 0.15)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSaving) {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(59, 130, 246, 0.25)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(59, 130, 246, 0.15)';
+                }}
+              >
+                {isSaving ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm" style={{ width: '0.8rem', height: '0.8rem' }}></span>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save style={{ width: '0.9rem', height: '0.9rem' }} />
+                    Update Settings
+                    <ArrowRight style={{ width: '0.8rem', height: '0.8rem' }} />
+                  </>
+                )}
+              </button>
+
+              {/* Footer */}
+              <div className="mt-4 pt-3 border-top text-center" style={{ borderColor: '#e9ecef !important' }}>
+                <span className="text-secondary" style={{ fontSize: '0.5rem' }}>
+                  <RefreshCw className="me-1" style={{ width: '0.6rem', height: '0.6rem' }} />
+                  Last updated: Today at 14:30
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        .form-check-input {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .form-check-input:checked {
+          background-color: #3b82f6 !important;
+          border-color: #3b82f6 !important;
+        }
+        
+        .form-check-input:focus {
+          box-shadow: none !important;
+        }
+
+        .space-y-2 > * + * {
+          margin-top: 0.5rem;
+        }
+
+        .transition-all {
+          transition: all 0.3s ease;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: rgba(0,0,0,0.05);
+          border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: rgba(59, 130, 246, 0.3);
+          border-radius: 10px;
+        }
+
+        /* Spinner */
+        .spinner-border {
+          animation: spinner-border 0.75s linear infinite;
+        }
+
+        @keyframes spinner-border {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
