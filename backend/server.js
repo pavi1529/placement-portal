@@ -7,21 +7,22 @@ require('dotenv').config();
 
 const app = express();
 
-
-const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:3001'],
-  credentials: true,
+// 🔥🔥🔥 CORRECTED CORS - Allow All Origins 🔥🔥🔥
+app.use(cors({
+  origin: '*',  // Allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  exposedHeaders: ['Authorization']
-};
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+  exposedHeaders: ['Authorization'],
+  credentials: true
+}));
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/placement_portal')
   .then(() => {
     console.log('✅ MongoDB Connected Successfully');
@@ -32,8 +33,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/placement_p
     process.exit(1);
   });
 
-
-
+// ==================== SCHEMAS ====================
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -48,7 +48,6 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
-
 
 const CompanySchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -66,7 +65,6 @@ const CompanySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const Company = mongoose.model('Company', CompanySchema);
-
 
 const JobSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -98,7 +96,6 @@ const QuestionSchema = new mongoose.Schema({
 
 const Question = mongoose.model('Question', QuestionSchema);
 
-
 const NotificationSchema = new mongoose.Schema({
   title: { type: String, required: true },
   message: { type: String, required: true },
@@ -108,7 +105,6 @@ const NotificationSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const Notification = mongoose.model('Notification', NotificationSchema);
-
 
 const TestSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -125,7 +121,6 @@ const TestSchema = new mongoose.Schema({
 
 const Test = mongoose.model('Test', TestSchema);
 
-
 const ApplicationSchema = new mongoose.Schema({
   student: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   job: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
@@ -140,7 +135,6 @@ const ApplicationSchema = new mongoose.Schema({
 
 const Application = mongoose.model('Application', ApplicationSchema);
 
-
 const ReportSchema = new mongoose.Schema({
   type: { type: String, enum: ['placement', 'student', 'company', 'test'], default: 'placement' },
   department: { type: String, default: 'ALL' },
@@ -153,14 +147,15 @@ const ReportSchema = new mongoose.Schema({
 
 const Report = mongoose.model('Report', ReportSchema);
 
+// ==================== CONSTANTS ====================
 
 const JWT_SECRET = 'placement_portal_secret_key_2026';
 const SALT_ROUNDS = 10;
 
+// ==================== SEED DATABASE ====================
 
 async function seedDatabase() {
   try {
-   
     const adminExists = await User.findOne({ email: 'admin@gmail.com' });
     if (!adminExists) {
       const hashedPassword = await bcrypt.hash('admin123', SALT_ROUNDS);
@@ -169,7 +164,6 @@ async function seedDatabase() {
       console.log('✅ Admin created');
     }
 
-   
     const studentExists = await User.findOne({ email: 'pavi@gmail.com' });
     if (!studentExists) {
       const hashedPassword = await bcrypt.hash('123456', SALT_ROUNDS);
@@ -178,7 +172,6 @@ async function seedDatabase() {
       console.log('✅ Student created');
     }
 
-   
     const companies = ['Google', 'Microsoft', 'Amazon', 'Zoho', 'PayPal'];
     for (const name of companies) {
       const exists = await Company.findOne({ name });
@@ -189,7 +182,6 @@ async function seedDatabase() {
       }
     }
 
-   
     const sampleJobs = [
       { title: 'Software Engineer', location: 'Bangalore', salary: '₹25 LPA', type: 'full-time', status: 'Active' },
       { title: 'Full Stack Developer', location: 'Hyderabad', salary: '₹22 LPA', type: 'full-time', status: 'Active' },
@@ -215,6 +207,7 @@ async function seedDatabase() {
   }
 }
 
+// ==================== AUTH ROUTES ====================
 
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -266,13 +259,13 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// ==================== HELPER FUNCTIONS ====================
 
 const getToken = (req) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return null;
   return authHeader.split(' ')[1];
 };
-
 
 const verifyAdmin = async (req) => {
   const token = getToken(req);
@@ -286,6 +279,7 @@ const verifyAdmin = async (req) => {
   }
 };
 
+// ==================== ADMIN - STUDENTS ====================
 
 app.get('/api/admin/students', async (req, res) => {
   try {
@@ -331,6 +325,7 @@ app.post('/api/admin/students', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - COMPANIES ====================
 
 app.get('/api/admin/companies', async (req, res) => {
   try {
@@ -397,6 +392,7 @@ app.delete('/api/admin/companies/:id', async (req, res) => {
   }
 });
 
+// ==================== JOBS ====================
 
 app.get('/api/jobs', async (req, res) => {
   try {
@@ -475,6 +471,7 @@ app.delete('/api/jobs/:id', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - QUESTIONS ====================
 
 app.get('/api/admin/questions', async (req, res) => {
   try {
@@ -523,6 +520,7 @@ app.delete('/api/admin/questions/:id', async (req, res) => {
   }
 });
 
+// ==================== NOTIFICATIONS ====================
 
 app.get('/api/notifications', async (req, res) => {
   try {
@@ -566,6 +564,7 @@ app.delete('/api/notifications/:id', async (req, res) => {
   }
 });
 
+// ==================== TESTS ====================
 
 app.get('/api/tests', async (req, res) => {
   try {
@@ -609,6 +608,7 @@ app.delete('/api/tests/:id', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - APPLICATIONS ====================
 
 app.get('/api/admin/applications', async (req, res) => {
   try {
@@ -646,6 +646,7 @@ app.put('/api/admin/applications/:id/status', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - REPORTS ====================
 
 app.get('/api/admin/reports', async (req, res) => {
   try {
@@ -691,6 +692,7 @@ app.post('/api/admin/reports/generate', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - PROFILE ====================
 
 app.get('/api/admin/profile', async (req, res) => {
   try {
@@ -731,6 +733,7 @@ app.put('/api/admin/profile', async (req, res) => {
   }
 });
 
+// ==================== ADMIN - DASHBOARD ====================
 
 app.get('/api/admin/dashboard', async (req, res) => {
   try {
@@ -764,6 +767,7 @@ app.get('/api/admin/dashboard', async (req, res) => {
   }
 });
 
+// ==================== PUBLIC ROUTES ====================
 
 app.get('/api/companies', async (req, res) => {
   try {
@@ -774,22 +778,22 @@ app.get('/api/companies', async (req, res) => {
   }
 });
 
-
 app.get('/api/test', (req, res) => {
   res.json({ success: true, message: '✅ API is working!', timestamp: new Date().toISOString() });
 });
 
+// ==================== ERROR HANDLING ====================
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route ' + req.method + ' ' + req.url + ' not found' });
 });
-
 
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err);
   res.status(500).json({ success: false, message: 'Something went wrong!', error: err.message });
 });
 
+// ==================== START SERVER ====================
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
