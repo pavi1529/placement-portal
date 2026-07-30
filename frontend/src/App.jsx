@@ -123,6 +123,7 @@ function App() {
               formData={formData}
               loading={loading}
               error={error}
+              apiUrl={API_URL}
             />
           } 
         />

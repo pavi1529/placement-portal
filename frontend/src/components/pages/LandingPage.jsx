@@ -10,7 +10,8 @@ import {
   XCircle, Check
 } from 'lucide-react';
 
-const API_URL = 'http://localhost:5000/api';
+// 🔥 IMPORTANT: API_URL from props or fallback
+// const API_URL = 'http://localhost:5000/api';  // ❌ REMOVE THIS!
 
 export default function LandingPage({ 
   onLoginClick, 
@@ -19,7 +20,8 @@ export default function LandingPage({
   setFormData,
   formData,
   loading: parentLoading,
-  error: parentError
+  error: parentError,
+  apiUrl  // 👈🔥 NEW PROP - Receive from App.js
 }) {
  
   const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
@@ -107,8 +109,10 @@ export default function LandingPage({
       const password = String(studentLoginData.password);
 
       console.log('🔐 Student Login Attempt:', email);
+      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
 
-      const response = await fetch(`${API_URL}/auth/login`, {
+      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
+      const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,8 +187,10 @@ export default function LandingPage({
 
     try {
       console.log('📝 Student Registration:', registerData.email);
+      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
 
-      const response = await fetch(`${API_URL}/auth/register`, {
+      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
+      const response = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -254,8 +260,10 @@ export default function LandingPage({
       const password = String(adminData.password);
 
       console.log('🔐 Admin Login Attempt:', email);
+      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
 
-      const response = await fetch(`${API_URL}/auth/login`, {
+      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
+      const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -683,7 +691,6 @@ export default function LandingPage({
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              {/* BLOCK TEXT - PLACEMENT PORTAL */}
               <div className="navbar-brand mb-0 h1 fw-black tracking-wider text-white" 
                 style={{ 
                   fontSize: '1.8rem', 
@@ -696,7 +703,6 @@ export default function LandingPage({
               >
                 PLACEMENT PORTAL
               </div>
-              {/* BLOCK TEXT - INTEGRATED PLACEMENT SYSTEM */}
               <div className="d-block text-white-50" 
                 style={{ 
                   fontSize: '0.65rem', 
