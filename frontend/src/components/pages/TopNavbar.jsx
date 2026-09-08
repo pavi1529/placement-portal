@@ -16,7 +16,6 @@ export default function TopNavbar({
   const [showProfileMenu, setShowProfileMenu] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
 
-  // Get current time
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
@@ -34,7 +33,7 @@ export default function TopNavbar({
         backdropFilter: 'blur(20px)',
       }}
     >
-     
+      {/* LEFT SECTION */}
       <div className="d-flex align-items-center gap-3">
         {/* Mobile Menu Toggle */}
         <button 
@@ -47,22 +46,20 @@ export default function TopNavbar({
             color: '#ffffff'
           }}
         >
-          <Menu style={{ width: '1.1rem', height: '1.1rem' }} />
+          <Menu style={{ width: '1.1rem', height: '1.1rem', color: '#ffffff' }} />
         </button>
 
-        {/* Module Label */}
         <div className="d-flex align-items-center gap-2">
           <div className="d-none d-md-flex align-items-center gap-2">
             <div className="p-1.5 rounded-3" style={{ 
               background: 'rgba(255,255,255,0.15)',
               border: '1px solid rgba(255,255,255,0.2)'
             }}>
-              <Sparkles className="text-white" style={{ width: '0.8rem', height: '0.8rem' }} />
+              <Sparkles style={{ width: '0.8rem', height: '0.8rem', color: '#ffffff' }} />
             </div>
             <h6 className="text-white text-uppercase fw-bold m-0" style={{ fontSize: '0.6rem', letterSpacing: '0.05em', opacity: 0.9 }}>
               Student Module
             </h6>
-            <span className="text-white" style={{ fontSize: '0.6rem' }}></span>
           </div>
           <span 
             className="badge text-uppercase px-3 py-2 shadow-sm"
@@ -80,7 +77,6 @@ export default function TopNavbar({
           </span>
         </div>
 
-        {/* Welcome Message */}
         <div className="d-none d-lg-flex align-items-center gap-2">
           <span className="text-white" style={{ fontSize: '0.6rem', opacity: 0.8 }}>
             {getGreeting()}
@@ -91,16 +87,16 @@ export default function TopNavbar({
         </div>
       </div>
 
-     
+      {/* RIGHT SECTION */}
       <div className="d-flex align-items-center gap-2">
-        {/* Search Bar - Desktop */}
+        {/* Search Bar */}
         <div className="d-none d-md-flex align-items-center gap-2 px-3 py-1.5 rounded-3" style={{ 
           background: 'rgba(255,255,255,0.1)',
           border: '1px solid rgba(255,255,255,0.15)',
           transition: 'all 0.3s ease',
           maxWidth: '180px'
         }}>
-          <Search className="text-white" style={{ width: '0.8rem', height: '0.8rem', opacity: 0.7 }} />
+          <Search style={{ width: '0.8rem', height: '0.8rem', opacity: 0.7, color: '#ffffff' }} />
           <input 
             type="text" 
             className="form-control form-control-sm bg-transparent border-0 text-white p-0"
@@ -113,7 +109,7 @@ export default function TopNavbar({
           />
         </div>
 
-        {/* Quick Status */}
+        {/* Status */}
         <div className="d-none d-lg-flex align-items-center gap-1 px-2 py-1 rounded-3" style={{ 
           background: 'rgba(34, 197, 94, 0.15)',
           border: '1px solid rgba(34, 197, 94, 0.25)'
@@ -133,7 +129,7 @@ export default function TopNavbar({
             color: '#ffffff'
           }}
         >
-          <Bell style={{ width: '0.9rem', height: '0.9rem' }} className="text-white" />
+          <Bell style={{ width: '0.9rem', height: '0.9rem', color: '#ffffff' }} />
           {notifications > 0 && (
             <span className="position-absolute top-0 end-0 translate-middle badge rounded-circle bg-danger p-1" style={{ fontSize: '0.5rem', minWidth: '0.8rem' }}>
               {notifications > 9 ? '9+' : notifications}
@@ -141,7 +137,7 @@ export default function TopNavbar({
           )}
         </button>
 
-        {/* Profile Menu */}
+        {/* Profile */}
         <div className="position-relative">
           <button 
             onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -173,10 +169,9 @@ export default function TopNavbar({
                 Student
               </span>
             </div>
-            <ChevronDown className="text-white" style={{ width: '0.7rem', height: '0.7rem', opacity: 0.7 }} />
+            <ChevronDown style={{ width: '0.7rem', height: '0.7rem', opacity: 0.7, color: '#ffffff' }} />
           </button>
 
-          {/* Dropdown Menu */}
           {showProfileMenu && (
             <div 
               className="position-absolute top-100 end-0 mt-2 p-2 rounded-3 shadow-lg"
@@ -204,7 +199,7 @@ export default function TopNavbar({
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
               >
-                <User style={{ width: '0.8rem', height: '0.8rem' }} />
+                <User style={{ width: '0.8rem', height: '0.8rem', color: '#94a3b8' }} />
                 <span style={{ fontSize: '0.7rem' }}>Profile</span>
               </button>
               <button 
@@ -218,7 +213,7 @@ export default function TopNavbar({
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
               >
-                <Settings style={{ width: '0.8rem', height: '0.8rem' }} />
+                <Settings style={{ width: '0.8rem', height: '0.8rem', color: '#94a3b8' }} />
                 <span style={{ fontSize: '0.7rem' }}>Settings</span>
               </button>
               <button 
@@ -233,7 +228,7 @@ export default function TopNavbar({
                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 onClick={onLogout}
               >
-                <LogOut style={{ width: '0.8rem', height: '0.8rem' }} />
+                <LogOut style={{ width: '0.8rem', height: '0.8rem', color: '#f87171' }} />
                 <span style={{ fontSize: '0.7rem' }}>Logout</span>
               </button>
             </div>
@@ -242,12 +237,11 @@ export default function TopNavbar({
 
         {/* Role Badge */}
         <span className="badge bg-white text-dark border border-white rounded-pill px-3 py-2 d-none d-sm-flex" style={{ fontSize: '0.5rem', fontWeight: 'bold' }}>
-          <Shield style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.3rem' }} />
+          <Shield style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.3rem', color: '#000' }} />
           Student
         </span>
       </div>
 
-      {/* CSS Animations */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
@@ -284,19 +278,6 @@ export default function TopNavbar({
         
         .form-control::placeholder {
           color: rgba(255,255,255,0.5) !important;
-        }
-        
-        ::-webkit-scrollbar {
-          width: 2px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: rgba(255,255,255,0.3);
-          border-radius: 10px;
         }
       `}</style>
     </header>
