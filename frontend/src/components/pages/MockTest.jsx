@@ -9,7 +9,7 @@ import {
 const API_URL = 'http://localhost:5000/api';
 
 export default function MockTests() {
- 
+  // State
   const [activeTab, setActiveTab] = useState('easy');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,10 +30,8 @@ export default function MockTests() {
   // Results
   const [results, setResults] = useState({ correct: 0, wrong: 0, unanswered: 0, total: 0, score: 0 });
 
- 
   const token = localStorage.getItem('studentToken');
 
- 
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     try {
       setLoading(true);
@@ -67,7 +65,6 @@ export default function MockTests() {
     }
   };
 
- 
   const fetchQuestions = async (difficulty) => {
     try {
       const data = await apiCall(`/admin/questions`);
@@ -85,7 +82,6 @@ export default function MockTests() {
     }
   };
 
- 
   const getFallbackQuestions = (difficulty) => {
     const allQuestions = {
       easy: [
@@ -94,16 +90,17 @@ export default function MockTests() {
         { _id: '3', question: "What does CPU stand for?", category: "Technical", difficulty: "Easy", options: ["Central Processing Unit", "Computer Processing Unit", "Central Program Unit", "Computer Program Unit"], correctAnswer: "Central Processing Unit" }
       ],
       medium: [
-        { _id: '4', question: "What is the time complexity of binary search?", category: "Technical", difficulty: "Medium", options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"], correctAnswer: "O(log n)" }
+        { _id: '4', question: "What is the time complexity of binary search?", category: "Technical", difficulty: "Medium", options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"], correctAnswer: "O(log n)" },
+        { _id: '6', question: "Which data structure is used for BFS?", category: "Technical", difficulty: "Medium", options: ["Stack", "Queue", "Array", "Tree"], correctAnswer: "Queue" }
       ],
       hard: [
-        { _id: '5', question: "What is the time complexity of building a heap of n elements?", category: "Technical", difficulty: "Hard", options: ["O(n log n)", "O(n)", "O(log n)", "O(n²)"], correctAnswer: "O(n)" }
+        { _id: '5', question: "What is the time complexity of building a heap of n elements?", category: "Technical", difficulty: "Hard", options: ["O(n log n)", "O(n)", "O(log n)", "O(n²)"], correctAnswer: "O(n)" },
+        { _id: '7', question: "What is the space complexity of merge sort?", category: "Technical", difficulty: "Hard", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correctAnswer: "O(n)" }
       ]
     };
     return allQuestions[difficulty] || [];
   };
 
- 
   const loadAllQuestions = async () => {
     setLoading(true);
     try {
@@ -123,7 +120,6 @@ export default function MockTests() {
     }
   };
 
- 
   const getCurrentQuestions = () => {
     switch(activeTab) {
       case 'easy': return easyQuestions;
@@ -137,7 +133,6 @@ export default function MockTests() {
   const totalQuestions = currentQuestions.length;
   const currentQuestion = currentQuestions[currentQuestionIndex] || null;
 
-
   const getDifficultyColor = (difficulty) => {
     const d = difficulty?.toLowerCase() || 'medium';
     if (d === 'easy') return 'success';
@@ -147,15 +142,12 @@ export default function MockTests() {
   };
 
   const getTabIcon = (tab) => {
-    if (tab === 'easy') return <CheckCircle className="text-success" style={{ width: '0.8rem', height: '0.8rem' }} />;
-    if (tab === 'medium') return <AlertCircle className="text-warning" style={{ width: '0.8rem', height: '0.8rem' }} />;
-    if (tab === 'hard') return <XCircle className="text-danger" style={{ width: '0.8rem', height: '0.8rem' }} />;
+    if (tab === 'easy') return <CheckCircle className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />;
+    if (tab === 'medium') return <AlertCircle className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />;
+    if (tab === 'hard') return <XCircle className="text-danger" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />;
     return null;
   };
 
- 
-  
-  // ✅ Option Select - Fixed
   const handleOptionSelect = (optionIndex) => {
     if (!testActive) {
       alert('Please start the test first!');
@@ -165,7 +157,6 @@ export default function MockTests() {
     setAnswers({ ...answers, [currentQuestionIndex]: optionIndex });
   };
 
-  // ✅ Next Button - Fixed
   const handleNext = () => {
     if (!testActive) {
       alert('Please start the test first!');
@@ -179,7 +170,6 @@ export default function MockTests() {
     }
   };
 
-  // ✅ Previous Button - Fixed
   const handlePrevious = () => {
     if (!testActive) {
       alert('Please start the test first!');
@@ -191,7 +181,6 @@ export default function MockTests() {
     }
   };
 
-  // ✅ Submit Test - Fixed
   const handleSubmit = () => {
     if (!window.confirm('Are you sure you want to submit the test?')) return;
 
@@ -217,17 +206,19 @@ export default function MockTests() {
     setTestActive(false);
   };
 
-  // ✅ Start Test - Fixed
   const handleStartTest = () => {
+    if (totalQuestions === 0) {
+      alert('No questions available for this test!');
+      return;
+    }
     setShowResults(false);
     setTestActive(true);
     setCurrentQuestionIndex(0);
     setAnswers({});
     setSelectedOption(null);
-    setTimeLeft(currentQuestions.length * 60 || 1800); // 1 min per question
+    setTimeLeft(currentQuestions.length * 60 || 1800);
   };
 
-  // ✅ Tab Change - Fixed
   const handleTabChange = (tab) => {
     if (testActive) {
       if (!window.confirm('Test in progress. Switching tab will reset the test. Continue?')) return;
@@ -241,7 +232,6 @@ export default function MockTests() {
     setTimeLeft(1800);
   };
 
-
   useEffect(() => {
     let timer;
     if (testActive && timeLeft > 0) {
@@ -254,25 +244,22 @@ export default function MockTests() {
     return () => clearInterval(timer);
   }, [testActive, timeLeft]);
 
- 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
- 
   useEffect(() => {
     loadAllQuestions();
   }, []);
 
- 
   return (
     <div className="animate-fadeIn">
-      {/* ==================== TABS ==================== */}
-      <div className="card border-0 shadow-sm rounded-4 mb-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-        <div className="card-body p-2">
-          <div className="d-flex gap-2">
+      {/* TABS - Responsive */}
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex gap-1 gap-md-2 flex-wrap">
             {['easy', 'medium', 'hard'].map((tab) => {
               const counts = {
                 easy: easyQuestions.length,
@@ -288,21 +275,23 @@ export default function MockTests() {
                 <button
                   key={tab}
                   onClick={() => handleTabChange(tab)}
-                  className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-2 rounded-3 transition-all ${
+                  className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 gap-md-2 rounded-3 transition-all ${
                     activeTab === tab 
                       ? `btn-${colors[tab]} shadow-sm` 
                       : 'btn-outline-secondary text-secondary'
                   }`}
                   style={{ 
-                    padding: '0.6rem 1rem', 
-                    fontSize: '0.75rem', 
+                    padding: 'clamp(0.4rem, 1vw, 0.6rem) clamp(0.5rem, 1.5vw, 1rem)', 
+                    fontSize: 'clamp(0.6rem, 1vw, 0.75rem)', 
                     fontWeight: '600',
-                    border: activeTab === tab ? 'none' : '1px solid #e9ecef'
+                    border: activeTab === tab ? 'none' : '1px solid #e9ecef',
+                    minWidth: 'clamp(60px, 20vw, 100px)'
                   }}
                 >
                   {getTabIcon(tab)}
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  <span className="badge bg-light text-dark rounded-pill ms-1" style={{ fontSize: '0.55rem' }}>
+                  <span className="d-none d-sm-inline">{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
+                  <span className="d-sm-none">{tab.charAt(0).toUpperCase()}</span>
+                  <span className="badge bg-light text-dark rounded-pill ms-1" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                     {counts[tab]}
                   </span>
                 </button>
@@ -312,141 +301,144 @@ export default function MockTests() {
         </div>
       </div>
 
+      {/* Loading State */}
       {loading && (
-        <div className="text-center p-5">
-          <Loader2 className="spinner-border text-primary" style={{ width: '2rem', height: '2rem' }} />
-          <p className="text-secondary mt-2">Loading questions...</p>
+        <div className="text-center py-4 py-md-5">
+          <Loader2 className="spinner-border text-primary" style={{ width: 'clamp(1.5rem, 3vw, 2rem)', height: 'clamp(1.5rem, 3vw, 2rem)' }} />
+          <p className="text-secondary mt-2" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.85rem)' }}>Loading questions...</p>
         </div>
       )}
 
-      
+      {/* No Questions State */}
       {!loading && totalQuestions === 0 && (
-        <div className="card border-0 shadow-sm rounded-4 text-center p-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-          <div className="display-6 mb-3">📝</div>
-          <h5 className="text-dark">No Questions Available</h5>
-          <p className="text-secondary small">No {activeTab} questions found in database</p>
-          <button className="btn btn-primary btn-sm mt-2" onClick={loadAllQuestions}>
-            <RefreshCw style={{ width: '0.8rem', height: '0.8rem' }} className="me-1" /> Refresh
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+          <div className="display-6 mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>📝</div>
+          <h5 className="text-dark" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>No Questions Available</h5>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>No {activeTab} questions found in database</p>
+          <button className="btn btn-primary btn-sm mt-2" onClick={loadAllQuestions} style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)' }}>
+            <RefreshCw style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="me-1" /> Refresh
           </button>
         </div>
       )}
 
-     
+      {/* Test Content */}
       {!loading && totalQuestions > 0 && (
         <>
-          {/* Test Header */}
-          <div className="d-flex justify-content-between align-items-center mb-4">
+          {/* Test Header - Responsive */}
+          <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
             <div>
-              <h5 className="text-dark fw-bold m-0">
+              <h5 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(0.95rem, 2.5vw, 1.25rem)' }}>
                 {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Mock Test
               </h5>
-              <p className="text-secondary small m-0">{totalQuestions} Questions</p>
+              <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.75rem)' }}>{totalQuestions} Questions</p>
             </div>
-            <div className="d-flex align-items-center gap-3">
-              <div className="badge bg-light text-dark border border-light px-3 py-2 rounded-pill">
-                <Clock className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <div className="d-flex flex-wrap align-items-center gap-2 gap-md-3">
+              <div className="badge bg-light text-dark border border-light px-2 px-md-3 py-1 py-md-2 rounded-pill d-flex align-items-center gap-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+                <Clock className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />
                 {formatTime(timeLeft)}
               </div>
               {testActive && (
-                <span className="badge bg-success bg-opacity-10 text-success border border-success">
-                  <span className="d-inline-block rounded-circle bg-success me-1" style={{ width: '0.4rem', height: '0.4rem' }}></span>
+                <span className="badge bg-success bg-opacity-10 text-success border border-success" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                  <span className="d-inline-block rounded-circle bg-success me-1" style={{ width: 'clamp(0.3rem, 0.5vw, 0.4rem)', height: 'clamp(0.3rem, 0.5vw, 0.4rem)' }}></span>
                   Live
                 </span>
               )}
               {!testActive && !showResults && (
-                <span className="badge bg-secondary bg-opacity-10 text-secondary border border-secondary">
-                  <Pause className="me-1" style={{ width: '0.6rem', height: '0.6rem' }} />
+                <span className="badge bg-secondary bg-opacity-10 text-secondary border border-secondary" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                  <Pause className="me-1" style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} />
                   Paused
                 </span>
               )}
-              <span className="badge bg-primary bg-opacity-20 text-primary border border-primary">
+              <span className="badge bg-primary bg-opacity-20 text-primary border border-primary" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
                 {currentQuestionIndex + 1}/{totalQuestions}
               </span>
             </div>
           </div>
 
-          
+          {/* Results Section */}
           {showResults ? (
             <div className="card border-0 shadow-sm rounded-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-              <div className="card-body p-4 text-center">
-                <h5 className="text-dark fw-bold mb-4">Test Results</h5>
+              <div className="card-body p-3 p-md-4 text-center">
+                <h5 className="text-dark fw-bold mb-3 mb-md-4" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>Test Results</h5>
                 
-                <div className="position-relative d-inline-block mb-4">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center" style={{
-                    width: '120px', height: '120px',
+                <div className="position-relative d-inline-block mb-3 mb-md-4">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center mx-auto" style={{
+                    width: 'clamp(100px, 25vw, 120px)', 
+                    height: 'clamp(100px, 25vw, 120px)',
                     background: `conic-gradient(#4f46e5 ${results.score * 3.6}deg, rgba(0,0,0,0.05) 0deg)`,
                     border: '4px solid rgba(79,70,229,0.2)'
                   }}>
                     <div className="rounded-circle d-flex align-items-center justify-content-center flex-column" style={{
-                      width: '100px', height: '100px',
+                      width: 'clamp(80px, 20vw, 100px)', 
+                      height: 'clamp(80px, 20vw, 100px)',
                       background: '#ffffff'
                     }}>
-                      <span className="display-5 fw-bold text-primary">{results.score}%</span>
-                      <span className="text-secondary small">Score</span>
+                      <span className="display-5 fw-bold text-primary" style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)' }}>{results.score}%</span>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.55rem, 0.8vw, 0.65rem)' }}>Score</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="row g-3 mb-4">
+                <div className="row g-2 g-md-3 mb-3 mb-md-4">
                   <div className="col-4">
-                    <div className="p-3 rounded-3" style={{ background: 'rgba(34,197,94,0.08)' }}>
-                      <CheckCircle className="text-success" style={{ width: '1.5rem', height: '1.5rem' }} />
-                      <h4 className="text-success fw-bold mt-2">{results.correct}</h4>
-                      <span className="text-secondary small">Correct</span>
+                    <div className="p-2 p-md-3 rounded-3" style={{ background: 'rgba(34,197,94,0.08)' }}>
+                      <CheckCircle className="text-success" style={{ width: 'clamp(1.2rem, 2.5vw, 1.5rem)', height: 'clamp(1.2rem, 2.5vw, 1.5rem)' }} />
+                      <h4 className="text-success fw-bold mt-1 mt-md-2" style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)' }}>{results.correct}</h4>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>Correct</span>
                     </div>
                   </div>
                   <div className="col-4">
-                    <div className="p-3 rounded-3" style={{ background: 'rgba(239,68,68,0.08)' }}>
-                      <XCircle className="text-danger" style={{ width: '1.5rem', height: '1.5rem' }} />
-                      <h4 className="text-danger fw-bold mt-2">{results.wrong}</h4>
-                      <span className="text-secondary small">Wrong</span>
+                    <div className="p-2 p-md-3 rounded-3" style={{ background: 'rgba(239,68,68,0.08)' }}>
+                      <XCircle className="text-danger" style={{ width: 'clamp(1.2rem, 2.5vw, 1.5rem)', height: 'clamp(1.2rem, 2.5vw, 1.5rem)' }} />
+                      <h4 className="text-danger fw-bold mt-1 mt-md-2" style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)' }}>{results.wrong}</h4>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>Wrong</span>
                     </div>
                   </div>
                   <div className="col-4">
-                    <div className="p-3 rounded-3" style={{ background: 'rgba(234,179,8,0.08)' }}>
-                      <AlertCircle className="text-warning" style={{ width: '1.5rem', height: '1.5rem' }} />
-                      <h4 className="text-warning fw-bold mt-2">{results.unanswered}</h4>
-                      <span className="text-secondary small">Unanswered</span>
+                    <div className="p-2 p-md-3 rounded-3" style={{ background: 'rgba(234,179,8,0.08)' }}>
+                      <AlertCircle className="text-warning" style={{ width: 'clamp(1.2rem, 2.5vw, 1.5rem)', height: 'clamp(1.2rem, 2.5vw, 1.5rem)' }} />
+                      <h4 className="text-warning fw-bold mt-1 mt-md-2" style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)' }}>{results.unanswered}</h4>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>Unanswered</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="d-flex gap-2 justify-content-center">
-                  <button className="btn btn-primary shadow-sm transition-all hover:scale-105" onClick={handleStartTest}>
-                    <Play style={{ width: '0.8rem', height: '0.8rem' }} className="me-1" /> Retry Test
+                <div className="d-flex flex-wrap gap-2 justify-content-center">
+                  <button className="btn btn-primary shadow-sm transition-all hover:scale-105" onClick={handleStartTest} style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.85rem)', padding: 'clamp(0.4rem, 1vw, 0.6rem) clamp(0.8rem, 2vw, 1.2rem)' }}>
+                    <Play style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="me-1" /> Retry Test
                   </button>
                   <button className="btn btn-outline-secondary transition-all hover:scale-105" onClick={() => {
                     setShowResults(false);
                     setCurrentQuestionIndex(0);
-                  }}>
-                    <ListChecks style={{ width: '0.8rem', height: '0.8rem' }} className="me-1" /> Review
+                  }} style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.85rem)', padding: 'clamp(0.4rem, 1vw, 0.6rem) clamp(0.8rem, 2vw, 1.2rem)' }}>
+                    <ListChecks style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="me-1" /> Review
                   </button>
                 </div>
               </div>
             </div>
           ) : (
-            
+            // Question Section - Responsive
             <>
-              <div className="card border-0 shadow-sm rounded-4 mb-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-                <div className="card-body p-4">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <span className="text-secondary small">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+                <div className="card-body p-3 p-md-4">
+                  <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <span className="text-secondary small" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
                       Question {currentQuestionIndex + 1} of {totalQuestions}
                     </span>
-                    <div className="d-flex gap-2">
-                      <span className={`badge bg-${getDifficultyColor(currentQuestion?.difficulty)} bg-opacity-10 text-${getDifficultyColor(currentQuestion?.difficulty)} border border-${getDifficultyColor(currentQuestion?.difficulty)}`}>
+                    <div className="d-flex gap-1 gap-md-2 flex-wrap">
+                      <span className={`badge bg-${getDifficultyColor(currentQuestion?.difficulty)} bg-opacity-10 text-${getDifficultyColor(currentQuestion?.difficulty)} border border-${getDifficultyColor(currentQuestion?.difficulty)}`} style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
                         {currentQuestion?.difficulty || 'Medium'}
                       </span>
-                      <span className="badge bg-primary bg-opacity-20 text-primary border border-primary">
+                      <span className="badge bg-primary bg-opacity-20 text-primary border border-primary" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
                         {currentQuestion?.category || 'General'}
                       </span>
                     </div>
                   </div>
                   
-                  {/* Question Text */}
-                  <h6 className="text-dark mb-3">{currentQuestion?.question || 'No question available'}</h6>
+                  <h6 className="text-dark mb-3" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.1rem)' }}>
+                    {currentQuestion?.question || 'No question available'}
+                  </h6>
                   
-                  {/* ✅ Options - FIXED: Clickable only when testActive */}
                   <div className="space-y-2">
                     {currentQuestion?.options?.map((option, index) => {
                       const isSelected = selectedOption === index;
@@ -455,7 +447,7 @@ export default function MockTests() {
                       return (
                         <div 
                           key={index}
-                          className={`p-3 rounded-3 border cursor-pointer transition-all ${
+                          className={`p-2 p-md-3 rounded-3 border cursor-pointer transition-all ${
                             isSelected ? 'border-primary bg-primary bg-opacity-10' : 
                             isAnswered && answers[currentQuestionIndex] === index ? 'border-success bg-success bg-opacity-10' :
                             'border-light hover:border-primary'
@@ -466,15 +458,16 @@ export default function MockTests() {
                             background: isSelected ? 'rgba(59,130,246,0.05)' : 
                                       isAnswered && answers[currentQuestionIndex] === index ? 'rgba(34,197,94,0.05)' :
                                       'rgba(0,0,0,0.01)',
-                            opacity: testActive ? 1 : 0.7
+                            opacity: testActive ? 1 : 0.7,
+                            fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)'
                           }}
                         >
                           <span className="text-dark">{String.fromCharCode(65 + index)}. {option}</span>
                           {isSelected && testActive && (
-                            <CheckCircle className="float-end text-primary" style={{ width: '1rem', height: '1rem' }} />
+                            <CheckCircle className="float-end text-primary" style={{ width: 'clamp(0.8rem, 1.5vw, 1rem)', height: 'clamp(0.8rem, 1.5vw, 1rem)' }} />
                           )}
                           {!testActive && isAnswered && answers[currentQuestionIndex] === index && (
-                            <CheckCircle className="float-end text-success" style={{ width: '1rem', height: '1rem' }} />
+                            <CheckCircle className="float-end text-success" style={{ width: 'clamp(0.8rem, 1.5vw, 1rem)', height: 'clamp(0.8rem, 1.5vw, 1rem)' }} />
                           )}
                         </div>
                       );
@@ -483,23 +476,26 @@ export default function MockTests() {
                 </div>
               </div>
 
-              {/* ==================== CONTROLS - FIXED ==================== */}
-              <div className="d-flex justify-content-between align-items-center">
+              {/* Controls - Responsive */}
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <button 
                   className="btn btn-outline-secondary d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
                   onClick={handlePrevious}
                   disabled={!testActive || currentQuestionIndex === 0}
+                  style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)', padding: 'clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem)' }}
                 >
-                  <SkipBack style={{ width: '0.8rem', height: '0.8rem' }} /> Previous
+                  <SkipBack style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> 
+                  <span className="d-none d-sm-inline">Previous</span>
                 </button>
                 
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-1 gap-md-2 flex-wrap justify-content-center">
                   {!testActive && !showResults && (
                     <button 
                       className="btn btn-primary d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
                       onClick={handleStartTest}
+                      style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)', padding: 'clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem)' }}
                     >
-                      <Play style={{ width: '0.8rem', height: '0.8rem' }} /> Start Test
+                      <Play style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Start Test
                     </button>
                   )}
                   
@@ -508,14 +504,16 @@ export default function MockTests() {
                       <button 
                         className="btn btn-outline-secondary d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
                         onClick={() => setTestActive(false)}
+                        style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)', padding: 'clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem)' }}
                       >
-                        <Pause style={{ width: '0.8rem', height: '0.8rem' }} /> Pause
+                        <Pause style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Pause
                       </button>
                       <button 
                         className="btn btn-success d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
                         onClick={handleSubmit}
+                        style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)', padding: 'clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem)' }}
                       >
-                        <Award style={{ width: '0.8rem', height: '0.8rem' }} /> Submit Test
+                        <Award style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Submit
                       </button>
                     </>
                   )}
@@ -525,18 +523,20 @@ export default function MockTests() {
                   className="btn btn-outline-primary d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
                   onClick={handleNext}
                   disabled={!testActive || currentQuestionIndex === totalQuestions - 1}
+                  style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)', padding: 'clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 1rem)' }}
                 >
-                  Next <SkipForward style={{ width: '0.8rem', height: '0.8rem' }} />
+                  <span className="d-none d-sm-inline">Next</span>
+                  <SkipForward style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />
                 </button>
               </div>
 
-              {/* Progress Bar */}
+              {/* Progress Bar - Responsive */}
               <div className="mt-3">
                 <div className="d-flex justify-content-between small text-secondary">
-                  <span>Progress</span>
-                  <span>{totalQuestions > 0 ? Math.round((Object.keys(answers).length / totalQuestions) * 100) : 0}%</span>
+                  <span style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>Progress</span>
+                  <span style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{totalQuestions > 0 ? Math.round((Object.keys(answers).length / totalQuestions) * 100) : 0}%</span>
                 </div>
-                <div className="progress" style={{ height: '4px', background: 'rgba(0,0,0,0.05)' }}>
+                <div className="progress" style={{ height: 'clamp(3px, 0.5vw, 4px)', background: 'rgba(0,0,0,0.05)' }}>
                   <div 
                     className="progress-bar bg-primary" 
                     style={{ 
@@ -612,6 +612,31 @@ export default function MockTests() {
         .btn-primary:hover {
           transform: scale(1.05);
           box-shadow: 0 8px 30px rgba(79,70,229,0.3) !important;
+        }
+
+        /* Responsive overrides */
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.25rem 0.5rem !important;
+          }
+          .badge {
+            padding: 0.15rem 0.4rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
         
         ::-webkit-scrollbar {

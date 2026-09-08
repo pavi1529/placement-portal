@@ -19,7 +19,6 @@ export default function Companies({ token }) {
   const [showDetails, setShowDetails] = useState(false);
   const [bookmarkedCompanies, setBookmarkedCompanies] = useState([]);
 
-
   const sampleCompanies = [
     {
       _id: '1',
@@ -197,7 +196,6 @@ export default function Companies({ token }) {
     }
   };
 
-  
   const toggleBookmark = (companyId) => {
     if (bookmarkedCompanies.includes(companyId)) {
       setBookmarkedCompanies(bookmarkedCompanies.filter(id => id !== companyId));
@@ -210,7 +208,6 @@ export default function Companies({ token }) {
     return bookmarkedCompanies.includes(companyId);
   };
 
- 
   useEffect(() => {
     if (token) {
       fetchCompanies();
@@ -219,7 +216,6 @@ export default function Companies({ token }) {
     }
   }, [token]);
 
- 
   const filteredCompanies = companies.filter(company => {
     const matchesSearch = company?.name?.toLowerCase().includes(searchQuery?.toLowerCase() || '') ||
                           company?.industry?.toLowerCase().includes(searchQuery?.toLowerCase() || '') ||
@@ -234,7 +230,6 @@ export default function Companies({ token }) {
   const startupCompanies = companies.filter(c => c?.tier === 'Startup').length;
   const totalOpenRoles = companies.reduce((sum, c) => sum + (c?.openRoles || 0), 0);
 
- 
   const getTierColor = (tier) => {
     switch(tier) {
       case 'Product': return 'primary';
@@ -246,9 +241,9 @@ export default function Companies({ token }) {
 
   const getTierIcon = (tier) => {
     switch(tier) {
-      case 'Product': return <Star className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Services': return <Briefcase className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Startup': return <TrendingUp className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Product': return <Star className="text-primary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Services': return <Briefcase className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Startup': return <TrendingUp className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
       default: return null;
     }
   };
@@ -273,34 +268,37 @@ export default function Companies({ token }) {
     return name?.charAt(0) || 'C';
   };
 
-
   if (loading) {
     return (
       <div className="text-center py-5">
-        <Loader2 className="spinner-border text-primary" style={{ width: '2rem', height: '2rem' }} />
-        <p className="text-secondary mt-2">Loading companies...</p>
+        <Loader2 className="spinner-border text-primary" style={{ width: 'clamp(1.5rem, 3vw, 2rem)', height: 'clamp(1.5rem, 3vw, 2rem)' }} />
+        <p className="text-secondary mt-2" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.85rem)' }}>Loading companies...</p>
       </div>
     );
   }
 
   return (
     <div className="animate-fadeIn">
-      
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      {/* Header */}
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
         <div>
-          <h5 className="text-dark fw-bold m-0">Partner Companies</h5>
-          <p className="text-secondary small m-0">Connect with top companies hiring fresh talent</p>
+          <h5 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+            Partner Companies
+          </h5>
+          <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+            Connect with top companies hiring fresh talent
+          </p>
         </div>
         <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2">
-            <Zap style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} />
+          <span className="badge bg-success bg-opacity-10 text-success border border-success px-2 px-md-3 py-1 py-md-2" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>
+            <Zap style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} />
             {totalOpenRoles} Open Roles
           </span>
         </div>
       </div>
 
-    
-      <div className="row g-3 mb-4">
+      {/* Stats Cards */}
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
           { label: "Total Companies", value: totalCompanies, color: "primary", icon: Building2 },
           { label: "Product", value: productCompanies, color: "primary", icon: Star },
@@ -317,15 +315,24 @@ export default function Companies({ token }) {
           };
           return (
             <div key={i} className="col-6 col-lg">
-              <div className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-1" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-                <div className="card-body p-3">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100" style={{ background: '#ffffff', border: '1px solid #e9ecef', transition: 'all 0.3s ease' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
+                }}
+              >
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.5rem' }}>{stat.label}</span>
-                    <div className={`p-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                    <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>{stat.label}</span>
+                    <div className={`p-1 p-md-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
+                      <Icon className={`text-${stat.color}`} style={{ width: 'clamp(0.7rem, 1.2vw, 0.9rem)', height: 'clamp(0.7rem, 1.2vw, 0.9rem)' }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>{stat.value}</h4>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -333,28 +340,28 @@ export default function Companies({ token }) {
         })}
       </div>
 
-     
-      <div className="card border-0 shadow-sm rounded-4 mb-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-3 align-items-center">
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: '300px' }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+      {/* Search & Filter */}
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <div className="d-flex align-items-center gap-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: 'clamp(160px, 35vw, 300px)' }}>
+              <Search className="text-secondary" style={{ width: 'clamp(0.7rem, 1.1vw, 0.8rem)', height: 'clamp(0.7rem, 1.1vw, 0.8rem)' }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-dark" 
-                placeholder="Search companies..." 
+                placeholder="Search..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.75rem', outline: 'none' }}
+                style={{ fontSize: 'clamp(0.6rem, 1vw, 0.75rem)', outline: 'none', padding: '0.1rem 0' }}
               />
             </div>
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light">
-              <Filter className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1 flex-md-grow-0">
+              <Filter className="text-secondary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-dark" 
                 value={filterTier}
                 onChange={(e) => setFilterTier(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '140px', outline: 'none' }}
+                style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', width: 'clamp(90px, 15vw, 140px)', outline: 'none', padding: '0.1rem 0.4rem' }}
               >
                 <option value="ALL">All Tiers</option>
                 <option value="Product">Product</option>
@@ -363,48 +370,60 @@ export default function Companies({ token }) {
               </select>
             </div>
             <button 
-              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
+              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm"
               onClick={fetchCompanies}
+              style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)', padding: '0.2rem 0.5rem' }}
             >
-              <RefreshCw style={{ width: '0.8rem', height: '0.8rem' }} /> Refresh
+              <RefreshCw style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> 
+              <span className="d-none d-sm-inline">Refresh</span>
             </button>
-            <span className="text-secondary small ms-auto">{filteredCompanies.length} companies</span>
+            <span className="text-secondary small ms-auto d-none d-md-block" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' }}>
+              {filteredCompanies.length} companies
+            </span>
           </div>
         </div>
       </div>
 
-     
+      {/* Companies Grid */}
       {filteredCompanies.length === 0 ? (
-        <div className="card border-0 shadow-sm rounded-4 text-center p-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-          <Building2 className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No companies found</h6>
-          <p className="text-secondary small">Try adjusting your search or filters</p>
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+          <Building2 className="text-secondary mx-auto" style={{ width: 'clamp(2rem, 4vw, 3rem)', height: 'clamp(2rem, 4vw, 3rem)' }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>No companies found</h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>Try adjusting your search or filters</p>
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="row g-2 g-md-3 g-lg-4">
           {filteredCompanies.map((company, index) => {
             const isBookmarkedCompany = isBookmarked(company?._id);
             const companyColor = getCompanyColor(company?.name);
             const companyInitial = getCompanyInitial(company?.name);
             
             return (
-              <div key={company?._id || index} className="col-md-6 col-lg-4">
+              <div key={company?._id || index} className="col-sm-6 col-xl-4">
                 <div 
-                  className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-2"
+                  className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100"
                   style={{ 
                     background: '#ffffff',
                     border: '1px solid #e9ecef',
-                    animation: `slideUp ${0.3 + index * 0.05}s ease-out forwards`
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
                   }}
                 >
-                  <div className="card-body p-4 d-flex flex-column">
+                  <div className="card-body p-3 p-md-4 d-flex flex-column">
                     {/* Company Logo & Header */}
-                    <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="d-flex align-items-start gap-2 gap-md-3 mb-2 mb-md-3">
                       <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
-                        width: '48px', 
-                        height: '48px',
+                        width: 'clamp(36px, 6vw, 48px)', 
+                        height: 'clamp(36px, 6vw, 48px)',
                         background: companyColor,
-                        fontSize: '1.2rem',
+                        fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)',
                         fontWeight: 'bold',
                         color: '#fff',
                         boxShadow: `0 4px 15px ${companyColor}40`
@@ -412,41 +431,43 @@ export default function Companies({ token }) {
                         {companyInitial}
                       </div>
                       <div className="flex-grow-1 min-w-0">
-                        <h6 className="fw-bold text-dark m-0 text-truncate">{company?.name}</h6>
-                        <span className="text-secondary d-flex align-items-center gap-1" style={{ fontSize: '0.55rem' }}>
-                          <MapPin style={{ width: '0.6rem', height: '0.6rem' }} /> 
+                        <h6 className="fw-bold text-dark m-0 text-truncate" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>
+                          {company?.name}
+                        </h6>
+                        <span className="text-secondary d-flex align-items-center gap-1" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
+                          <MapPin style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} /> 
                           {company?.location || 'N/A'}
                         </span>
                       </div>
                       <button 
                         onClick={() => toggleBookmark(company?._id)}
-                        className="btn btn-sm p-0 transition-all hover:scale-110"
+                        className="btn btn-sm p-0 transition-all hover:scale-110 flex-shrink-0"
                         style={{ background: 'transparent', border: 'none' }}
                       >
                         {isBookmarkedCompany ? (
-                          <Heart className="text-danger" style={{ width: '0.9rem', height: '0.9rem', fill: '#ef4444' }} />
+                          <Heart className="text-danger" style={{ width: 'clamp(0.7rem, 1.2vw, 0.9rem)', height: 'clamp(0.7rem, 1.2vw, 0.9rem)', fill: '#ef4444' }} />
                         ) : (
-                          <Heart className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                          <Heart className="text-secondary" style={{ width: 'clamp(0.7rem, 1.2vw, 0.9rem)', height: 'clamp(0.7rem, 1.2vw, 0.9rem)' }} />
                         )}
                       </button>
                     </div>
 
                     {/* Company Details */}
                     <div className="space-y-1.5 flex-grow-1">
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <Briefcase className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Industry</span>
-                        <span className="text-dark fw-bold" style={{ fontSize: '0.65rem' }}>{company?.industry || 'N/A'}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <Briefcase className="text-primary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />
+                        <span className="text-secondary small flex-grow-1" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Industry</span>
+                        <span className="text-dark fw-bold" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{company?.industry || 'N/A'}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <Award className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Min CGPA</span>
-                        <span className="text-primary fw-bold" style={{ fontSize: '0.65rem' }}>{company?.minCgpa || 'N/A'}+</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <Award className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />
+                        <span className="text-secondary small flex-grow-1" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Min CGPA</span>
+                        <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{company?.minCgpa || 'N/A'}+</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <Users className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Open Roles</span>
-                        <span className="text-success fw-bold" style={{ fontSize: '0.65rem' }}>{company?.openRoles || 0}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <Users className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />
+                        <span className="text-secondary small flex-grow-1" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Open Roles</span>
+                        <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{company?.openRoles || 0}</span>
                       </div>
                     </div>
 
@@ -455,8 +476,8 @@ export default function Companies({ token }) {
                       <div className="mt-2">
                         <div className="d-flex flex-wrap gap-1">
                           {company.highlights.slice(0, 3).map((highlight, i) => (
-                            <span key={i} className="badge bg-light text-secondary border border-light" style={{ fontSize: '0.45rem' }}>
-                              <Sparkles style={{ width: '0.4rem', height: '0.4rem', marginRight: '0.2rem' }} />
+                            <span key={i} className="badge bg-light text-secondary border border-light" style={{ fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)' }}>
+                              <Sparkles style={{ width: 'clamp(0.3rem, 0.5vw, 0.4rem)', height: 'clamp(0.3rem, 0.5vw, 0.4rem)', marginRight: '0.1rem' }} />
                               {highlight}
                             </span>
                           ))}
@@ -465,16 +486,17 @@ export default function Companies({ token }) {
                     )}
 
                     {/* Tier Badge & Actions */}
-                    <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
-                      <span className={`badge bg-${getTierColor(company?.tier)} bg-opacity-10 text-${getTierColor(company?.tier)} border border-${getTierColor(company?.tier)} d-flex align-items-center gap-1`} style={{ fontSize: '0.5rem' }}>
+                    <div className="mt-3 pt-2 pt-md-3 border-top border-light d-flex gap-2">
+                      <span className={`badge bg-${getTierColor(company?.tier)} bg-opacity-10 text-${getTierColor(company?.tier)} border border-${getTierColor(company?.tier)} d-flex align-items-center gap-1`} style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
                         {getTierIcon(company?.tier)} {company?.tier || 'N/A'}
                       </span>
                       <button 
                         onClick={() => { setSelectedCompany(company); setShowDetails(true); }}
-                        className="btn btn-outline-primary btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm transition-all hover:scale-105 ms-auto"
-                        style={{ fontSize: '0.6rem', borderRadius: '8px' }}
+                        className="btn btn-outline-primary btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm ms-auto"
+                        style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)', borderRadius: '8px', padding: '0.25rem 0.4rem' }}
                       >
-                        <Eye style={{ width: '0.7rem', height: '0.7rem' }} /> View Details
+                        <Eye style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} /> 
+                        <span className="d-none d-sm-inline">View Details</span>
                       </button>
                     </div>
                   </div>
@@ -485,42 +507,56 @@ export default function Companies({ token }) {
         </div>
       )}
 
-      
+      {/* Company Details Modal */}
       {showDetails && selectedCompany && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(5px)',
-          animation: 'fadeIn 0.3s ease'
-        }}>
-          <div className="card border-0 shadow-lg rounded-4" style={{ maxWidth: '550px', width: '95%', maxHeight: '90vh', overflowY: 'auto', background: '#ffffff' }}>
-            <div className="card-body p-4">
+          padding: '1rem'
+        }}
+        onClick={() => setShowDetails(false)}
+        >
+          <div className="card border-0 shadow-lg rounded-4" style={{ 
+            maxWidth: 'clamp(320px, 85vw, 550px)', 
+            width: '100%', 
+            maxHeight: '90vh', 
+            overflowY: 'auto', 
+            background: '#ffffff'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            <div className="card-body p-3 p-md-4">
               <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-light pb-3">
-                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2">
-                  <Building2 className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Building2 className="text-primary" style={{ width: 'clamp(0.9rem, 2vw, 1.2rem)', height: 'clamp(0.9rem, 2vw, 1.2rem)' }} />
                   Company Details
                 </h5>
-                <button onClick={() => setShowDetails(false)} className="btn btn-close"></button>
+                <button onClick={() => setShowDetails(false)} className="btn btn-close" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               {/* Company Header */}
               <div className="text-center mb-3">
                 <div className="d-inline-flex align-items-center justify-content-center rounded-circle" style={{ 
-                  width: '64px', height: '64px',
+                  width: 'clamp(50px, 10vw, 64px)', 
+                  height: 'clamp(50px, 10vw, 64px)',
                   background: getCompanyColor(selectedCompany?.name),
-                  fontSize: '1.5rem',
+                  fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
                   fontWeight: 'bold',
                   color: '#fff',
                   boxShadow: `0 4px 20px ${getCompanyColor(selectedCompany?.name)}50`
                 }}>
                   {getCompanyInitial(selectedCompany?.name)}
                 </div>
-                <h5 className="text-dark fw-bold mt-2">{selectedCompany?.name}</h5>
+                <h5 className="text-dark fw-bold mt-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.05rem)' }}>
+                  {selectedCompany?.name}
+                </h5>
                 <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-                  <span className={`badge bg-${getTierColor(selectedCompany?.tier)} bg-opacity-10 text-${getTierColor(selectedCompany?.tier)} border border-${getTierColor(selectedCompany?.tier)}`}>
+                  <span className={`badge bg-${getTierColor(selectedCompany?.tier)} bg-opacity-10 text-${getTierColor(selectedCompany?.tier)} border border-${getTierColor(selectedCompany?.tier)}`}
+                        style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                     {selectedCompany?.tier}
                   </span>
-                  <span className="badge bg-light text-secondary border border-light">
+                  <span className="badge bg-light text-secondary border border-light" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                     {selectedCompany?.industry || 'N/A'}
                   </span>
                 </div>
@@ -530,26 +566,26 @@ export default function Companies({ token }) {
               <div className="row g-2 mb-3">
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Location</span>
-                    <span className="text-dark">{selectedCompany?.location || 'N/A'}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Location</span>
+                    <span className="text-dark" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{selectedCompany?.location || 'N/A'}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Min CGPA</span>
-                    <span className="text-primary fw-bold">{selectedCompany?.minCgpa || 'N/A'}+</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Min CGPA</span>
+                    <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{selectedCompany?.minCgpa || 'N/A'}+</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Open Roles</span>
-                    <span className="text-success fw-bold">{selectedCompany?.openRoles || 0}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Open Roles</span>
+                    <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{selectedCompany?.openRoles || 0}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Phone</span>
-                    <span className="text-dark">{selectedCompany?.phone || 'N/A'}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Phone</span>
+                    <span className="text-dark" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)' }}>{selectedCompany?.phone || 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -557,26 +593,26 @@ export default function Companies({ token }) {
               {/* Description */}
               {selectedCompany?.description && (
                 <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Description</span>
-                  <p className="text-dark small mb-0" style={{ fontSize: '0.7rem' }}>{selectedCompany.description}</p>
+                  <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Description</span>
+                  <p className="text-dark small mb-0" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany.description}</p>
                 </div>
               )}
 
               {/* Contact */}
               <div className="space-y-2">
                 {selectedCompany?.email && (
-                  <div className="d-flex align-items-center gap-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <Mail className="text-info" style={{ width: '0.8rem', height: '0.8rem' }} />
-                    <span className="text-secondary small flex-grow-1">Email</span>
-                    <span className="text-dark small">{selectedCompany.email}</span>
+                  <div className="d-flex flex-wrap align-items-center gap-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                    <Mail className="text-info" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
+                    <span className="text-secondary small flex-grow-1" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Email</span>
+                    <span className="text-dark small" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>{selectedCompany.email}</span>
                   </div>
                 )}
                 {selectedCompany?.website && (
-                  <div className="d-flex align-items-center gap-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <Globe className="text-primary" style={{ width: '0.8rem', height: '0.8rem' }} />
-                    <span className="text-secondary small flex-grow-1">Website</span>
-                    <a href={selectedCompany.website} target="_blank" rel="noopener noreferrer" className="text-primary small text-decoration-none">
-                      Visit <ExternalLink style={{ width: '0.6rem', height: '0.6rem' }} />
+                  <div className="d-flex flex-wrap align-items-center gap-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                    <Globe className="text-primary" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
+                    <span className="text-secondary small flex-grow-1" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Website</span>
+                    <a href={selectedCompany.website} target="_blank" rel="noopener noreferrer" className="text-primary small text-decoration-none" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>
+                      Visit <ExternalLink style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} />
                     </a>
                   </div>
                 )}
@@ -585,11 +621,11 @@ export default function Companies({ token }) {
               {/* Highlights */}
               {selectedCompany?.highlights && selectedCompany.highlights.length > 0 && (
                 <div className="mt-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Highlights</span>
+                  <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>Highlights</span>
                   <div className="d-flex flex-wrap gap-1 mt-1">
                     {selectedCompany.highlights.map((highlight, i) => (
-                      <span key={i} className="badge bg-light text-secondary border border-light" style={{ fontSize: '0.55rem' }}>
-                        <Sparkles style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.2rem' }} />
+                      <span key={i} className="badge bg-light text-secondary border border-light" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                        <Sparkles style={{ width: 'clamp(0.4rem, 0.7vw, 0.6rem)', height: 'clamp(0.4rem, 0.7vw, 0.6rem)', marginRight: '0.1rem' }} />
                         {highlight}
                       </span>
                     ))}
@@ -598,10 +634,13 @@ export default function Companies({ token }) {
               )}
 
               {/* Actions */}
-              <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
-                <button onClick={() => setShowDetails(false)} className="btn btn-secondary flex-grow-1">Close</button>
-                <button className="btn btn-primary flex-grow-1 d-flex align-items-center justify-content-center gap-1">
-                  <ExternalLink style={{ width: '0.9rem', height: '0.9rem' }} /> Visit Website
+              <div className="mt-3 pt-3 border-top border-light d-flex gap-2 flex-wrap">
+                <button onClick={() => setShowDetails(false)} className="btn btn-secondary flex-grow-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  Close
+                </button>
+                <button className="btn btn-primary flex-grow-1 d-flex align-items-center justify-content-center gap-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  <ExternalLink style={{ width: 'clamp(0.7rem, 1.2vw, 0.9rem)', height: 'clamp(0.7rem, 1.2vw, 0.9rem)' }} /> 
+                  Visit Website
                 </button>
               </div>
             </div>
@@ -670,6 +709,34 @@ export default function Companies({ token }) {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+
+        /* Responsive overrides */
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.2rem 0.4rem !important;
+          }
+          .badge {
+            padding: 0.1rem 0.35rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
         
         ::-webkit-scrollbar {

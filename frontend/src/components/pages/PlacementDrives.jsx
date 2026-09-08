@@ -17,13 +17,11 @@ export default function PlacementDrives({ jobDrives = [] }) {
   const [selectedDrive, setSelectedDrive] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  
   const getSafeString = (value) => {
     if (value === null || value === undefined) return '';
     if (typeof value === 'string') return value;
     if (typeof value === 'number') return String(value);
     if (typeof value === 'object') {
-      // If it's an object with a name or title property, extract it
       if (value.name) return String(value.name);
       if (value.title) return String(value.title);
       if (value.label) return String(value.label);
@@ -36,13 +34,11 @@ export default function PlacementDrives({ jobDrives = [] }) {
     return String(value);
   };
 
- 
   const getDisplayText = (value, fallback = 'N/A') => {
     const str = getSafeString(value);
     return str || fallback;
   };
 
- 
   const getCompanyName = (company) => {
     if (!company) return 'N/A';
     if (typeof company === 'string') return company;
@@ -51,7 +47,6 @@ export default function PlacementDrives({ jobDrives = [] }) {
     }
     return String(company);
   };
-
 
   const getRoleName = (role) => {
     if (!role) return 'N/A';
@@ -62,7 +57,6 @@ export default function PlacementDrives({ jobDrives = [] }) {
     return String(role);
   };
 
- 
   const sampleDrives = [
     {
       id: 1,
@@ -171,10 +165,8 @@ export default function PlacementDrives({ jobDrives = [] }) {
     }
   ];
 
-  // Use provided data or fallback
   const drives = Array.isArray(jobDrives) && jobDrives.length > 0 ? jobDrives : sampleDrives;
 
-  // Toggle bookmark
   const toggleBookmark = (driveId) => {
     setBookmarkedDrives(prev => 
       prev.includes(driveId) 
@@ -183,13 +175,11 @@ export default function PlacementDrives({ jobDrives = [] }) {
     );
   };
 
-  // View drive details
   const viewDriveDetails = (drive) => {
     setSelectedDrive(drive);
     setShowDetailModal(true);
   };
 
-  // Filter drives - with safe string conversion
   const filteredDrives = drives.filter(drive => {
     const companyStr = getSafeString(getCompanyName(drive?.company)).toLowerCase();
     const roleStr = getSafeString(getRoleName(drive?.role)).toLowerCase();
@@ -204,7 +194,6 @@ export default function PlacementDrives({ jobDrives = [] }) {
     return matchesSearch && matchesStatus && matchesWorkMode;
   });
 
-  // Stats
   const totalDrives = drives.length;
   const eligibleCount = drives.filter(d => getSafeString(d?.status) === 'Eligible').length;
   const appliedCount = drives.filter(d => getSafeString(d?.status) === 'Applied').length;
@@ -226,11 +215,11 @@ export default function PlacementDrives({ jobDrives = [] }) {
   const getStatusIcon = (status) => {
     const statusStr = getSafeString(status);
     switch(statusStr) {
-      case 'Selected': return <CheckCircle className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Rejected': return <XCircle className="text-danger" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Shortlisted': return <UserCheck className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Applied': return <Clock className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Eligible': return <Sparkles className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Selected': return <CheckCircle className="text-success" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Rejected': return <XCircle className="text-danger" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Shortlisted': return <UserCheck className="text-warning" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Applied': return <Clock className="text-info" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Eligible': return <Sparkles className="text-success" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
       default: return null;
     }
   };
@@ -238,33 +227,37 @@ export default function PlacementDrives({ jobDrives = [] }) {
   const getWorkModeIcon = (mode) => {
     const modeStr = getSafeString(mode);
     switch(modeStr) {
-      case 'Onsite': return <Building2 className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Hybrid': return <Monitor className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Remote': return <Wifi className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      default: return <Home className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Onsite': return <Building2 className="text-primary" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Hybrid': return <Monitor className="text-info" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      case 'Remote': return <Wifi className="text-success" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
+      default: return <Home className="text-secondary" style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)' }} />;
     }
   };
 
   return (
     <div className="animate-fadeIn">
       {/* Welcome Section */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
         <div>
-          <h5 className="text-dark fw-bold m-0">Placement Drives</h5>
-          <p className="text-secondary small m-0">Find and apply to top company drives</p>
+          <h5 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(0.95rem, 2.2vw, 1.25rem)' }}>
+            Placement Drives
+          </h5>
+          <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.55rem, 1vw, 0.75rem)' }}>
+            Find and apply to top company drives
+          </p>
         </div>
         <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2">
-            <Sparkles style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} />
-            {eligibleCount} New Opportunities
+          <span className="badge bg-success bg-opacity-10 text-success border border-success px-2 px-md-3 py-1 py-md-2" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.6rem)' }}>
+            <Sparkles style={{ width: 'clamp(0.4rem, 0.7vw, 0.7rem)', height: 'clamp(0.4rem, 0.7vw, 0.7rem)', marginRight: '0.15rem' }} />
+            {eligibleCount} New
           </span>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="row g-3 mb-4">
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
-          { label: "Total Drives", value: totalDrives, color: "primary", icon: Briefcase },
+          { label: "Total", value: totalDrives, color: "primary", icon: Briefcase },
           { label: "Eligible", value: eligibleCount, color: "success", icon: Sparkles },
           { label: "Applied", value: appliedCount, color: "info", icon: Clock },
           { label: "Shortlisted", value: shortlistedCount, color: "warning", icon: UserCheck },
@@ -278,16 +271,39 @@ export default function PlacementDrives({ jobDrives = [] }) {
             warning: 'rgba(234,179,8,0.08)'
           };
           return (
-            <div key={i} className="col-6 col-lg">
-              <div className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-1" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-                <div className="card-body p-3">
+            <div key={i} className="col-6 col-md">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100" style={{ 
+                background: '#ffffff', 
+                border: '1px solid #e9ecef', 
+                transition: 'all 0.3s ease' 
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
+              }}
+              >
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.5rem' }}>{stat.label}</span>
-                    <div className={`p-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                    <span className="text-secondary fw-bold text-uppercase" style={{ 
+                      fontSize: 'clamp(0.35rem, 0.6vw, 0.5rem)', 
+                      letterSpacing: '0.03em' 
+                    }}>
+                      {stat.label}
+                    </span>
+                    <div className={`p-1 p-md-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
+                      <Icon className={`text-${stat.color}`} style={{ 
+                        width: 'clamp(0.6rem, 1.2vw, 0.9rem)', 
+                        height: 'clamp(0.6rem, 1.2vw, 0.9rem)' 
+                      }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>{stat.value}</h4>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ 
+                    fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' 
+                  }}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -296,29 +312,44 @@ export default function PlacementDrives({ jobDrives = [] }) {
       </div>
 
       {/* Search & Filter */}
-      <div className="card border-0 shadow-sm rounded-4 mb-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-3 align-items-center">
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: '300px' }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <div className="d-flex align-items-center gap-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: 'clamp(160px, 35vw, 300px)' }}>
+              <Search className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.8rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.8rem)' 
+              }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-dark" 
-                placeholder="Search companies..." 
+                placeholder="Search..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.75rem', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 1vw, 0.75rem)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0' 
+                }}
               />
             </div>
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light">
-              <Filter className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1 flex-md-grow-0">
+              <Filter className="text-secondary" style={{ 
+                width: 'clamp(0.5rem, 0.9vw, 0.7rem)', 
+                height: 'clamp(0.5rem, 0.9vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-dark" 
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '120px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.5rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(65px, 12vw, 120px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem' 
+                }}
               >
-                <option value="ALL">All Status</option>
+                <option value="ALL">Status</option>
                 <option value="Eligible">Eligible</option>
                 <option value="Applied">Applied</option>
                 <option value="Shortlisted">Shortlisted</option>
@@ -326,38 +357,55 @@ export default function PlacementDrives({ jobDrives = [] }) {
                 <option value="Rejected">Rejected</option>
               </select>
             </div>
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light">
-              <Building2 className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1 flex-md-grow-0">
+              <Building2 className="text-secondary" style={{ 
+                width: 'clamp(0.5rem, 0.9vw, 0.7rem)', 
+                height: 'clamp(0.5rem, 0.9vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-dark" 
                 value={filterWorkMode}
                 onChange={(e) => setFilterWorkMode(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '110px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.5rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(65px, 12vw, 110px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem' 
+                }}
               >
-                <option value="ALL">All Modes</option>
+                <option value="ALL">Mode</option>
                 <option value="Onsite">Onsite</option>
                 <option value="Hybrid">Hybrid</option>
                 <option value="Remote">Remote</option>
               </select>
             </div>
-            <span className="text-secondary small ms-auto">{filteredDrives.length} drives found</span>
+            <span className="text-secondary small ms-auto d-none d-md-block" style={{ 
+              fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' 
+            }}>
+              {filteredDrives.length} found
+            </span>
           </div>
         </div>
       </div>
 
       {/* Drives Cards Grid */}
       {filteredDrives.length === 0 ? (
-        <div className="card border-0 shadow-sm rounded-4 text-center p-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
-          <Briefcase className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No drives found</h6>
-          <p className="text-secondary small">Try adjusting your search or filters</p>
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+          <Briefcase className="text-secondary mx-auto" style={{ 
+            width: 'clamp(2rem, 4vw, 3rem)', 
+            height: 'clamp(2rem, 4vw, 3rem)' 
+          }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.85rem, 1.8vw, 1rem)' }}>
+            No drives found
+          </h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.65rem, 1vw, 0.8rem)' }}>
+            Try adjusting your search or filters
+          </p>
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="row g-2 g-md-3 g-lg-4">
           {filteredDrives.map((drive, index) => {
             const isBookmarked = bookmarkedDrives.includes(drive.id);
-            
-            
             const companyName = getCompanyName(drive?.company);
             const roleName = getRoleName(drive?.role);
             const companyInitial = getSafeString(companyName).charAt(0) || 'C';
@@ -367,47 +415,64 @@ export default function PlacementDrives({ jobDrives = [] }) {
             const locationStr = getSafeString(drive?.location);
             const deadlineStr = getSafeString(drive?.regDeadline);
             const openingsStr = getSafeString(drive?.openings);
-            const descriptionStr = getSafeString(drive?.description);
             const minCgpaStr = getSafeString(drive?.minCgpa);
             
             return (
-              <div key={drive?.id || index} className="col-md-6 col-lg-4">
+              <div key={drive?.id || index} className="col-sm-6 col-xl-4">
                 <div 
-                  className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-2"
+                  className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100"
                   style={{ 
                     background: '#ffffff',
                     border: '1px solid #e9ecef',
-                    animation: `slideUp ${0.3 + index * 0.05}s ease-out forwards`
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
                   }}
                 >
-                  <div className="card-body p-4 d-flex flex-column">
-                    {/* Header - Company Logo & Status */}
-                    <div className="d-flex align-items-start gap-3 mb-3">
+                  <div className="card-body p-3 p-md-4 d-flex flex-column">
+                    {/* Header */}
+                    <div className="d-flex align-items-start gap-2 gap-md-3 mb-2 mb-md-3">
                       <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
-                        width: '48px', 
-                        height: '48px',
+                        width: 'clamp(32px, 5vw, 48px)', 
+                        height: 'clamp(32px, 5vw, 48px)',
                         background: drive?.color || 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                        fontSize: '1.2rem',
+                        fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)',
                         fontWeight: 'bold',
                         color: '#fff'
                       }}>
                         {companyInitial}
                       </div>
                       <div className="flex-grow-1 min-w-0">
-                        {/* ✅ FIXED: Using getDisplayText for safe rendering */}
-                        <h6 className="fw-bold text-dark m-0" style={{ fontSize: '0.95rem' }}>
+                        <h6 className="fw-bold text-dark m-0" style={{ 
+                          fontSize: 'clamp(0.75rem, 1.3vw, 0.95rem)' 
+                        }}>
                           {getDisplayText(companyName)}
                         </h6>
-                        <span className="text-secondary" style={{ fontSize: '0.6rem' }}>
+                        <span className="text-secondary" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.8vw, 0.6rem)' 
+                        }}>
                           {getDisplayText(roleName)}
                         </span>
                         <div className="d-flex align-items-center gap-1 mt-1 flex-wrap">
-                          <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1" style={{ fontSize: '0.5rem' }}>
+                          <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1" style={{ 
+                            fontSize: 'clamp(0.35rem, 0.6vw, 0.5rem)' 
+                          }}>
                             {getWorkModeIcon(workMode)}
                             {getDisplayText(workMode)}
                           </span>
-                          <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1" style={{ fontSize: '0.5rem' }}>
-                            <GraduationCap style={{ width: '0.6rem', height: '0.6rem' }} />
+                          <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1" style={{ 
+                            fontSize: 'clamp(0.35rem, 0.6vw, 0.5rem)' 
+                          }}>
+                            <GraduationCap style={{ 
+                              width: 'clamp(0.35rem, 0.6vw, 0.6rem)', 
+                              height: 'clamp(0.35rem, 0.6vw, 0.6rem)' 
+                            }} />
                             {getDisplayText(minCgpaStr)}+
                           </span>
                         </div>
@@ -415,18 +480,28 @@ export default function PlacementDrives({ jobDrives = [] }) {
                       <div className="d-flex flex-column align-items-end gap-1 flex-shrink-0">
                         <button 
                           onClick={() => toggleBookmark(drive.id)}
-                          className="btn btn-sm p-0 transition-all hover:scale-110"
+                          className="btn btn-sm p-0"
                           style={{ background: 'transparent', border: 'none' }}
                         >
                           {isBookmarked ? (
-                            <Heart className="text-danger" style={{ width: '0.9rem', height: '0.9rem', fill: '#ef4444' }} />
+                            <Heart className="text-danger" style={{ 
+                              width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                              height: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                              fill: '#ef4444' 
+                            }} />
                           ) : (
-                            <Heart className="text-secondary" style={{ width: '0.9rem', height: '0.9rem' }} />
+                            <Heart className="text-secondary" style={{ 
+                              width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                              height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                            }} />
                           )}
                         </button>
                         <span 
                           className={`badge bg-${getStatusColor(status)} bg-opacity-10 text-${getStatusColor(status)} border border-${getStatusColor(status)} d-inline-flex align-items-center gap-1`}
-                          style={{ fontSize: '0.5rem', padding: '0.2rem 0.4rem' }}
+                          style={{ 
+                            fontSize: 'clamp(0.35rem, 0.6vw, 0.5rem)', 
+                            padding: '0.12rem 0.25rem' 
+                          }}
                         >
                           {getStatusIcon(status)}
                           {getDisplayText(status)}
@@ -436,25 +511,53 @@ export default function PlacementDrives({ jobDrives = [] }) {
 
                     {/* Details */}
                     <div className="space-y-1.5 flex-grow-1">
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <DollarSign className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Package</span>
-                        <span className="text-primary fw-bold" style={{ fontSize: '0.7rem' }}>{getDisplayText(packageStr)}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <DollarSign className="text-primary" style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} />
+                        <span className="text-secondary small flex-grow-1" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)' 
+                        }}>Package</span>
+                        <span className="text-primary fw-bold" style={{ 
+                          fontSize: 'clamp(0.5rem, 0.9vw, 0.7rem)' 
+                        }}>{getDisplayText(packageStr)}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <MapPin className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Location</span>
-                        <span className="text-dark" style={{ fontSize: '0.65rem' }}>{getDisplayText(locationStr)}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <MapPin className="text-info" style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} />
+                        <span className="text-secondary small flex-grow-1" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)' 
+                        }}>Location</span>
+                        <span className="text-dark" style={{ 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' 
+                        }}>{getDisplayText(locationStr)}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <Calendar className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Deadline</span>
-                        <span className="text-dark" style={{ fontSize: '0.65rem' }}>{getDisplayText(deadlineStr)}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <Calendar className="text-warning" style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} />
+                        <span className="text-secondary small flex-grow-1" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)' 
+                        }}>Deadline</span>
+                        <span className="text-dark" style={{ 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' 
+                        }}>{getDisplayText(deadlineStr)}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                        <Users className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Openings</span>
-                        <span className="text-dark" style={{ fontSize: '0.65rem' }}>{getDisplayText(openingsStr)}</span>
+                      <div className="d-flex align-items-center gap-2 p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <Users className="text-success" style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} />
+                        <span className="text-secondary small flex-grow-1" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)' 
+                        }}>Openings</span>
+                        <span className="text-dark" style={{ 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' 
+                        }}>{getDisplayText(openingsStr)}</span>
                       </div>
                     </div>
 
@@ -463,14 +566,22 @@ export default function PlacementDrives({ jobDrives = [] }) {
                       <div className="mt-2">
                         <div className="d-flex flex-wrap gap-1">
                           {drive.requiredSkills.slice(0, 3).map((skill, i) => (
-                            <span key={i} className="badge bg-light text-secondary border border-light" style={{ fontSize: '0.45rem' }}>
-                              <Code style={{ width: '0.5rem', height: '0.5rem', marginRight: '0.2rem' }} />
+                            <span key={i} className="badge bg-light text-secondary border border-light" style={{ 
+                              fontSize: 'clamp(0.3rem, 0.6vw, 0.45rem)' 
+                            }}>
+                              <Code style={{ 
+                                width: 'clamp(0.3rem, 0.6vw, 0.5rem)', 
+                                height: 'clamp(0.3rem, 0.6vw, 0.5rem)', 
+                                marginRight: '0.1rem' 
+                              }} />
                               {getDisplayText(skill)}
                             </span>
                           ))}
                           {drive.requiredSkills.length > 3 && (
-                            <span className="badge bg-light text-secondary border border-light" style={{ fontSize: '0.45rem' }}>
-                              +{drive.requiredSkills.length - 3} more
+                            <span className="badge bg-light text-secondary border border-light" style={{ 
+                              fontSize: 'clamp(0.3rem, 0.6vw, 0.45rem)' 
+                            }}>
+                              +{drive.requiredSkills.length - 3}
                             </span>
                           )}
                         </div>
@@ -478,27 +589,52 @@ export default function PlacementDrives({ jobDrives = [] }) {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
+                    <div className="mt-3 pt-2 pt-md-3 border-top border-light d-flex gap-2">
                       <button 
                         onClick={() => viewDriveDetails(drive)}
-                        className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 transition-all hover:scale-105"
-                        style={{ borderRadius: '8px', fontSize: '0.6rem', fontWeight: '600' }}
+                        className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1"
+                        style={{ 
+                          borderRadius: '8px', 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)', 
+                          fontWeight: '600', 
+                          padding: '0.25rem 0.4rem' 
+                        }}
                       >
-                        <Eye style={{ width: '0.7rem', height: '0.7rem' }} /> View Details
+                        <Eye style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} /> View
                       </button>
                       <button 
-                        className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 transition-all hover:scale-105 ${status === 'Selected' ? 'btn-success' : status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
-                        style={{ borderRadius: '8px', fontSize: '0.6rem', fontWeight: '600' }}
+                        className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 ${status === 'Selected' ? 'btn-success' : status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
+                        style={{ 
+                          borderRadius: '8px', 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)', 
+                          fontWeight: '600', 
+                          padding: '0.25rem 0.4rem' 
+                        }}
                         disabled={status === 'Selected' || status === 'Applied'}
                       >
                         {status === 'Selected' ? (
-                          <><CheckCircle style={{ width: '0.7rem', height: '0.7rem' }} /> Selected</>
+                          <><CheckCircle style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Selected</>
                         ) : status === 'Applied' ? (
-                          <><Clock style={{ width: '0.7rem', height: '0.7rem' }} /> Applied</>
+                          <><Clock style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Applied</>
                         ) : status === 'Shortlisted' ? (
-                          <><UserCheck style={{ width: '0.7rem', height: '0.7rem' }} /> Shortlisted</>
+                          <><UserCheck style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Shortlisted</>
                         ) : (
-                          <><ExternalLink style={{ width: '0.7rem', height: '0.7rem' }} /> Apply Now</>
+                          <><ExternalLink style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Apply</>
                         )}
                       </button>
                     </div>
@@ -510,51 +646,72 @@ export default function PlacementDrives({ jobDrives = [] }) {
         </div>
       )}
 
-      
+      {/* Detail Modal */}
       {showDetailModal && selectedDrive && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(5px)',
-          animation: 'fadeIn 0.3s ease'
-        }}>
+          padding: '1rem'
+        }}
+        onClick={() => setShowDetailModal(false)}
+        >
           <div className="card border-0 shadow-lg rounded-4" style={{ 
-            maxWidth: '700px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 85vw, 700px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: '#ffffff'
-          }}>
-            <div className="card-body p-4">
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            <div className="card-body p-3 p-md-4">
               <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-light pb-3">
-                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2">
-                  <Briefcase className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2" style={{ 
+                  fontSize: 'clamp(0.9rem, 2vw, 1.25rem)' 
+                }}>
+                  <Briefcase className="text-primary" style={{ 
+                    width: 'clamp(0.8rem, 1.5vw, 1.2rem)', 
+                    height: 'clamp(0.8rem, 1.5vw, 1.2rem)' 
+                  }} />
                   Drive Details
                 </h5>
-                <button onClick={() => setShowDetailModal(false)} className="btn btn-close"></button>
+                <button onClick={() => setShowDetailModal(false)} className="btn btn-close" style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                }}></button>
               </div>
 
               {/* Company Header */}
               <div className="d-flex align-items-center gap-3 mb-3">
-                <div className="d-flex align-items-center justify-content-center rounded-3" style={{ 
-                  width: '56px', 
-                  height: '56px',
+                <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
+                  width: 'clamp(36px, 6vw, 56px)', 
+                  height: 'clamp(36px, 6vw, 56px)',
                   background: selectedDrive?.color || 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                  fontSize: '1.4rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1.4rem)',
                   fontWeight: 'bold',
                   color: '#fff'
                 }}>
                   {getSafeString(getCompanyName(selectedDrive?.company)).charAt(0) || 'C'}
                 </div>
-                <div>
-                  <h5 className="text-dark fw-bold m-0">{getDisplayText(getCompanyName(selectedDrive?.company))}</h5>
-                  <span className="text-secondary" style={{ fontSize: '0.7rem' }}>{getDisplayText(getRoleName(selectedDrive?.role))}</span>
+                <div className="min-w-0">
+                  <h5 className="text-dark fw-bold m-0" style={{ 
+                    fontSize: 'clamp(0.85rem, 1.8vw, 1.1rem)' 
+                  }}>
+                    {getDisplayText(getCompanyName(selectedDrive?.company))}
+                  </h5>
+                  <span className="text-secondary" style={{ 
+                    fontSize: 'clamp(0.5rem, 1vw, 0.7rem)' 
+                  }}>
+                    {getDisplayText(getRoleName(selectedDrive?.role))}
+                  </span>
                   <div className="d-flex align-items-center gap-2 mt-1 flex-wrap">
-                    <span className={`badge bg-${getStatusColor(selectedDrive?.status)} bg-opacity-10 text-${getStatusColor(selectedDrive?.status)} border border-${getStatusColor(selectedDrive?.status)} d-inline-flex align-items-center gap-1`}>
+                    <span className={`badge bg-${getStatusColor(selectedDrive?.status)} bg-opacity-10 text-${getStatusColor(selectedDrive?.status)} border border-${getStatusColor(selectedDrive?.status)} d-inline-flex align-items-center gap-1`}
+                          style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>
                       {getStatusIcon(selectedDrive?.status)}
                       {getDisplayText(selectedDrive?.status)}
                     </span>
-                    <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1">
+                    <span className="badge bg-light text-secondary border border-light d-inline-flex align-items-center gap-1"
+                          style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>
                       {getWorkModeIcon(selectedDrive?.workMode)}
                       {getDisplayText(selectedDrive?.workMode)}
                     </span>
@@ -566,79 +723,74 @@ export default function PlacementDrives({ jobDrives = [] }) {
               <div className="row g-2 mb-3">
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Package</span>
-                    <span className="text-primary fw-bold">{getDisplayText(selectedDrive?.package)}</span>
+                    <span className="text-secondary small d-block" style={{ 
+                      fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                    }}>Package</span>
+                    <span className="text-primary fw-bold" style={{ 
+                      fontSize: 'clamp(0.55rem, 1vw, 0.8rem)' 
+                    }}>{getDisplayText(selectedDrive?.package)}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Location</span>
-                    <span className="text-dark">{getDisplayText(selectedDrive?.location)}</span>
+                    <span className="text-secondary small d-block" style={{ 
+                      fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                    }}>Location</span>
+                    <span className="text-dark" style={{ 
+                      fontSize: 'clamp(0.55rem, 1vw, 0.75rem)' 
+                    }}>{getDisplayText(selectedDrive?.location)}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Min CGPA</span>
-                    <span className="text-dark">{getDisplayText(selectedDrive?.minCgpa)}+</span>
+                    <span className="text-secondary small d-block" style={{ 
+                      fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                    }}>Min CGPA</span>
+                    <span className="text-dark" style={{ 
+                      fontSize: 'clamp(0.55rem, 1vw, 0.75rem)' 
+                    }}>{getDisplayText(selectedDrive?.minCgpa)}+</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligible Batch</span>
-                    <span className="text-dark">{getDisplayText(selectedDrive?.eligibleBatch)}</span>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Openings</span>
-                    <span className="text-dark">{getDisplayText(selectedDrive?.openings)}</span>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Drive Date</span>
-                    <span className="text-dark">{getDisplayText(selectedDrive?.driveDate)}</span>
+                    <span className="text-secondary small d-block" style={{ 
+                      fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                    }}>Openings</span>
+                    <span className="text-dark" style={{ 
+                      fontSize: 'clamp(0.55rem, 1vw, 0.75rem)' 
+                    }}>{getDisplayText(selectedDrive?.openings)}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Eligible Departments */}
-              {selectedDrive?.eligibleDepts && selectedDrive.eligibleDepts.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligible Departments</span>
-                  <div className="d-flex flex-wrap gap-1 mt-1">
-                    {selectedDrive.eligibleDepts.map((dept, i) => (
-                      <span key={i} className="badge bg-primary bg-opacity-10 text-primary border border-primary" style={{ fontSize: '0.55rem' }}>
-                        {getDisplayText(dept)}
-                      </span>
-                    ))}
-                  </div>
+              {/* Description */}
+              {selectedDrive?.description && (
+                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                  <span className="text-secondary small d-block" style={{ 
+                    fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                  }}>Description</span>
+                  <p className="text-secondary small mb-0" style={{ 
+                    fontSize: 'clamp(0.5rem, 0.9vw, 0.7rem)' 
+                  }}>{getDisplayText(selectedDrive.description)}</p>
                 </div>
               )}
 
-              {/* Selection Process */}
-              {selectedDrive?.selectionProcess && selectedDrive.selectionProcess.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Selection Process</span>
-                  <div className="d-flex flex-wrap gap-1 mt-1">
-                    {selectedDrive.selectionProcess.map((step, i) => (
-                      <span key={i} className="badge bg-info bg-opacity-10 text-info border border-info" style={{ fontSize: '0.55rem' }}>
-                        <ListChecks style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.2rem' }} />
-                        {getDisplayText(step)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Required Skills */}
+              {/* Skills */}
               {selectedDrive?.requiredSkills && selectedDrive.requiredSkills.length > 0 && (
                 <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Required Skills</span>
+                  <span className="text-secondary small d-block" style={{ 
+                    fontSize: 'clamp(0.35rem, 0.6vw, 0.55rem)' 
+                  }}>Required Skills</span>
                   <div className="d-flex flex-wrap gap-1 mt-1">
                     {selectedDrive.requiredSkills.map((skill, i) => (
-                      <span key={i} className="badge bg-warning bg-opacity-10 text-warning border border-warning" style={{ fontSize: '0.55rem' }}>
-                        <Code style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.2rem' }} />
+                      <span key={i} className="badge bg-warning bg-opacity-10 text-warning border border-warning" style={{ 
+                        fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' 
+                      }}>
+                        <Code style={{ 
+                          width: 'clamp(0.35rem, 0.6vw, 0.6rem)', 
+                          height: 'clamp(0.35rem, 0.6vw, 0.6rem)', 
+                          marginRight: '0.15rem' 
+                        }} />
                         {getDisplayText(skill)}
                       </span>
                     ))}
@@ -646,44 +798,59 @@ export default function PlacementDrives({ jobDrives = [] }) {
                 </div>
               )}
 
-              {/* Description */}
-              {selectedDrive?.description && (
-                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Job Description</span>
-                  <p className="text-secondary small mb-0" style={{ fontSize: '0.7rem' }}>{getDisplayText(selectedDrive.description)}</p>
-                </div>
-              )}
-
-              {/* Eligibility Criteria */}
-              {selectedDrive?.eligibilityCriteria && (
-                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligibility Criteria</span>
-                  <p className="text-secondary small mb-0" style={{ fontSize: '0.7rem' }}>{getDisplayText(selectedDrive.eligibilityCriteria)}</p>
-                </div>
-              )}
-
               {/* Action Buttons */}
               <div className="mt-3 pt-3 border-top border-light d-flex flex-wrap gap-2">
                 <button 
                   className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 ${selectedDrive?.status === 'Selected' ? 'btn-success' : selectedDrive?.status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
-                  style={{ borderRadius: '10px', fontWeight: '600' }}
+                  style={{ 
+                    borderRadius: '10px', 
+                    fontWeight: '600', 
+                    fontSize: 'clamp(0.5rem, 0.9vw, 0.7rem)', 
+                    padding: '0.35rem 0.7rem' 
+                  }}
                   disabled={selectedDrive?.status === 'Selected' || selectedDrive?.status === 'Applied'}
                 >
                   {selectedDrive?.status === 'Selected' ? (
-                    <><CheckCircle style={{ width: '0.9rem', height: '0.9rem' }} /> Selected</>
+                    <><CheckCircle style={{ 
+                      width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                      height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                    }} /> Selected</>
                   ) : selectedDrive?.status === 'Applied' ? (
-                    <><Clock style={{ width: '0.9rem', height: '0.9rem' }} /> Applied</>
+                    <><Clock style={{ 
+                      width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                      height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                    }} /> Applied</>
                   ) : selectedDrive?.status === 'Shortlisted' ? (
-                    <><UserCheck style={{ width: '0.9rem', height: '0.9rem' }} /> Shortlisted</>
+                    <><UserCheck style={{ 
+                      width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                      height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                    }} /> Shortlisted</>
                   ) : (
-                    <><ExternalLink style={{ width: '0.9rem', height: '0.9rem' }} /> Apply Now</>
+                    <><ExternalLink style={{ 
+                      width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                      height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                    }} /> Apply Now</>
                   )}
                 </button>
-                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ borderRadius: '10px' }}>
-                  <Download style={{ width: '0.9rem', height: '0.9rem' }} /> JD
+                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ 
+                  borderRadius: '10px', 
+                  fontSize: 'clamp(0.45rem, 0.8vw, 0.65rem)', 
+                  padding: '0.35rem 0.7rem' 
+                }}>
+                  <Download style={{ 
+                    width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                    height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                  }} /> JD
                 </button>
-                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ borderRadius: '10px' }}>
-                  <Bell style={{ width: '0.9rem', height: '0.9rem' }} /> Remind
+                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ 
+                  borderRadius: '10px', 
+                  fontSize: 'clamp(0.45rem, 0.8vw, 0.65rem)', 
+                  padding: '0.35rem 0.7rem' 
+                }}>
+                  <Bell style={{ 
+                    width: 'clamp(0.6rem, 1vw, 0.9rem)', 
+                    height: 'clamp(0.6rem, 1vw, 0.9rem)' 
+                  }} /> Remind
                 </button>
               </div>
             </div>
@@ -698,33 +865,12 @@ export default function PlacementDrives({ jobDrives = [] }) {
           to { opacity: 1; }
         }
         
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out forwards;
         }
         
         .transition-all {
           transition: all 0.3s ease;
-        }
-        
-        .hover\\:translate-y-1:hover {
-          transform: translateY(-4px);
-        }
-        
-        .hover\\:translate-y-2:hover {
-          transform: translateY(-8px);
-        }
-        
-        .hover\\:scale-105:hover {
-          transform: scale(1.05);
-        }
-        
-        .hover\\:scale-110:hover {
-          transform: scale(1.1);
         }
         
         .space-y-1.5 > * + * {
@@ -735,21 +881,53 @@ export default function PlacementDrives({ jobDrives = [] }) {
           transition: all 0.3s ease;
         }
         
-        .card:hover {
-          box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
-        }
-        
-        .form-control, .form-select {
-          transition: all 0.3s ease;
-        }
-        
-        .form-control:focus, .form-select:focus {
-          border-color: rgba(79, 70, 229, 0.5) !important;
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
-        }
-        
         .min-w-0 {
           min-width: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.65rem !important;
+          }
+          .gap-1 {
+            gap: 0.2rem !important;
+          }
+          .badge {
+            padding: 0.12rem 0.35rem !important;
+          }
+          .btn-sm {
+            padding: 0.15rem 0.4rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+        }
+
+        @media (min-width: 576px) and (max-width: 767px) {
+          .col-sm-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 0.9rem !important;
+          }
+          .col-md {
+            flex: 1 0 0%;
+          }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199px) {
+          .col-xl-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+          }
         }
         
         ::-webkit-scrollbar {

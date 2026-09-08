@@ -18,9 +18,7 @@ export default function Coding() {
   const [isRunning, setIsRunning] = useState(false);
   const [activeLanguage, setActiveLanguage] = useState('Python');
 
- 
   const problems = [
-    
     { 
       id: 1, 
       title: "Reverse a String", 
@@ -69,8 +67,6 @@ export default function Coding() {
       sampleOutput: "Found at index 2",
       starterCode: `#include <stdio.h>\n\nint binarySearch(int arr[], int left, int right, int target) {\n    // Write your code here\n}\n\nint main() {\n    int arr[100], n, target;\n    printf("Enter array size: ");\n    scanf("%d", &n);\n    // Write your code here\n    return 0;\n}`
     },
-
-   
     { 
       id: 4, 
       title: "Two Sum Problem", 
@@ -119,8 +115,6 @@ export default function Coding() {
       sampleOutput: "1 2 3 4 5 6",
       starterCode: `#include <iostream>\n#include <vector>\nusing namespace std;\n\nvoid merge(vector<int>& arr, int left, int mid, int right) {\n    // Write your code here\n}\n\nvoid mergeSort(vector<int>& arr, int left, int right) {\n    // Write your code here\n}\n\nint main() {\n    vector<int> arr = {5, 2, 4, 6, 1, 3};\n    // Write your code here\n    return 0;\n}`
     },
-
-   
     { 
       id: 7, 
       title: "Fibonacci - DP", 
@@ -169,8 +163,6 @@ export default function Coding() {
       sampleOutput: "InvalidAgeException: Age must be 18+",
       starterCode: `class InvalidAgeException extends Exception {\n    // Write your code here\n}\n\npublic class Main {\n    public static void validate(int age) throws InvalidAgeException {\n        // Write your code here\n    }\n    \n    public static void main(String[] args) {\n        // Write your code here\n    }\n}`
     },
-
-   
     { 
       id: 10, 
       title: "Reverse k-group array", 
@@ -219,8 +211,6 @@ export default function Coding() {
       sampleOutput: "my_func took 0.001 seconds",
       starterCode: `import time\n\ndef timer_decorator(func):\n    # Write your code here\n    pass\n\n@timer_decorator\ndef my_function():\n    time.sleep(0.5)\n    print("Function executed")\n\ndef main():\n    my_function()\n\nif __name__ == "__main__":\n    main()`
     },
-
-   
     { 
       id: 13, 
       title: "Join Queries Practice", 
@@ -271,10 +261,8 @@ export default function Coding() {
     },
   ];
 
-  // Get unique languages
   const languages = ['All', 'C', 'C++', 'Java', 'Python', 'SQL'];
 
-  // Filter problems
   const filteredProblems = problems.filter(problem => {
     const matchesLanguage = selectedLanguage === 'All' || problem.language === selectedLanguage;
     const matchesSearch = problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -282,7 +270,6 @@ export default function Coding() {
     return matchesLanguage && matchesSearch;
   });
 
-  // Stats
   const totalProblems = filteredProblems.length;
   const solvedProblems = filteredProblems.filter(p => p.completed).length;
   const progressPercentage = totalProblems > 0 ? Math.round((solvedProblems / totalProblems) * 100) : 0;
@@ -305,14 +292,13 @@ export default function Coding() {
 
   const getDifficultyIcon = (diff) => {
     switch(diff) {
-      case 'Easy': return <Star className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Medium': return <TrendingUp className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Hard': return <Zap className="text-danger" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Easy': return <Star className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Medium': return <TrendingUp className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Hard': return <Zap className="text-danger" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
       default: return null;
     }
   };
 
-  // Language color mapping
   const getLanguageColor = (lang) => {
     switch(lang) {
       case 'C': return '#6c5ce7';
@@ -345,7 +331,6 @@ export default function Coding() {
     setIsRunning(true);
     setOutput('');
     
-    // Simulate code execution
     setTimeout(() => {
       if (selectedProblem) {
         let outputText = `✅ Program executed successfully!\n\n`;
@@ -374,45 +359,50 @@ export default function Coding() {
   };
 
   return (
-    <div>
-      {/* Stats Cards */}
-      <div className="row g-3 mb-4">
+    <div className="animate-fadeIn">
+      {/* Stats Cards - Responsive */}
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           return (
             <div key={i} className="col-6 col-lg-3">
               <div 
-                className="card border-0 shadow-sm rounded-4 overflow-hidden"
+                className="card border-0 shadow-sm rounded-3 rounded-md-4 overflow-hidden"
                 style={{ 
                   background: '#ffffff',
                   border: '1px solid #e9ecef',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.08)';
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.05)';
                 }}
               >
-                <div className="card-body p-3">
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.55rem' }}>
+                    <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>
                       {stat.label}
                     </span>
                     <div 
-                      className="p-1.5 rounded-3"
+                      className="p-1 p-md-1.5 rounded-3"
                       style={{ 
                         background: `rgba(var(--bs-${stat.color}-rgb), 0.08)`,
                         border: `1px solid rgba(var(--bs-${stat.color}-rgb), 0.12)`
                       }}
                     >
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                      <Icon className={`text-${stat.color}`} style={{ 
+                        width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                        height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                      }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ 
+                    fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)' 
+                  }}>
                     {stat.value}
                   </h4>
                 </div>
@@ -422,27 +412,32 @@ export default function Coding() {
         })}
       </div>
 
-      {/* Language Filter */}
+      {/* Language Filter - Responsive */}
       <div 
-        className="card border-0 shadow-sm rounded-4 overflow-hidden mb-4"
+        className="card border-0 shadow-sm rounded-3 rounded-md-4 overflow-hidden mb-3 mb-md-4"
         style={{ 
           background: '#ffffff',
           border: '1px solid #e9ecef',
           boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
         }}
       >
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-2 align-items-center">
-            <div className="d-flex align-items-center gap-2 me-2">
-              <Terminal className="text-primary" style={{ width: '0.9rem', height: '0.9rem' }} />
-              <span className="text-secondary small fw-bold">Languages:</span>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-1 gap-md-2 align-items-center">
+            <div className="d-flex align-items-center gap-1 gap-md-2 me-1 me-md-2">
+              <Terminal className="text-primary" style={{ 
+                width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+              }} />
+              <span className="text-secondary small fw-bold d-none d-sm-inline" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                Languages:
+              </span>
             </div>
             
             {languages.map((lang, idx) => (
               <button 
                 key={idx}
                 onClick={() => setSelectedLanguage(lang)}
-                className={`btn btn-sm px-3 py-1.5 rounded-3 transition-all duration-300 ${
+                className={`btn btn-sm px-2 px-md-3 py-1 py-md-1.5 rounded-3 transition-all duration-300 ${
                   selectedLanguage === lang 
                     ? 'text-white shadow-sm' 
                     : 'text-secondary hover:text-dark'
@@ -456,9 +451,10 @@ export default function Coding() {
                   border: selectedLanguage === lang 
                     ? 'none' 
                     : '1px solid #e9ecef',
-                  fontSize: '0.6rem',
+                  fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)',
                   fontWeight: 'bold',
-                  color: selectedLanguage === lang ? '#ffffff' : '#6b7280'
+                  color: selectedLanguage === lang ? '#ffffff' : '#6b7280',
+                  padding: 'clamp(0.2rem, 0.5vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
                 }}
               >
                 {lang}
@@ -466,53 +462,67 @@ export default function Coding() {
             ))}
 
             {/* Search */}
-            <div className="flex-grow-1 d-flex align-items-center gap-2 px-3 py-1.5 rounded-3 ms-2" style={{ 
+            <div className="flex-grow-1 d-flex align-items-center gap-2 px-2 px-md-3 py-1 py-md-1.5 rounded-3 ms-1 ms-md-2" style={{ 
               background: 'rgba(0,0,0,0.03)',
               border: '1px solid #e9ecef',
-              maxWidth: '250px'
+              maxWidth: 'clamp(140px, 30vw, 250px)'
             }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+              <Search className="text-secondary" style={{ 
+                width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+              }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-dark" 
-                placeholder="Search problems..." 
+                placeholder="Search..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ fontSize: '0.7rem' }}
+                style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.7rem)',
+                  outline: 'none',
+                  padding: '0.1rem 0'
+                }}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Problems List */}
+      {/* Problems List - Responsive */}
       {filteredProblems.length === 0 ? (
         <div 
-          className="card border-0 shadow-sm rounded-4 overflow-hidden text-center p-5"
+          className="card border-0 shadow-sm rounded-4 overflow-hidden text-center p-3 p-md-5"
           style={{ 
             background: '#ffffff',
             border: '1px solid #e9ecef',
           }}
         >
-          <Code2 className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No problems found</h6>
-          <p className="text-secondary small">Try selecting a different language or search term</p>
+          <Code2 className="text-secondary mx-auto" style={{ 
+            width: 'clamp(2rem, 4vw, 3rem)', 
+            height: 'clamp(2rem, 4vw, 3rem)' 
+          }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>
+            No problems found
+          </h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>
+            Try selecting a different language or search term
+          </p>
         </div>
       ) : (
-        <div className="row g-3">
+        <div className="row g-2 g-md-3">
           {filteredProblems.map((problem, index) => (
             <div key={problem.id} className="col-12">
               <div 
-                className="card border-0 shadow-sm rounded-4 overflow-hidden animate-slide-up"
+                className="card border-0 shadow-sm rounded-3 rounded-md-4 overflow-hidden animate-slide-up"
                 style={{ 
                   animationDelay: `${index * 50}ms`,
                   background: '#ffffff',
                   border: `1px solid ${problem.completed ? 'rgba(34, 197, 94, 0.2)' : '#e9ecef'}`,
-                  transition: 'all 0.4s ease'
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px) scale(1.005)';
-                  e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.08)';
+                  e.currentTarget.style.transform = 'translateY(-3px) scale(1.002)';
+                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.08)';
                   e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.2)';
                 }}
                 onMouseLeave={(e) => {
@@ -521,45 +531,69 @@ export default function Coding() {
                   e.currentTarget.style.borderColor = problem.completed ? 'rgba(34, 197, 94, 0.2)' : '#e9ecef';
                 }}
               >
-                <div className="card-body p-4">
-                  <div className="d-flex flex-wrap justify-content-between align-items-start gap-3">
-                    <div className="flex-grow-1">
-                      <div className="d-flex align-items-center gap-3 mb-2">
+                <div className="card-body p-3 p-md-4">
+                  <div className="d-flex flex-wrap justify-content-between align-items-start gap-2 gap-md-3">
+                    <div className="flex-grow-1 min-w-0">
+                      <div className="d-flex flex-wrap align-items-center gap-2 gap-md-3 mb-1 mb-md-2">
                         {problem.completed && (
-                          <CheckCircle className="text-success" style={{ width: '1rem', height: '1rem' }} />
+                          <CheckCircle className="text-success flex-shrink-0" style={{ 
+                            width: 'clamp(0.8rem, 1.5vw, 1rem)', 
+                            height: 'clamp(0.8rem, 1.5vw, 1rem)' 
+                          }} />
                         )}
-                        <h6 className={`fw-bold m-0 ${problem.completed ? 'text-success' : 'text-dark'}`}>
+                        <h6 className={`fw-bold m-0 ${problem.completed ? 'text-success' : 'text-dark'}`} style={{ 
+                          fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' 
+                        }}>
                           {problem.title}
                         </h6>
-                        <span className="badge px-2 py-1" style={{ 
+                        <span className="badge px-2 py-1 flex-shrink-0" style={{ 
                           background: `${getLanguageColor(problem.language)}25`,
                           color: getLanguageColor(problem.language),
                           border: `1px solid ${getLanguageColor(problem.language)}40`,
-                          fontSize: '0.5rem'
+                          fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)'
                         }}>
                           {problem.language}
                         </span>
-                        <Sparkles className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />
+                        <Sparkles className="text-warning flex-shrink-0" style={{ 
+                          width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                          height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+                        }} />
                       </div>
-                      <div className="d-flex flex-wrap gap-2">
-                        <span className={`badge bg-${getDifficultyColor(problem.difficulty)} bg-opacity-10 text-${getDifficultyColor(problem.difficulty)} border border-${getDifficultyColor(problem.difficulty)} d-flex align-items-center gap-1 px-2 py-1`}>
+                      <div className="d-flex flex-wrap gap-1 gap-md-2">
+                        <span className={`badge bg-${getDifficultyColor(problem.difficulty)} bg-opacity-10 text-${getDifficultyColor(problem.difficulty)} border border-${getDifficultyColor(problem.difficulty)} d-flex align-items-center gap-1 px-2 py-1`} style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
                           {getDifficultyIcon(problem.difficulty)}
                           {problem.difficulty}
                         </span>
-                        <span className="badge px-2 py-1" style={{ background: 'rgba(6, 182, 212, 0.08)', color: '#0891b2', border: '1px solid rgba(6, 182, 212, 0.12)' }}>
-                          <BookOpen className="me-1" style={{ width: '0.6rem', height: '0.6rem' }} />
+                        <span className="badge px-2 py-1" style={{ 
+                          background: 'rgba(6, 182, 212, 0.08)', 
+                          color: '#0891b2', 
+                          border: '1px solid rgba(6, 182, 212, 0.12)',
+                          fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)'
+                        }}>
+                          <BookOpen className="me-1" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} />
                           {problem.category}
                         </span>
                       </div>
-                      <p className="text-secondary small mt-2 mb-0">{problem.desc}</p>
+                      <p className="text-secondary small mt-1 mt-md-2 mb-0" style={{ 
+                        fontSize: 'clamp(0.65rem, 1.1vw, 0.75rem)' 
+                      }}>
+                        {problem.desc}
+                      </p>
                     </div>
 
-                    <div className="d-flex flex-column align-items-end gap-2">
+                    <div className="d-flex flex-column align-items-end gap-2 flex-shrink-0">
                       <div className="d-flex align-items-center gap-2 w-100">
-                        <span className="text-secondary" style={{ fontSize: '0.55rem' }}>
+                        <span className="text-secondary" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
                           {problem.progress}%
                         </span>
-                        <div className="rounded-pill" style={{ width: '80px', height: '4px', background: 'rgba(0,0,0,0.05)' }}>
+                        <div className="rounded-pill" style={{ 
+                          width: 'clamp(60px, 10vw, 80px)', 
+                          height: 'clamp(3px, 0.4vw, 4px)', 
+                          background: 'rgba(0,0,0,0.05)' 
+                        }}>
                           <div 
                             className="rounded-pill h-100"
                             style={{ 
@@ -574,12 +608,14 @@ export default function Coding() {
                       </div>
                       <button 
                         onClick={() => handleLaunchProblem(problem)}
-                        className={`btn btn-sm px-4 py-2 rounded-3 d-flex align-items-center gap-1 ${
+                        className={`btn btn-sm px-3 px-md-4 py-1 py-md-2 rounded-3 d-flex align-items-center gap-1 ${
                           problem.completed ? 'btn-success' : 'btn-primary'
                         }`}
                         style={{ 
                           fontWeight: '600',
-                          transition: 'all 0.3s ease'
+                          fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)',
+                          transition: 'all 0.3s ease',
+                          padding: 'clamp(0.2rem, 0.5vw, 0.3rem) clamp(0.6rem, 1.2vw, 0.8rem)'
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.transform = 'scale(1.05)';
@@ -590,12 +626,18 @@ export default function Coding() {
                       >
                         {problem.completed ? (
                           <>
-                            <CheckCircle style={{ width: '0.7rem', height: '0.7rem' }} />
-                            Completed
+                            <CheckCircle style={{ 
+                              width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                              height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+                            }} />
+                            <span className="d-none d-sm-inline">Completed</span>
                           </>
                         ) : (
                           <>
-                            <Play style={{ width: '0.7rem', height: '0.7rem' }} />
+                            <Play style={{ 
+                              width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                              height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+                            }} />
                             Launch
                           </>
                         )}
@@ -609,7 +651,7 @@ export default function Coding() {
         </div>
       )}
 
-     
+      {/* Question Modal - Responsive */}
       {showQuestionModal && selectedProblem && (
         <div 
           className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
@@ -617,17 +659,18 @@ export default function Coding() {
             zIndex: 9999, 
             background: 'rgba(0,0,0,0.5)',
             backdropFilter: 'blur(5px)',
-            animation: 'fadeIn 0.3s ease'
+            animation: 'fadeIn 0.3s ease',
+            padding: '0.5rem'
           }}
         >
           <div 
             className="bg-white border border-light rounded-4 shadow-xl"
             style={{ 
-              maxWidth: isFullScreen ? '100%' : '800px',
+              maxWidth: isFullScreen ? '100%' : 'clamp(340px, 90vw, 800px)',
               width: isFullScreen ? '100%' : '90%',
               height: isFullScreen ? '100%' : 'auto',
-              maxHeight: isFullScreen ? '100%' : '80vh',
-              margin: isFullScreen ? '0' : '20px',
+              maxHeight: isFullScreen ? '100%' : '85vh',
+              margin: isFullScreen ? '0' : '10px',
               animation: 'slideUp 0.3s ease',
               overflow: 'hidden',
               display: 'flex',
@@ -635,102 +678,119 @@ export default function Coding() {
             }}
           >
             {/* Modal Header */}
-            <div className="p-4 border-bottom border-light d-flex justify-content-between align-items-center" style={{ background: 'rgba(0,0,0,0.02)' }}>
-              <div className="d-flex align-items-center gap-3">
+            <div className="p-3 p-md-4 border-bottom border-light d-flex flex-wrap justify-content-between align-items-center gap-2" style={{ background: 'rgba(0,0,0,0.02)' }}>
+              <div className="d-flex flex-wrap align-items-center gap-2 gap-md-3">
                 <div 
-                  className="p-2 rounded-3"
+                  className="p-1 p-md-2 rounded-3 flex-shrink-0"
                   style={{ 
                     background: `${getLanguageColor(selectedProblem.language)}25`,
                     border: `1px solid ${getLanguageColor(selectedProblem.language)}40`
                   }}
                 >
-                  <Code2 className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+                  <Code2 className="text-primary" style={{ 
+                    width: 'clamp(1rem, 2vw, 1.2rem)', 
+                    height: 'clamp(1rem, 2vw, 1.2rem)' 
+                  }} />
                 </div>
-                <div>
-                  <h6 className="text-dark fw-bold m-0">{selectedProblem.title}</h6>
-                  <div className="d-flex gap-2 mt-1">
+                <div className="min-w-0">
+                  <h6 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
+                    {selectedProblem.title}
+                  </h6>
+                  <div className="d-flex flex-wrap gap-1 gap-md-2 mt-1">
                     <span className="badge px-2 py-0.5" style={{ 
                       background: `${getLanguageColor(selectedProblem.language)}25`,
                       color: getLanguageColor(selectedProblem.language),
                       border: `1px solid ${getLanguageColor(selectedProblem.language)}40`,
-                      fontSize: '0.5rem'
+                      fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)'
                     }}>
                       {selectedProblem.language}
                     </span>
-                    <span className={`badge bg-${getDifficultyColor(selectedProblem.difficulty)} bg-opacity-10 text-${getDifficultyColor(selectedProblem.difficulty)} border border-${getDifficultyColor(selectedProblem.difficulty)}`} style={{ fontSize: '0.5rem' }}>
+                    <span className={`badge bg-${getDifficultyColor(selectedProblem.difficulty)} bg-opacity-10 text-${getDifficultyColor(selectedProblem.difficulty)} border border-${getDifficultyColor(selectedProblem.difficulty)}`} style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
                       {selectedProblem.difficulty}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="d-flex gap-2">
+              <div className="d-flex gap-1 gap-md-2 flex-shrink-0">
                 <button 
                   onClick={() => setIsFullScreen(!isFullScreen)}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'transparent', border: 'none' }}
+                  style={{ background: 'transparent', border: 'none', padding: '0.2rem 0.4rem' }}
                 >
                   {isFullScreen ? (
-                    <Minimize2 style={{ width: '1rem', height: '1rem' }} />
+                    <Minimize2 style={{ width: 'clamp(0.8rem, 1.5vw, 1rem)', height: 'clamp(0.8rem, 1.5vw, 1rem)' }} />
                   ) : (
-                    <Maximize2 style={{ width: '1rem', height: '1rem' }} />
+                    <Maximize2 style={{ width: 'clamp(0.8rem, 1.5vw, 1rem)', height: 'clamp(0.8rem, 1.5vw, 1rem)' }} />
                   )}
                 </button>
                 <button 
                   onClick={() => setShowQuestionModal(false)}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'transparent', border: 'none' }}
+                  style={{ background: 'transparent', border: 'none', padding: '0.2rem 0.4rem' }}
                 >
-                  <X style={{ width: '1.2rem', height: '1.2rem' }} />
+                  <X style={{ width: 'clamp(1rem, 2vw, 1.2rem)', height: 'clamp(1rem, 2vw, 1.2rem)' }} />
                 </button>
               </div>
             </div>
 
             {/* Modal Body - Question Content */}
-            <div className="p-4 overflow-auto" style={{ flex: 1 }}>
-              {/* Question */}
-              <div className="mb-4">
-                <h6 className="text-primary fw-bold text-uppercase" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
-                  <Brain className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <div className="p-3 p-md-4 overflow-auto" style={{ flex: 1 }}>
+              <div className="mb-3 mb-md-4">
+                <h6 className="text-primary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', letterSpacing: '0.05em' }}>
+                  <Brain className="me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                   Question
                 </h6>
-                <p className="text-dark" style={{ fontSize: '0.9rem' }}>{selectedProblem.question}</p>
+                <p className="text-dark" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>{selectedProblem.question}</p>
               </div>
 
-              {/* Example */}
               {selectedProblem.example && (
-                <div className="mb-3">
-                  <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                <div className="mb-2 mb-md-3">
+                  <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', letterSpacing: '0.05em' }}>
                     Example
                   </h6>
-                  <div className="bg-light p-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
-                    <pre className="text-secondary mb-0" style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                  <div className="bg-light p-2 p-md-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
+                    <pre className="text-secondary mb-0" style={{ 
+                      fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      fontFamily: 'monospace',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word'
+                    }}>
                       {selectedProblem.example}
                     </pre>
                   </div>
                 </div>
               )}
 
-              {/* Sample Input/Output */}
-              <div className="row g-3">
+              <div className="row g-2 g-md-3">
                 {selectedProblem.sampleInput && (
-                  <div className="col-md-6">
-                    <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                  <div className="col-12 col-md-6">
+                    <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', letterSpacing: '0.05em' }}>
                       Sample Input
                     </h6>
-                    <div className="bg-light p-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
-                      <pre className="text-success mb-0" style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                    <div className="bg-light p-2 p-md-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
+                      <pre className="text-success mb-0" style={{ 
+                        fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                        fontFamily: 'monospace',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word'
+                      }}>
                         {selectedProblem.sampleInput}
                       </pre>
                     </div>
                   </div>
                 )}
                 {selectedProblem.sampleOutput && (
-                  <div className="col-md-6">
-                    <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                  <div className="col-12 col-md-6">
+                    <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', letterSpacing: '0.05em' }}>
                       Sample Output
                     </h6>
-                    <div className="bg-light p-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
-                      <pre className="text-info mb-0" style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                    <div className="bg-light p-2 p-md-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
+                      <pre className="text-info mb-0" style={{ 
+                        fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                        fontFamily: 'monospace',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word'
+                      }}>
                         {selectedProblem.sampleOutput}
                       </pre>
                     </div>
@@ -738,32 +798,33 @@ export default function Coding() {
                 )}
               </div>
 
-              {/* Constraints */}
               {selectedProblem.constraints && (
-                <div className="mt-3">
-                  <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: '0.6rem', letterSpacing: '0.05em' }}>
+                <div className="mt-2 mt-md-3">
+                  <h6 className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', letterSpacing: '0.05em' }}>
                     Constraints
                   </h6>
-                  <div className="bg-light p-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
-                    <p className="text-warning mb-0" style={{ fontSize: '0.8rem' }}>{selectedProblem.constraints}</p>
+                  <div className="bg-light p-2 p-md-3 rounded-3" style={{ border: '1px solid #e9ecef' }}>
+                    <p className="text-warning mb-0" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>{selectedProblem.constraints}</p>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="p-3 border-top border-light d-flex justify-content-end gap-2" style={{ background: 'rgba(0,0,0,0.02)' }}>
+            <div className="p-2 p-md-3 border-top border-light d-flex flex-wrap justify-content-end gap-2" style={{ background: 'rgba(0,0,0,0.02)' }}>
               <button 
                 onClick={() => setShowQuestionModal(false)}
-                className="btn btn-secondary btn-sm px-4"
+                className="btn btn-secondary btn-sm px-3 px-md-4"
+                style={{ fontSize: 'clamp(0.65rem, 1vw, 0.7rem)' }}
               >
                 Close
               </button>
               <button 
                 onClick={handleStartCoding}
-                className="btn btn-primary btn-sm px-4 d-flex align-items-center gap-1"
+                className="btn btn-primary btn-sm px-3 px-md-4 d-flex align-items-center gap-1"
+                style={{ fontSize: 'clamp(0.65rem, 1vw, 0.7rem)' }}
               >
-                <Play style={{ width: '0.8rem', height: '0.8rem' }} />
+                <Play style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                 Start Coding
               </button>
             </div>
@@ -771,7 +832,7 @@ export default function Coding() {
         </div>
       )}
 
-   
+      {/* Code Editor Modal - Responsive */}
       {showCodeEditor && selectedProblem && (
         <div 
           className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
@@ -779,16 +840,17 @@ export default function Coding() {
             zIndex: 9998, 
             background: 'rgba(0,0,0,0.5)',
             backdropFilter: 'blur(5px)',
-            animation: 'fadeIn 0.3s ease'
+            animation: 'fadeIn 0.3s ease',
+            padding: '0.5rem'
           }}
         >
           <div 
             className="bg-white border border-light rounded-4 shadow-xl"
             style={{ 
-              maxWidth: isFullScreen ? '100%' : '1200px',
+              maxWidth: isFullScreen ? '100%' : 'clamp(340px, 95vw, 1200px)',
               width: isFullScreen ? '100%' : '95%',
-              height: isFullScreen ? '100%' : '90vh',
-              margin: isFullScreen ? '0' : '20px',
+              height: isFullScreen ? '100%' : '85vh',
+              margin: isFullScreen ? '0' : '10px',
               animation: 'slideUp 0.3s ease',
               overflow: 'hidden',
               display: 'flex',
@@ -796,32 +858,42 @@ export default function Coding() {
             }}
           >
             {/* Editor Header */}
-            <div className="p-3 border-bottom border-light d-flex justify-content-between align-items-center" style={{ background: 'rgba(0,0,0,0.02)' }}>
-              <div className="d-flex align-items-center gap-3">
+            <div className="p-2 p-md-3 border-bottom border-light d-flex flex-wrap justify-content-between align-items-center gap-2" style={{ background: 'rgba(0,0,0,0.02)' }}>
+              <div className="d-flex flex-wrap align-items-center gap-2 gap-md-3">
                 <div 
-                  className="p-2 rounded-3"
+                  className="p-1 p-md-2 rounded-3 flex-shrink-0"
                   style={{ 
                     background: `${getLanguageColor(selectedProblem.language)}25`,
                     border: `1px solid ${getLanguageColor(selectedProblem.language)}40`
                   }}
                 >
-                  <Code2 className="text-primary" style={{ width: '1rem', height: '1rem' }} />
+                  <Code2 className="text-primary" style={{ 
+                    width: 'clamp(0.8rem, 1.5vw, 1rem)', 
+                    height: 'clamp(0.8rem, 1.5vw, 1rem)' 
+                  }} />
                 </div>
-                <div>
-                  <h6 className="text-dark fw-bold m-0" style={{ fontSize: '0.9rem' }}>{selectedProblem.title}</h6>
-                  <span className="text-secondary" style={{ fontSize: '0.65rem' }}>Code Editor</span>
+                <div className="min-w-0">
+                  <h6 className="text-dark fw-bold m-0" style={{ 
+                    fontSize: 'clamp(0.75rem, 1.5vw, 0.9rem)' 
+                  }}>
+                    {selectedProblem.title}
+                  </h6>
+                  <span className="text-secondary" style={{ 
+                    fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' 
+                  }}>Code Editor</span>
                 </div>
               </div>
-              <div className="d-flex gap-2">
+              <div className="d-flex flex-wrap gap-1 gap-md-2">
                 <select 
                   className="form-select form-select-sm bg-white text-dark border-light"
                   value={activeLanguage}
                   onChange={(e) => setActiveLanguage(e.target.value)}
                   style={{ 
-                    fontSize: '0.65rem',
+                    fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)',
                     borderRadius: '8px',
-                    width: '120px',
-                    borderColor: '#e9ecef'
+                    width: 'clamp(80px, 15vw, 120px)',
+                    borderColor: '#e9ecef',
+                    padding: 'clamp(0.15rem, 0.4vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
                   }}
                 >
                   <option value="C">C</option>
@@ -833,90 +905,129 @@ export default function Coding() {
                 <button 
                   onClick={handleResetCode}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid #e9ecef' }}
+                  style={{ 
+                    background: 'rgba(0,0,0,0.03)', 
+                    border: '1px solid #e9ecef',
+                    padding: 'clamp(0.15rem, 0.4vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
+                  }}
                 >
-                  <RefreshCw style={{ width: '0.8rem', height: '0.8rem' }} />
+                  <RefreshCw style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                  }} />
                 </button>
                 <button 
                   onClick={handleCopyCode}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid #e9ecef' }}
+                  style={{ 
+                    background: 'rgba(0,0,0,0.03)', 
+                    border: '1px solid #e9ecef',
+                    padding: 'clamp(0.15rem, 0.4vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
+                  }}
                 >
-                  <Copy style={{ width: '0.8rem', height: '0.8rem' }} />
+                  <Copy style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                  }} />
                 </button>
                 <button 
                   onClick={() => setIsFullScreen(!isFullScreen)}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid #e9ecef' }}
+                  style={{ 
+                    background: 'rgba(0,0,0,0.03)', 
+                    border: '1px solid #e9ecef',
+                    padding: 'clamp(0.15rem, 0.4vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
+                  }}
                 >
                   {isFullScreen ? (
-                    <Minimize2 style={{ width: '0.8rem', height: '0.8rem' }} />
+                    <Minimize2 style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} />
                   ) : (
-                    <Maximize2 style={{ width: '0.8rem', height: '0.8rem' }} />
+                    <Maximize2 style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} />
                   )}
                 </button>
                 <button 
                   onClick={() => { setShowCodeEditor(false); setShowQuestionModal(false); }}
                   className="btn btn-sm text-secondary hover:text-dark"
-                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid #e9ecef' }}
+                  style={{ 
+                    background: 'rgba(0,0,0,0.03)', 
+                    border: '1px solid #e9ecef',
+                    padding: 'clamp(0.15rem, 0.4vw, 0.3rem) clamp(0.4rem, 1vw, 0.6rem)'
+                  }}
                 >
-                  <X style={{ width: '1rem', height: '1rem' }} />
+                  <X style={{ 
+                    width: 'clamp(0.9rem, 1.5vw, 1rem)', 
+                    height: 'clamp(0.9rem, 1.5vw, 1rem)' 
+                  }} />
                 </button>
               </div>
             </div>
 
-            {/* Editor Body */}
-            <div className="row g-0 flex-1" style={{ flex: 1, minHeight: '300px' }}>
+            {/* Editor Body - Responsive */}
+            <div className="row g-0 flex-1" style={{ flex: 1, minHeight: 'clamp(250px, 40vh, 300px)' }}>
               {/* Code Editor */}
-              <div className="col-md-7 p-3" style={{ background: '#f8f9fa' }}>
-                <div className="d-flex gap-2 mb-2">
-                  <span className="text-secondary" style={{ fontSize: '0.6rem' }}>Line 1</span>
+              <div className="col-12 col-md-7 p-2 p-md-3" style={{ background: '#f8f9fa' }}>
+                <div className="d-flex gap-2 mb-1 mb-md-2">
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>Line 1</span>
                 </div>
                 <textarea
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="w-100 h-100 border-0"
+                  className="w-100 border-0"
                   style={{ 
                     background: 'transparent',
                     color: '#1a1a2e',
                     fontFamily: 'monospace',
-                    fontSize: '0.85rem',
+                    fontSize: 'clamp(0.7rem, 1.2vw, 0.85rem)',
                     resize: 'none',
                     outline: 'none',
-                    minHeight: '300px',
-                    lineHeight: '1.6'
+                    minHeight: 'clamp(200px, 30vh, 300px)',
+                    lineHeight: '1.6',
+                    width: '100%'
                   }}
                   spellCheck="false"
                 />
               </div>
 
               {/* Output Panel */}
-              <div className="col-md-5 p-3 border-start border-light" style={{ background: 'rgba(0,0,0,0.02)' }}>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <span className="text-secondary fw-bold" style={{ fontSize: '0.65rem' }}>
-                    <Terminal className="me-1" style={{ width: '0.7rem', height: '0.7rem' }} />
+              <div className="col-12 col-md-5 p-2 p-md-3 border-start border-light" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                <div className="d-flex flex-wrap justify-content-between align-items-center gap-1 mb-1 mb-md-2">
+                  <span className="text-secondary fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Terminal className="me-1" style={{ 
+                      width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                      height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+                    }} />
                     Output
                   </span>
                   {output && (
                     <button 
                       onClick={() => setOutput('')}
                       className="btn btn-sm text-secondary"
-                      style={{ background: 'transparent', border: 'none', fontSize: '0.55rem' }}
+                      style={{ 
+                        background: 'transparent', 
+                        border: 'none', 
+                        fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' 
+                      }}
                     >
                       Clear
                     </button>
                   )}
                 </div>
                 <div 
-                  className="p-3 rounded-3"
+                  className="p-2 p-md-3 rounded-3"
                   style={{ 
                     background: 'rgba(0,0,0,0.02)',
                     border: '1px solid #e9ecef',
-                    minHeight: '250px',
-                    maxHeight: '400px',
+                    minHeight: 'clamp(150px, 25vh, 250px)',
+                    maxHeight: 'clamp(200px, 30vh, 350px)',
                     overflow: 'auto',
                     fontFamily: 'monospace',
-                    fontSize: '0.8rem',
+                    fontSize: 'clamp(0.65rem, 1vw, 0.8rem)',
                     color: '#6b7280'
                   }}
                 >
@@ -926,31 +1037,36 @@ export default function Coding() {
             </div>
 
             {/* Editor Footer */}
-            <div className="p-3 border-top border-light d-flex justify-content-between align-items-center" style={{ background: 'rgba(0,0,0,0.02)' }}>
-              <span className="text-secondary" style={{ fontSize: '0.55rem' }}>
+            <div className="p-2 p-md-3 border-top border-light d-flex flex-wrap justify-content-between align-items-center gap-2" style={{ background: 'rgba(0,0,0,0.02)' }}>
+              <span className="text-secondary" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
                 {activeLanguage} • {selectedProblem.language}
               </span>
-              <div className="d-flex gap-2">
+              <div className="d-flex gap-1 gap-md-2 flex-wrap">
                 <button 
                   onClick={() => { setShowCodeEditor(false); setShowQuestionModal(true); }}
-                  className="btn btn-secondary btn-sm px-3"
+                  className="btn btn-secondary btn-sm px-2 px-md-3"
+                  style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}
                 >
                   Back
                 </button>
                 <button 
                   onClick={handleRunCode}
                   disabled={isRunning}
-                  className="btn btn-success btn-sm px-4 d-flex align-items-center gap-1"
+                  className="btn btn-success btn-sm px-3 px-md-4 d-flex align-items-center gap-1"
+                  style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}
                 >
                   {isRunning ? (
                     <>
-                      <span className="spinner-border spinner-border-sm" style={{ width: '0.7rem', height: '0.7rem' }}></span>
-                      Running...
+                      <span className="spinner-border spinner-border-sm" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }}></span>
+                      <span className="d-none d-sm-inline">Running...</span>
                     </>
                   ) : (
                     <>
-                      <Send style={{ width: '0.7rem', height: '0.7rem' }} />
-                      Run Code
+                      <Send style={{ 
+                        width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                        height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+                      }} />
+                      <span className="d-none d-sm-inline">Run Code</span>
                     </>
                   )}
                 </button>
@@ -962,6 +1078,11 @@ export default function Coding() {
 
       {/* CSS Animations */}
       <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
         @keyframes slide-up {
           from {
             opacity: 0;
@@ -971,11 +1092,6 @@ export default function Coding() {
             opacity: 1;
             transform: translateY(0);
           }
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
         }
 
         @keyframes slideUp {
@@ -989,6 +1105,10 @@ export default function Coding() {
           }
         }
 
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+
         .animate-slide-up {
           animation: slide-up 0.4s ease-out forwards;
           opacity: 0;
@@ -996,6 +1116,7 @@ export default function Coding() {
 
         .card {
           position: relative;
+          transition: all 0.3s ease;
         }
 
         .card::before {
@@ -1012,6 +1133,10 @@ export default function Coding() {
           -webkit-mask-composite: xor;
           mask-composite: exclude;
           pointer-events: none;
+        }
+
+        .min-w-0 {
+          min-width: 0;
         }
 
         .overflow-auto::-webkit-scrollbar {
@@ -1051,6 +1176,34 @@ export default function Coding() {
 
         @keyframes spinner-border {
           to { transform: rotate(360deg); }
+        }
+
+        /* Responsive overrides */
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.2rem 0.4rem !important;
+          }
+          .badge {
+            padding: 0.1rem 0.35rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
       `}</style>
     </div>

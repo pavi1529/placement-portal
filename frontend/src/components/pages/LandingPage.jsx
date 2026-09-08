@@ -10,9 +10,6 @@ import {
   XCircle, Check
 } from 'lucide-react';
 
-// 🔥 IMPORTANT: API_URL from props or fallback
-// const API_URL = 'http://localhost:5000/api';  // ❌ REMOVE THIS!
-
 export default function LandingPage({ 
   onLoginClick, 
   onSignUpClick, 
@@ -21,9 +18,8 @@ export default function LandingPage({
   formData,
   loading: parentLoading,
   error: parentError,
-  apiUrl  // 👈🔥 NEW PROP - Receive from App.js
+  apiUrl
 }) {
- 
   const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(true);
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -38,13 +34,11 @@ export default function LandingPage({
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   
-  // Student Login State
   const [studentLoginData, setStudentLoginData] = useState({
     email: '',
     password: ''
   });
 
-  // Student Register State
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [registerData, setRegisterData] = useState({
     name: '',
@@ -67,7 +61,6 @@ export default function LandingPage({
     setRegisterSuccess('');
   }, [isLoginMode, isRegisterMode]);
 
-  // Check auth - only redirect on specific paths
   useEffect(() => {
     const path = window.location.pathname;
     
@@ -91,7 +84,6 @@ export default function LandingPage({
     setIsCheckingAuth(false);
   }, []);
 
- 
   const handleStudentLogin = async (e) => {
     e.preventDefault();
     setStudentError('');
@@ -108,10 +100,6 @@ export default function LandingPage({
       const email = String(studentLoginData.email).trim();
       const password = String(studentLoginData.password);
 
-      console.log('🔐 Student Login Attempt:', email);
-      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
-
-      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -125,7 +113,6 @@ export default function LandingPage({
       });
 
       const data = await response.json();
-      console.log('📦 Student Login Response:', data);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -160,7 +147,6 @@ export default function LandingPage({
     }
   };
 
-
   const handleStudentRegister = async (e) => {
     e.preventDefault();
     setRegisterError('');
@@ -186,10 +172,6 @@ export default function LandingPage({
     }
 
     try {
-      console.log('📝 Student Registration:', registerData.email);
-      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
-
-      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
       const response = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: {
@@ -206,7 +188,6 @@ export default function LandingPage({
       });
 
       const data = await response.json();
-      console.log('📦 Register Response:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
@@ -243,7 +224,6 @@ export default function LandingPage({
     }
   };
 
- 
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setErrorMessage('');
@@ -259,10 +239,6 @@ export default function LandingPage({
       const email = String(adminData.email).trim();
       const password = String(adminData.password);
 
-      console.log('🔐 Admin Login Attempt:', email);
-      console.log('📍 API URL:', apiUrl); // 👈🔥 Debug log
-
-      // 🔥🔥🔥 USE apiUrl FROM PROPS! 🔥🔥🔥
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {
@@ -276,7 +252,6 @@ export default function LandingPage({
       });
 
       const data = await response.json();
-      console.log('📦 Admin Login Response:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Invalid admin credentials');
@@ -306,13 +281,12 @@ export default function LandingPage({
     }
   };
 
- 
   const renderStudentLoginForm = () => (
     <form onSubmit={handleStudentLogin} className="vstack gap-2">
       <div className="position-relative">
         <Mail className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type="email" 
@@ -321,13 +295,13 @@ export default function LandingPage({
           value={studentLoginData.email}
           onChange={(e) => setStudentLoginData({...studentLoginData, email: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
       </div>
       <div className="position-relative">
         <Lock className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type={showStudentPassword ? 'text' : 'password'} 
@@ -336,22 +310,22 @@ export default function LandingPage({
           value={studentLoginData.password}
           onChange={(e) => setStudentLoginData({...studentLoginData, password: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
         <button
           type="button"
           className="btn btn-sm position-absolute text-secondary"
-          style={{ right: '8px', top: '50%', transform: 'translateY(-50%)' }}
+          style={{ right: 'clamp(4px, 1vw, 8px)', top: '50%', transform: 'translateY(-50%)' }}
           onClick={() => setShowStudentPassword(!showStudentPassword)}
         >
-          {showStudentPassword ? <EyeOff style={{ width: '0.8rem', height: '0.8rem' }} /> : <Eye style={{ width: '0.8rem', height: '0.8rem' }} />}
+          {showStudentPassword ? <EyeOff style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} /> : <Eye style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />}
         </button>
       </div>
       <button 
         type="submit" 
         className="btn btn-primary w-100 fw-bold py-2 rounded-pill"
         style={{ 
-          fontSize: '0.75rem',
+          fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)',
           background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
           border: 'none',
           boxShadow: '0 8px 30px rgba(59, 130, 246, 0.3)',
@@ -362,12 +336,12 @@ export default function LandingPage({
       >
         {studentLoading ? (
           <>
-            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Logging in...
           </>
         ) : (
           <>
-            <LogIn className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <LogIn className="me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Login to Dashboard
           </>
         )}
@@ -376,7 +350,7 @@ export default function LandingPage({
         <button 
           type="button"
           className="btn btn-link text-secondary p-0"
-          style={{ fontSize: '0.6rem', textDecoration: 'none' }}
+          style={{ fontSize: 'clamp(0.5rem, 1vw, 0.6rem)', textDecoration: 'none' }}
           onClick={() => { 
             setIsRegisterMode(true); 
             setIsLoginMode(false);
@@ -386,20 +360,19 @@ export default function LandingPage({
             setRegisterSuccess('');
           }}
         >
-          <UserPlus style={{ width: '0.7rem', height: '0.7rem' }} className="me-1" />
+          <UserPlus style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} className="me-1" />
           Don't have an account? Sign up
         </button>
       </div>
     </form>
   );
 
-  
   const renderStudentRegisterForm = () => (
     <form onSubmit={handleStudentRegister} className="vstack gap-2">
       <div className="position-relative">
         <User className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type="text" 
@@ -408,13 +381,13 @@ export default function LandingPage({
           value={registerData.name}
           onChange={(e) => setRegisterData({...registerData, name: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
       </div>
       <div className="position-relative">
         <Mail className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type="email" 
@@ -423,13 +396,13 @@ export default function LandingPage({
           value={registerData.email}
           onChange={(e) => setRegisterData({...registerData, email: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
       </div>
       <div className="position-relative">
         <Lock className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type={showRegisterPassword ? 'text' : 'password'} 
@@ -439,21 +412,21 @@ export default function LandingPage({
           onChange={(e) => setRegisterData({...registerData, password: e.target.value})} 
           required 
           minLength="6"
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
         <button
           type="button"
           className="btn btn-sm position-absolute text-secondary"
-          style={{ right: '8px', top: '50%', transform: 'translateY(-50%)' }}
+          style={{ right: 'clamp(4px, 1vw, 8px)', top: '50%', transform: 'translateY(-50%)' }}
           onClick={() => setShowRegisterPassword(!showRegisterPassword)}
         >
-          {showRegisterPassword ? <EyeOff style={{ width: '0.8rem', height: '0.8rem' }} /> : <Eye style={{ width: '0.8rem', height: '0.8rem' }} />}
+          {showRegisterPassword ? <EyeOff style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} /> : <Eye style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />}
         </button>
       </div>
       <div className="position-relative">
         <Lock className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type="password" 
@@ -462,7 +435,7 @@ export default function LandingPage({
           value={registerData.confirmPassword}
           onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
       </div>
       <div className="row g-1">
@@ -471,7 +444,7 @@ export default function LandingPage({
             className="form-select form-select-sm bg-dark text-light border-secondary"
             value={registerData.department}
             onChange={(e) => setRegisterData({...registerData, department: e.target.value})}
-            style={{ fontSize: '0.65rem', borderRadius: '10px' }}
+            style={{ fontSize: 'clamp(0.55rem, 1vw, 0.65rem)', borderRadius: '10px' }}
           >
             <option value="CSE">CSE</option>
             <option value="IT">IT</option>
@@ -489,7 +462,7 @@ export default function LandingPage({
             placeholder="CGPA" 
             value={registerData.cgpa}
             onChange={(e) => setRegisterData({...registerData, cgpa: e.target.value})}
-            style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+            style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
           />
         </div>
       </div>
@@ -497,7 +470,7 @@ export default function LandingPage({
         type="submit" 
         className="btn btn-success w-100 fw-bold py-2 rounded-pill"
         style={{ 
-          fontSize: '0.75rem',
+          fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)',
           background: 'linear-gradient(135deg, #22c55e, #16a34a)',
           border: 'none',
           boxShadow: '0 8px 30px rgba(34, 197, 94, 0.3)',
@@ -508,12 +481,12 @@ export default function LandingPage({
       >
         {registerLoading ? (
           <>
-            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Creating Account...
           </>
         ) : (
           <>
-            <UserPlus className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <UserPlus className="me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Create Account
           </>
         )}
@@ -522,7 +495,7 @@ export default function LandingPage({
         <button 
           type="button"
           className="btn btn-link text-secondary p-0"
-          style={{ fontSize: '0.6rem', textDecoration: 'none' }}
+          style={{ fontSize: 'clamp(0.5rem, 1vw, 0.6rem)', textDecoration: 'none' }}
           onClick={() => { 
             setIsRegisterMode(false); 
             setIsLoginMode(true);
@@ -532,20 +505,19 @@ export default function LandingPage({
             setStudentSuccess('');
           }}
         >
-          <ArrowRight style={{ width: '0.7rem', height: '0.7rem' }} className="me-1" />
+          <ArrowRight style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} className="me-1" />
           Back to Login
         </button>
       </div>
     </form>
   );
 
- 
   const renderAdminForm = () => (
     <form onSubmit={handleAdminLogin} className="vstack gap-2">
       <div className="position-relative">
         <Mail className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type="email" 
@@ -554,13 +526,13 @@ export default function LandingPage({
           value={adminData.email} 
           onChange={e => setAdminData({...adminData, email: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
       </div>
       <div className="position-relative">
         <Lock className="position-absolute" style={{ 
-          left: '10px', top: '50%', transform: 'translateY(-50%)', 
-          width: '0.8rem', height: '0.8rem', color: '#6c757d' 
+          left: 'clamp(8px, 1.5vw, 10px)', top: '50%', transform: 'translateY(-50%)', 
+          width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)', color: '#6c757d' 
         }} />
         <input 
           type={showAdminPassword ? 'text' : 'password'} 
@@ -569,22 +541,22 @@ export default function LandingPage({
           value={adminData.password} 
           onChange={e => setAdminData({...adminData, password: e.target.value})} 
           required 
-          style={{ fontSize: '0.75rem', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)', borderRadius: '10px', borderColor: 'rgba(255,255,255,0.06)' }}
         />
         <button
           type="button"
           className="btn btn-sm position-absolute text-secondary"
-          style={{ right: '8px', top: '50%', transform: 'translateY(-50%)' }}
+          style={{ right: 'clamp(4px, 1vw, 8px)', top: '50%', transform: 'translateY(-50%)' }}
           onClick={() => setShowAdminPassword(!showAdminPassword)}
         >
-          {showAdminPassword ? <EyeOff style={{ width: '0.8rem', height: '0.8rem' }} /> : <Eye style={{ width: '0.8rem', height: '0.8rem' }} />}
+          {showAdminPassword ? <EyeOff style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} /> : <Eye style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />}
         </button>
       </div>
       <button 
         type="submit" 
         className="btn btn-info w-100 fw-bold py-2 rounded-pill"
         style={{ 
-          fontSize: '0.75rem',
+          fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)',
           background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
           border: 'none',
           boxShadow: '0 8px 30px rgba(6, 182, 212, 0.3)',
@@ -595,25 +567,24 @@ export default function LandingPage({
       >
         {adminLoading ? (
           <>
-            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <Loader2 className="spinner-border spinner-border-sm me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Verifying...
           </>
         ) : (
           <>
-            <ShieldCheck className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <ShieldCheck className="me-1" style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
             Verify & Access
           </>
         )}
       </button>
       <div className="text-center mt-1">
-        <small className="text-secondary" style={{ fontSize: '0.45rem' }}>
+        <small className="text-secondary" style={{ fontSize: 'clamp(0.35rem, 0.7vw, 0.45rem)' }}>
           Test: admin@gmail.com / admin123
         </small>
       </div>
     </form>
   );
 
-  
   const stats = [
     { icon: Users, label: "Students Placed", value: "482+", color: "#3b82f6", bg: "rgba(59,130,246,0.15)" },
     { icon: Building2, label: "Partner Companies", value: "48+", color: "#22c55e", bg: "rgba(34,197,94,0.15)" },
@@ -628,21 +599,19 @@ export default function LandingPage({
     { icon: BarChart3, label: "Statistics", desc: "Comprehensive data" },
   ];
 
- 
   if (parentLoading || isCheckingAuth) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100" style={{ background: '#e3f2fd' }}>
         <div className="text-center">
-          <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+          <div className="spinner-border text-primary" role="status" style={{ width: 'clamp(2rem, 5vw, 3rem)', height: 'clamp(2rem, 5vw, 3rem)' }}>
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="text-secondary mt-3">Loading...</p>
+          <p className="text-secondary mt-3" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>Loading...</p>
         </div>
       </div>
     );
   }
 
- 
   return (
     <div className="min-vh-100 d-flex flex-column text-light position-relative overflow-hidden"
       style={{ 
@@ -653,66 +622,59 @@ export default function LandingPage({
       {/* Animated Background */}
       <div className="position-absolute w-100 h-100" style={{ zIndex: 0 }}>
         <div className="position-absolute rounded-circle" style={{ 
-          width: '600px', height: '600px', 
+          width: 'clamp(300px, 60vw, 600px)', 
+          height: 'clamp(300px, 60vw, 600px)', 
           background: 'radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%)',
           top: '-200px', right: '-200px',
           animation: 'float-slow 12s ease-in-out infinite'
         }}></div>
         <div className="position-absolute rounded-circle" style={{ 
-          width: '400px', height: '400px', 
+          width: 'clamp(200px, 40vw, 400px)', 
+          height: 'clamp(200px, 40vw, 400px)', 
           background: 'radial-gradient(circle, rgba(255,255,255,0.2), transparent 70%)',
           bottom: '-100px', left: '-100px',
           animation: 'float-slow 15s ease-in-out infinite reverse'
         }}></div>
-        <div className="position-absolute" style={{
-          top: '20%', left: '5%',
-          animation: 'float 15s ease-in-out infinite'
-        }}>
-          <Sparkles className="text-blue-400/20" style={{ width: '4rem', height: '4rem' }} />
-        </div>
-        <div className="position-absolute" style={{
-          bottom: '25%', right: '8%',
-          animation: 'float 20s ease-in-out infinite reverse'
-        }}>
-          <Globe className="text-blue-500/15" style={{ width: '5rem', height: '5rem' }} />
-        </div>
       </div>
 
-      {/* Header with Block Text */}
-      <header className="navbar navbar-dark py-3 px-4 position-relative" style={{ zIndex: 1 }}>
+      {/* Header */}
+      <header className="navbar navbar-dark py-2 py-md-3 px-3 px-md-4 position-relative" style={{ zIndex: 1 }}>
         <div className="container d-flex justify-content-between align-items-center">
-          <div className="d-flex align-items-center gap-3">
-            <div className="p-2.5 rounded-3 text-white d-flex align-items-center justify-content-center shadow-lg" 
+          <div className="d-flex align-items-center gap-2 gap-md-3">
+            <div className="p-2 p-md-2.5 rounded-3 text-white d-flex align-items-center justify-content-center shadow-lg" 
               style={{ 
                 background: 'linear-gradient(135deg, #1a73e8, #4a90d9)',
-                boxShadow: '0 8px 30px rgba(26, 115, 232, 0.3)'
+                boxShadow: '0 8px 30px rgba(26, 115, 232, 0.3)',
+                width: 'clamp(36px, 6vw, 48px)',
+                height: 'clamp(36px, 6vw, 48px)'
               }}
             >
-              <ShieldCheck className="w-5 h-5" />
+              <ShieldCheck className="w-4 h-4" style={{ width: 'clamp(1rem, 2vw, 1.2rem)', height: 'clamp(1rem, 2vw, 1.2rem)' }} />
             </div>
             <div>
               <div className="navbar-brand mb-0 h1 fw-black tracking-wider text-white" 
                 style={{ 
-                  fontSize: '1.8rem', 
+                  fontSize: 'clamp(1rem, 4vw, 1.8rem)', 
                   fontWeight: '900',
                   letterSpacing: '0.05em',
                   textTransform: 'uppercase',
                   fontFamily: "'Inter', 'Arial Black', sans-serif",
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                  lineHeight: '1.1'
                 }}
               >
-                PLACEMENT PORTAL
+                PLACEMENT
               </div>
-              <div className="d-block text-white-50" 
+              <div className="d-block text-white-50 d-none d-sm-block" 
                 style={{ 
-                  fontSize: '0.65rem', 
+                  fontSize: 'clamp(0.4rem, 0.8vw, 0.6rem)', 
                   letterSpacing: '0.2em',
                   fontWeight: '700',
                   textTransform: 'uppercase',
                   fontFamily: "'Inter', 'Arial Black', sans-serif",
                 }}
               >
-                
+                Student Portal System
               </div>
             </div>
           </div>
@@ -723,19 +685,19 @@ export default function LandingPage({
                   localStorage.clear();
                   window.location.reload();
                 }}
-                className="btn btn-outline-danger btn-sm px-3 py-1"
-                style={{ fontSize: '0.6rem', borderRadius: '8px' }}
+                className="btn btn-outline-danger btn-sm px-2 px-md-3 py-1"
+                style={{ fontSize: 'clamp(0.5rem, 1vw, 0.6rem)', borderRadius: '8px' }}
               >
                 Logout
               </button>
             )}
-            <span className="badge px-3 py-2 rounded-pill" style={{ 
+            <span className="badge px-2 px-md-3 py-1 py-md-2 rounded-pill d-none d-sm-inline-block" style={{ 
               background: 'rgba(34, 197, 94, 0.2)',
               border: '1px solid rgba(34, 197, 94, 0.3)',
               color: '#1b7a34',
-              fontSize: '0.6rem'
+              fontSize: 'clamp(0.45rem, 0.8vw, 0.6rem)'
             }}>
-              <span className="d-inline-block rounded-circle bg-success me-1" style={{ width: '0.4rem', height: '0.4rem' }}></span>
+              <span className="d-inline-block rounded-circle bg-success me-1" style={{ width: 'clamp(0.3rem, 0.6vw, 0.4rem)', height: 'clamp(0.3rem, 0.6vw, 0.4rem)' }}></span>
               Live
             </span>
           </div>
@@ -743,63 +705,71 @@ export default function LandingPage({
       </header>
 
       {/* Main Content */}
-      <main className="container my-auto py-4 position-relative" style={{ zIndex: 1 }}>
-        <div className="row align-items-center g-5">
+      <main className="container my-auto py-3 py-md-4 position-relative" style={{ zIndex: 1 }}>
+        <div className="row align-items-center g-3 g-md-5">
           {/* Left Section - Hero */}
           <div className="col-lg-6 text-center text-lg-start">
-            <div className="d-inline-flex align-items-center gap-2 mb-4 px-3 py-2 rounded-pill" 
+            <div className="d-inline-flex align-items-center gap-2 mb-3 mb-md-4 px-2 px-md-3 py-1 py-md-2 rounded-pill" 
               style={{ 
                 background: 'rgba(26, 115, 232, 0.15)',
                 border: '1px solid rgba(26, 115, 232, 0.2)'
               }}
             >
-              <Award className="text-primary" style={{ width: '0.9rem', height: '0.9rem' }} />
-              <span className="text-primary" style={{ fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.05em' }}>
+              <Award className="text-primary" style={{ width: 'clamp(0.7rem, 1.2vw, 0.9rem)', height: 'clamp(0.7rem, 1.2vw, 0.9rem)' }} />
+              <span className="text-primary" style={{ fontSize: 'clamp(0.5rem, 1vw, 0.65rem)', fontWeight: '600', letterSpacing: '0.05em' }}>
                 Integrated Placement System
               </span>
             </div>
             
-            <h1 className="display-3 fw-black mb-4" style={{ lineHeight: '1.1', color: '#0a1e3c' }}>
-              Bridge The Gap <br/> 
+            <h1 className="display-3 fw-black mb-3 mb-md-4" style={{ 
+              lineHeight: '1.1', 
+              color: '#0a1e3c',
+              fontSize: 'clamp(1.8rem, 8vw, 3.5rem)'
+            }}>
+              Bridge The Gap <br className="d-none d-sm-block" /> 
               Between <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">Talent & Industry</span>
             </h1>
             
-            <p className="lead mb-4" style={{ color: '#1a3a5c', fontSize: '1.1rem', maxWidth: '500px' }}>
+            <p className="lead mb-3 mb-md-4" style={{ 
+              color: '#1a3a5c', 
+              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', 
+              maxWidth: '500px' 
+            }}>
               A unified secure deployment routing matrix connecting elite students with global opportunities.
             </p>
 
             {/* Features */}
-            <div className="d-flex flex-wrap gap-2 mb-4">
+            <div className="d-flex flex-wrap gap-1 gap-md-2 mb-3 mb-md-4">
               {features.map((feature, i) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={i} className="d-flex align-items-center gap-1.5 px-3 py-1.5 rounded-3" style={{
+                  <div key={i} className="d-flex align-items-center gap-1 gap-md-1.5 px-2 px-md-3 py-1 py-md-1.5 rounded-3" style={{
                     background: 'rgba(255,255,255,0.5)',
                     border: '1px solid rgba(255,255,255,0.8)',
                     transition: 'all 0.3s ease'
                   }}>
-                    <Icon className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />
-                    <span className="text-dark" style={{ fontSize: '0.55rem', fontWeight: '500' }}>{feature.label}</span>
+                    <Icon className="text-primary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />
+                    <span className="text-dark" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)', fontWeight: '500' }}>{feature.label}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* Stats */}
-            <div className="d-flex flex-wrap gap-4 mt-3">
+            <div className="d-flex flex-wrap gap-3 gap-md-4 mt-2 mt-md-3">
               {stats.map((stat, i) => {
                 const Icon = stat.icon;
                 return (
                   <div key={i} className="d-flex align-items-center gap-2">
-                    <div className="p-2 rounded-3" style={{ 
+                    <div className="p-1 p-md-2 rounded-3" style={{ 
                       background: 'rgba(255,255,255,0.6)',
                       border: `1px solid rgba(0,0,0,0.08)`
                     }}>
-                      <Icon style={{ width: '1rem', height: '1rem', color: stat.color }} />
+                      <Icon style={{ width: 'clamp(0.8rem, 1.5vw, 1rem)', height: 'clamp(0.8rem, 1.5vw, 1rem)', color: stat.color }} />
                     </div>
                     <div>
-                      <h5 className="fw-bold m-0" style={{ fontSize: '1.1rem', color: '#0a1e3c' }}>{stat.value}</h5>
-                      <span className="text-secondary" style={{ fontSize: '0.5rem', fontWeight: '500' }}>{stat.label}</span>
+                      <h5 className="fw-bold m-0" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', color: '#0a1e3c' }}>{stat.value}</h5>
+                      <span className="text-secondary" style={{ fontSize: 'clamp(0.4rem, 0.8vw, 0.5rem)', fontWeight: '500' }}>{stat.label}</span>
                     </div>
                   </div>
                 );
@@ -809,7 +779,7 @@ export default function LandingPage({
 
           {/* Right Section - Forms */}
           <div className="col-lg-5 offset-lg-1">
-            <div className="p-4 rounded-4 border shadow-2xl" 
+            <div className="p-3 p-md-4 rounded-4 border shadow-2xl" 
               style={{ 
                 background: 'rgba(255, 255, 255, 0.85)',
                 backdropFilter: 'blur(20px)',
@@ -819,7 +789,7 @@ export default function LandingPage({
             >
               {/* Student Gateway */}
               <div 
-                className="card border-0 mb-4 overflow-hidden shadow-lg"
+                className="card border-0 mb-3 mb-md-4 overflow-hidden shadow-lg"
                 style={{ 
                   background: hoveredCard === 'student' 
                     ? 'rgba(26, 115, 232, 0.08)' 
@@ -836,83 +806,88 @@ export default function LandingPage({
                 onMouseEnter={() => setHoveredCard('student')}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                <div className="card-body d-flex align-items-center gap-4 py-4 px-4" 
+                <div className="card-body d-flex align-items-center gap-3 gap-md-4 py-3 py-md-4 px-3 px-md-4" 
                   style={{ cursor: 'pointer' }} 
                   onClick={() => setIsStudentFormOpen(!isStudentFormOpen)}
                 >
-                  <div className="p-3 rounded-3 d-flex align-items-center justify-content-center" style={{ 
+                  <div className="p-2 p-md-3 rounded-3 d-flex align-items-center justify-content-center" style={{ 
                     background: 'linear-gradient(135deg, rgba(26, 115, 232, 0.2), rgba(26, 115, 232, 0.05))',
                     border: '2px solid rgba(26, 115, 232, 0.2)',
                     boxShadow: '0 4px 20px rgba(26, 115, 232, 0.1), inset 0 1px 0 rgba(255,255,255,0.2)',
-                    width: '64px',
-                    height: '64px',
+                    width: 'clamp(48px, 8vw, 64px)',
+                    height: 'clamp(48px, 8vw, 64px)',
                     transition: 'all 0.3s ease',
                     transform: isStudentFormOpen ? 'scale(1.1)' : 'scale(1)',
                     flexShrink: 0
                   }}>
                     <GraduationCap className="text-primary" style={{ 
-                      width: '2rem', 
-                      height: '2rem',
+                      width: 'clamp(1.5rem, 3vw, 2rem)', 
+                      height: 'clamp(1.5rem, 3vw, 2rem)',
                       filter: 'drop-shadow(0 2px 8px rgba(26, 115, 232, 0.3))'
                     }} />
                   </div>
-                  <div className="flex-grow-1">
-                    <h5 className="card-title mb-1 fw-bold d-flex align-items-center gap-2" style={{ fontSize: '1.1rem', color: '#0a1e3c' }}>
+                  <div className="flex-grow-1 min-w-0">
+                    <h5 className="card-title mb-1 fw-bold d-flex align-items-center gap-2 flex-wrap" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', color: '#0a1e3c' }}>
                       Student Gateway
-                      <span className="badge bg-primary bg-opacity-10 text-primary border border-primary" style={{ fontSize: '0.45rem', padding: '0.25rem 0.6rem' }}>Active</span>
+                      <span className="badge bg-primary bg-opacity-10 text-primary border border-primary" style={{ fontSize: 'clamp(0.35rem, 0.7vw, 0.45rem)', padding: '0.2rem 0.5rem' }}>Active</span>
                     </h5>
-                    <span className="text-secondary" style={{ fontSize: '0.6rem' }}>Access placements, tests, and opportunities</span>
+                    <span className="text-secondary" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Access placements, tests, and opportunities</span>
                   </div>
-                  <ArrowRight className="text-primary" style={{ 
-                    width: '1.2rem', height: '1.2rem',
+                  <ArrowRight className="text-primary flex-shrink-0" style={{ 
+                    width: 'clamp(1rem, 2vw, 1.2rem)', 
+                    height: 'clamp(1rem, 2vw, 1.2rem)',
                     transform: isStudentFormOpen ? 'rotate(90deg)' : 'rotate(0deg)',
                     transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                   }} />
                 </div>
                 
                 {isStudentFormOpen && (
-                  <div className="px-4 pb-4 pt-2 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
+                  <div className="px-3 px-md-4 pb-3 pb-md-4 pt-2 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
                     {studentError && (
-                      <div className="alert alert-danger p-2 small text-center mb-3 d-flex align-items-center gap-2" style={{ 
+                      <div className="alert alert-danger p-2 small text-center mb-2 mb-md-3 d-flex align-items-center gap-2" style={{ 
                         background: 'rgba(239, 68, 68, 0.1)',
                         border: '1px solid rgba(239, 68, 68, 0.2)',
                         color: '#991b1b',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        fontSize: 'clamp(0.55rem, 1vw, 0.65rem)'
                       }}>
-                        <AlertCircle style={{ width: '0.8rem', height: '0.8rem' }} />
+                        <AlertCircle style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                         {studentError}
                       </div>
                     )}
                     {studentSuccess && (
-                      <div className="alert alert-success p-2 small text-center mb-3 d-flex align-items-center gap-2" style={{ 
+                      <div className="alert alert-success p-2 small text-center mb-2 mb-md-3 d-flex align-items-center gap-2" style={{ 
                         background: 'rgba(34, 197, 94, 0.1)',
                         border: '1px solid rgba(34, 197, 94, 0.2)',
                         color: '#166534',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        fontSize: 'clamp(0.55rem, 1vw, 0.65rem)'
                       }}>
-                        <Check style={{ width: '0.8rem', height: '0.8rem' }} />
+                        <Check style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                         {studentSuccess}
                       </div>
                     )}
                     {registerError && (
-                      <div className="alert alert-danger p-2 small text-center mb-3 d-flex align-items-center gap-2" style={{ 
+                      <div className="alert alert-danger p-2 small text-center mb-2 mb-md-3 d-flex align-items-center gap-2" style={{ 
                         background: 'rgba(239, 68, 68, 0.1)',
                         border: '1px solid rgba(239, 68, 68, 0.2)',
                         color: '#991b1b',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        fontSize: 'clamp(0.55rem, 1vw, 0.65rem)'
                       }}>
-                        <AlertCircle style={{ width: '0.8rem', height: '0.8rem' }} />
+                        <AlertCircle style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                         {registerError}
                       </div>
                     )}
                     {registerSuccess && (
-                      <div className="alert alert-success p-2 small text-center mb-3 d-flex align-items-center gap-2" style={{ 
+                      <div className="alert alert-success p-2 small text-center mb-2 mb-md-3 d-flex align-items-center gap-2" style={{ 
                         background: 'rgba(34, 197, 94, 0.1)',
                         border: '1px solid rgba(34, 197, 94, 0.2)',
                         color: '#166534',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        fontSize: 'clamp(0.55rem, 1vw, 0.65rem)'
                       }}>
-                        <Check style={{ width: '0.8rem', height: '0.8rem' }} />
+                        <Check style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                         {registerSuccess}
                       </div>
                     )}
@@ -940,50 +915,52 @@ export default function LandingPage({
                 onMouseEnter={() => setHoveredCard('admin')}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                <div className="card-body d-flex align-items-center gap-4 py-4 px-4" 
+                <div className="card-body d-flex align-items-center gap-3 gap-md-4 py-3 py-md-4 px-3 px-md-4" 
                   style={{ cursor: 'pointer' }} 
                   onClick={() => setIsAdminFormOpen(!isAdminFormOpen)}
                 >
-                  <div className="p-3 rounded-3 d-flex align-items-center justify-content-center" style={{ 
+                  <div className="p-2 p-md-3 rounded-3 d-flex align-items-center justify-content-center" style={{ 
                     background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05))',
                     border: '2px solid rgba(6, 182, 212, 0.2)',
                     boxShadow: '0 4px 20px rgba(6, 182, 212, 0.1), inset 0 1px 0 rgba(255,255,255,0.2)',
-                    width: '64px',
-                    height: '64px',
+                    width: 'clamp(48px, 8vw, 64px)',
+                    height: 'clamp(48px, 8vw, 64px)',
                     transition: 'all 0.3s ease',
                     transform: isAdminFormOpen ? 'scale(1.1)' : 'scale(1)',
                     flexShrink: 0
                   }}>
                     <UserCheck className="text-cyan-600" style={{ 
-                      width: '2rem', 
-                      height: '2rem',
+                      width: 'clamp(1.5rem, 3vw, 2rem)', 
+                      height: 'clamp(1.5rem, 3vw, 2rem)',
                       filter: 'drop-shadow(0 2px 8px rgba(6, 182, 212, 0.3))'
                     }} />
                   </div>
-                  <div className="flex-grow-1">
-                    <h5 className="card-title mb-1 fw-bold d-flex align-items-center gap-2" style={{ fontSize: '1.1rem', color: '#0a1e3c' }}>
+                  <div className="flex-grow-1 min-w-0">
+                    <h5 className="card-title mb-1 fw-bold d-flex align-items-center gap-2 flex-wrap" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', color: '#0a1e3c' }}>
                       Admin Terminal
-                      <span className="badge bg-cyan-400 bg-opacity-10 text-cyan-600 border border-cyan-400" style={{ fontSize: '0.45rem', padding: '0.25rem 0.6rem' }}>Secure</span>
+                      <span className="badge bg-cyan-400 bg-opacity-10 text-cyan-600 border border-cyan-400" style={{ fontSize: 'clamp(0.35rem, 0.7vw, 0.45rem)', padding: '0.2rem 0.5rem' }}>Secure</span>
                     </h5>
-                    <span className="text-secondary" style={{ fontSize: '0.6rem' }}>Manage students, companies, jobs and more</span>
+                    <span className="text-secondary" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>Manage students, companies, jobs and more</span>
                   </div>
-                  <ArrowRight className="text-cyan-600" style={{ 
-                    width: '1.2rem', height: '1.2rem',
+                  <ArrowRight className="text-cyan-600 flex-shrink-0" style={{ 
+                    width: 'clamp(1rem, 2vw, 1.2rem)', 
+                    height: 'clamp(1rem, 2vw, 1.2rem)',
                     transform: isAdminFormOpen ? 'rotate(90deg)' : 'rotate(0deg)',
                     transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                   }} />
                 </div>
                 
                 {isAdminFormOpen && (
-                  <div className="px-4 pb-4 pt-2 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
+                  <div className="px-3 px-md-4 pb-3 pb-md-4 pt-2 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
                     {errorMessage && (
-                      <div className="alert alert-danger p-2 small text-center mb-3 d-flex align-items-center gap-2" style={{ 
+                      <div className="alert alert-danger p-2 small text-center mb-2 mb-md-3 d-flex align-items-center gap-2" style={{ 
                         background: 'rgba(239, 68, 68, 0.1)',
                         border: '1px solid rgba(239, 68, 68, 0.2)',
                         color: '#991b1b',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        fontSize: 'clamp(0.55rem, 1vw, 0.65rem)'
                       }}>
-                        <AlertCircle style={{ width: '0.8rem', height: '0.8rem' }} />
+                        <AlertCircle style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />
                         {errorMessage}
                       </div>
                     )}
@@ -993,23 +970,23 @@ export default function LandingPage({
               </div>
 
               {/* Footer */}
-              <div className="mt-4 pt-3 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
-                <div className="d-flex justify-content-center gap-5">
-                  <span className="text-secondary d-flex align-items-center gap-2" style={{ fontSize: '0.55rem', fontWeight: '500' }}>
-                    <div className="p-1.5 rounded-circle" style={{ background: 'rgba(26,115,232,0.1)', border: '1px solid rgba(26,115,232,0.2)' }}>
-                      <Lock style={{ width: '0.8rem', height: '0.8rem' }} className="text-primary" />
+              <div className="mt-3 mt-md-4 pt-2 pt-md-3 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)' }}>
+                <div className="d-flex justify-content-center gap-3 gap-md-5 flex-wrap">
+                  <span className="text-secondary d-flex align-items-center gap-1 gap-md-2" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)', fontWeight: '500' }}>
+                    <div className="p-1 p-md-1.5 rounded-circle" style={{ background: 'rgba(26,115,232,0.1)', border: '1px solid rgba(26,115,232,0.2)' }}>
+                      <Lock style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="text-primary" />
                     </div>
                     Secure
                   </span>
-                  <span className="text-secondary d-flex align-items-center gap-2" style={{ fontSize: '0.55rem', fontWeight: '500' }}>
-                    <div className="p-1.5 rounded-circle" style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)' }}>
-                      <Shield style={{ width: '0.8rem', height: '0.8rem' }} className="text-cyan-600" />
+                  <span className="text-secondary d-flex align-items-center gap-1 gap-md-2" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)', fontWeight: '500' }}>
+                    <div className="p-1 p-md-1.5 rounded-circle" style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)' }}>
+                      <Shield style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="text-cyan-600" />
                     </div>
                     Encrypted
                   </span>
-                  <span className="text-secondary d-flex align-items-center gap-2" style={{ fontSize: '0.55rem', fontWeight: '500' }}>
-                    <div className="p-1.5 rounded-circle" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
-                      <CheckCircle style={{ width: '0.8rem', height: '0.8rem' }} className="text-success" />
+                  <span className="text-secondary d-flex align-items-center gap-1 gap-md-2" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)', fontWeight: '500' }}>
+                    <div className="p-1 p-md-1.5 rounded-circle" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                      <CheckCircle style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} className="text-success" />
                     </div>
                     Protected
                   </span>
@@ -1132,6 +1109,28 @@ export default function LandingPage({
 
         .btn-link.text-secondary:hover {
           color: #0a1e3c !important;
+        }
+
+        /* Responsive utilities */
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn-sm {
+            padding: 0.2rem 0.5rem !important;
+          }
+          .rounded-4 {
+            border-radius: 12px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
       `}</style>
     </div>
