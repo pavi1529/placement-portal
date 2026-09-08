@@ -3,13 +3,12 @@ import {
   Building2, Plus, Trash2, Edit2, Search, Filter,
   Mail, Phone, MapPin, Globe, Users, Award,
   Eye, RefreshCw, XCircle, CheckCircle, Loader2,
-  ArrowUpRight, Sparkles, Zap, TrendingUp
+  ArrowUpRight, Sparkles, Zap, TrendingUp, Save
 } from 'lucide-react';
 
 const API_URL = 'http://localhost:5000/api';
 
 export default function AdminCompaniesTab({ token }) {
-
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,7 +33,6 @@ export default function AdminCompaniesTab({ token }) {
     openRoles: ''
   });
 
-  
   const fetchCompanies = async () => {
     try {
       setLoading(true);
@@ -48,7 +46,6 @@ export default function AdminCompaniesTab({ token }) {
       });
       
       const data = await response.json();
-      console.log('📦 Companies response:', data);
       
       if (data.success) {
         setCompanies(data.data || []);
@@ -63,7 +60,6 @@ export default function AdminCompaniesTab({ token }) {
     }
   };
 
- 
   const handleAddCompany = async (e) => {
     e.preventDefault();
     if (!newCompany.name || !newCompany.email) {
@@ -123,7 +119,6 @@ export default function AdminCompaniesTab({ token }) {
     }
   };
 
- 
   const handleEditCompany = (company) => {
     setEditingCompany(company);
     setNewCompany({
@@ -231,13 +226,11 @@ export default function AdminCompaniesTab({ token }) {
     }
   };
 
- 
   const handleViewCompany = (company) => {
     setSelectedCompany(company);
     setShowDetailsModal(true);
   };
 
- 
   const getTierColor = (tier) => {
     switch(tier) {
       case 'Product': return 'primary';
@@ -249,9 +242,9 @@ export default function AdminCompaniesTab({ token }) {
 
   const getTierIcon = (tier) => {
     switch(tier) {
-      case 'Product': return <Award className="text-primary" style={{ width: '0.6rem', height: '0.6rem' }} />;
-      case 'Services': return <Users className="text-success" style={{ width: '0.6rem', height: '0.6rem' }} />;
-      case 'Startup': return <TrendingUp className="text-warning" style={{ width: '0.6rem', height: '0.6rem' }} />;
+      case 'Product': return <Award className="text-primary" style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} />;
+      case 'Services': return <Users className="text-success" style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} />;
+      case 'Startup': return <TrendingUp className="text-warning" style={{ width: 'clamp(0.5rem, 0.8vw, 0.6rem)', height: 'clamp(0.5rem, 0.8vw, 0.6rem)' }} />;
       default: return null;
     }
   };
@@ -282,31 +275,32 @@ export default function AdminCompaniesTab({ token }) {
     return matchesSearch && matchesTier;
   });
 
-  
   const totalCompanies = companies.length;
   const productCompanies = companies.filter(c => c?.tier === 'Product').length;
   const serviceCompanies = companies.filter(c => c?.tier === 'Services').length;
   const startupCompanies = companies.filter(c => c?.tier === 'Startup').length;
   const totalOpenRoles = companies.reduce((sum, c) => sum + (c?.openRoles || 0), 0);
 
- 
   useEffect(() => {
     if (token) {
       fetchCompanies();
     }
   }, [token]);
 
-
   return (
     <div className="animate-fadeIn">
-     
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      {/* Header */}
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
         <div>
-          <h5 className="text-light fw-bold m-0">Companies</h5>
-          <p className="text-secondary small m-0">Manage all partner companies</p>
+          <h5 className="text-light fw-bold m-0" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+            Companies
+          </h5>
+          <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+            Manage all partner companies
+          </p>
         </div>
         <button 
-          className="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+          className="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-lg shadow-primary/20"
           onClick={() => {
             setEditingCompany(null);
             setNewCompany({
@@ -323,14 +317,23 @@ export default function AdminCompaniesTab({ token }) {
             });
             setShowAddModal(true);
           }}
-          style={{ borderRadius: '10px', fontWeight: '600' }}
+          style={{ 
+            borderRadius: '10px', 
+            fontWeight: '600',
+            fontSize: 'clamp(0.6rem, 1vw, 0.7rem)',
+            padding: 'clamp(0.3rem, 0.6vw, 0.4rem) clamp(0.6rem, 1.2vw, 0.8rem)'
+          }}
         >
-          <Plus style={{ width: '0.8rem', height: '0.8rem' }} /> Add Company
+          <Plus style={{ 
+            width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+            height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+          }} /> 
+          <span className="d-none d-sm-inline">Add Company</span>
         </button>
       </div>
 
-     
-      <div className="row g-3 mb-4">
+      {/* Stats Cards */}
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
           { label: "Total Companies", value: totalCompanies, color: "primary", icon: Building2 },
           { label: "Product", value: productCompanies, color: "primary", icon: Award },
@@ -347,15 +350,39 @@ export default function AdminCompaniesTab({ token }) {
           };
           return (
             <div key={i} className="col-6 col-lg">
-              <div className="card border-0 shadow-lg rounded-4 h-100 transition-all hover:translate-y-1" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-                <div className="card-body p-3">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100" style={{ 
+                background: 'rgba(20,20,30,0.6)', 
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                transition: 'all 0.3s ease'
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.5rem' }}>{stat.label}</span>
-                    <div className={`p-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                    <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
+                      {stat.label}
+                    </span>
+                    <div className={`p-1 p-md-2 rounded-3`} style={{ 
+                      background: bgColors[stat.color], 
+                      border: `1px solid ${bgColors[stat.color]}` 
+                    }}>
+                      <Icon className={`text-${stat.color}`} style={{ 
+                        width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                        height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                      }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>{stat.value}</h4>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ 
+                    fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' 
+                  }}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -363,82 +390,134 @@ export default function AdminCompaniesTab({ token }) {
         })}
       </div>
 
-     
-      <div className="card border-0 shadow-lg rounded-4 mb-4" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-3 align-items-center">
-            <div className="d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded-3 border border-secondary flex-grow-1" style={{ maxWidth: '300px' }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+      {/* Search & Filter */}
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ 
+        background: 'rgba(20,20,30,0.6)', 
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.05)'
+      }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <div className="d-flex align-items-center gap-2 bg-dark px-2 px-md-3 py-1 py-md-2 rounded-3 border border-secondary flex-grow-1" style={{ 
+              maxWidth: 'clamp(160px, 35vw, 300px)',
+              borderColor: 'rgba(255,255,255,0.1) !important'
+            }}>
+              <Search className="text-secondary" style={{ 
+                width: 'clamp(0.7rem, 1.1vw, 0.8rem)', 
+                height: 'clamp(0.7rem, 1.1vw, 0.8rem)' 
+              }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-light" 
-                placeholder="Search companies..." 
+                placeholder="Search..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.75rem', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.75rem)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0',
+                  color: '#ffffff !important'
+                }}
               />
             </div>
-            <div className="d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded-3 border border-secondary">
-              <Filter className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-dark px-2 px-md-3 py-1 py-md-2 rounded-3 border border-secondary flex-grow-1 flex-md-grow-0" style={{
+              borderColor: 'rgba(255,255,255,0.1) !important'
+            }}>
+              <Filter className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-light" 
                 value={filterTier}
                 onChange={(e) => setFilterTier(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '140px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(90px, 15vw, 140px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem',
+                  color: '#ffffff !important'
+                }}
               >
-                <option value="ALL">All Tiers</option>
-                <option value="Product">Product</option>
-                <option value="Services">Services</option>
-                <option value="Startup">Startup</option>
+                <option value="ALL" style={{ background: '#1a1a2e', color: '#ffffff' }}>All Tiers</option>
+                <option value="Product" style={{ background: '#1a1a2e', color: '#ffffff' }}>Product</option>
+                <option value="Services" style={{ background: '#1a1a2e', color: '#ffffff' }}>Services</option>
+                <option value="Startup" style={{ background: '#1a1a2e', color: '#ffffff' }}>Startup</option>
               </select>
             </div>
             <button 
-              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
+              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm"
               onClick={fetchCompanies}
+              style={{ 
+                fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)', 
+                padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.4rem, 0.8vw, 0.6rem)'
+              }}
             >
-              <RefreshCw style={{ width: '0.8rem', height: '0.8rem' }} /> Refresh
+              <RefreshCw style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.8rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.8rem)' 
+              }} /> 
+              <span className="d-none d-sm-inline">Refresh</span>
             </button>
-            <span className="text-secondary small ms-auto">{filteredCompanies.length} companies</span>
+            <span className="text-secondary small ms-auto d-none d-md-block" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' }}>
+              {filteredCompanies.length} companies
+            </span>
           </div>
         </div>
       </div>
 
-     
+      {/* Companies Grid */}
       {loading && companies.length === 0 ? (
         <div className="text-center py-5">
-          <Loader2 className="spinner-border text-primary" style={{ width: '2rem', height: '2rem' }} />
-          <p className="text-secondary mt-2">Loading companies...</p>
+          <Loader2 className="spinner-border text-primary" style={{ width: 'clamp(1.5rem, 3vw, 2rem)', height: 'clamp(1.5rem, 3vw, 2rem)' }} />
+          <p className="text-secondary mt-2" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.85rem)' }}>Loading companies...</p>
         </div>
       ) : filteredCompanies.length === 0 ? (
-        <div className="card border-0 shadow-lg rounded-4 text-center p-5" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-          <Building2 className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No companies found</h6>
-          <p className="text-secondary small">Click "Add Company" to register a new company</p>
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ 
+          background: 'rgba(20,20,30,0.6)', 
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255,255,255,0.05)'
+        }}>
+          <Building2 className="text-secondary mx-auto" style={{ 
+            width: 'clamp(2rem, 4vw, 3rem)', 
+            height: 'clamp(2rem, 4vw, 3rem)' 
+          }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>No companies found</h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>Click "Add Company" to register a new company</p>
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="row g-2 g-md-3 g-lg-4">
           {filteredCompanies.map((company, index) => {
             const companyColor = getCompanyColor(company?.name);
             const companyInitial = getCompanyInitial(company?.name);
             
             return (
-              <div key={company._id || index} className="col-md-6 col-lg-4">
+              <div key={company._id || index} className="col-sm-6 col-xl-4">
                 <div 
-                  className="card border-0 shadow-lg rounded-4 h-100 transition-all hover:translate-y-2"
+                  className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100"
                   style={{ 
                     background: 'rgba(20,20,30,0.6)', 
                     backdropFilter: 'blur(10px)',
-                    animation: `slideUp ${0.3 + index * 0.05}s ease-out forwards`
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  <div className="card-body p-4 d-flex flex-column">
-                    
-                    <div className="d-flex align-items-center gap-3 mb-3">
+                  <div className="card-body p-3 p-md-4 d-flex flex-column">
+                    {/* Company Header */}
+                    <div className="d-flex align-items-start gap-2 gap-md-3 mb-2 mb-md-3">
                       <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
-                        width: '48px', 
-                        height: '48px',
+                        width: 'clamp(36px, 6vw, 48px)', 
+                        height: 'clamp(36px, 6vw, 48px)',
                         background: companyColor,
-                        fontSize: '1.2rem',
+                        fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)',
                         fontWeight: 'bold',
                         color: '#fff',
                         boxShadow: `0 4px 15px ${companyColor}40`
@@ -446,90 +525,141 @@ export default function AdminCompaniesTab({ token }) {
                         {companyInitial}
                       </div>
                       <div className="flex-grow-1 min-w-0">
-                        <h6 className="fw-bold text-light m-0 text-truncate">{company?.name}</h6>
-                        <span className={`badge bg-${getTierColor(company?.tier)} bg-opacity-10 text-${getTierColor(company?.tier)} border border-${getTierColor(company?.tier)} d-flex align-items-center gap-1`} style={{ fontSize: '0.45rem' }}>
-                          {getTierIcon(company?.tier)}
-                          {company?.tier || 'N/A'}
-                        </span>
-                        <span className="badge bg-secondary bg-opacity-20 text-secondary border border-secondary ms-1" style={{ fontSize: '0.4rem' }}>
-                          {company?.industry || 'General'}
-                        </span>
+                        <h6 className="fw-bold text-light m-0 text-truncate" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>
+                          {company?.name}
+                        </h6>
+                        <div className="d-flex flex-wrap gap-1 mt-1">
+                          <span className={`badge bg-${getTierColor(company?.tier)} bg-opacity-10 text-${getTierColor(company?.tier)} border border-${getTierColor(company?.tier)} d-flex align-items-center gap-1`} style={{ fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)' }}>
+                            {getTierIcon(company?.tier)}
+                            {company?.tier || 'N/A'}
+                          </span>
+                          <span className="badge bg-secondary bg-opacity-20 text-secondary border border-secondary" style={{ fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)' }}>
+                            {company?.industry || 'General'}
+                          </span>
+                        </div>
                       </div>
-                      <div className="d-flex gap-1">
+                      <div className="d-flex gap-1 flex-shrink-0">
                         <button 
                           onClick={() => handleViewCompany(company)}
-                          className="btn btn-outline-info btn-sm shadow-sm transition-all hover:scale-110"
-                          style={{ padding: '0.2rem 0.4rem' }}
+                          className="btn btn-outline-info btn-sm shadow-sm"
+                          style={{ 
+                            padding: 'clamp(0.12rem, 0.25vw, 0.2rem) clamp(0.25rem, 0.4vw, 0.35rem)',
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)',
+                            borderRadius: '6px'
+                          }}
                           title="View Details"
                         >
-                          <Eye style={{ width: '0.6rem', height: '0.6rem' }} />
+                          <Eye style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} />
                         </button>
                         <button 
                           onClick={() => handleEditCompany(company)}
-                          className="btn btn-outline-warning btn-sm shadow-sm transition-all hover:scale-110"
-                          style={{ padding: '0.2rem 0.4rem' }}
+                          className="btn btn-outline-warning btn-sm shadow-sm"
+                          style={{ 
+                            padding: 'clamp(0.12rem, 0.25vw, 0.2rem) clamp(0.25rem, 0.4vw, 0.35rem)',
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)',
+                            borderRadius: '6px'
+                          }}
                           title="Edit"
                         >
-                          <Edit2 style={{ width: '0.6rem', height: '0.6rem' }} />
+                          <Edit2 style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} />
                         </button>
                         <button 
                           onClick={() => handleDeleteCompany(company._id)}
-                          className="btn btn-outline-danger btn-sm shadow-sm transition-all hover:scale-110"
-                          style={{ padding: '0.2rem 0.4rem' }}
+                          className="btn btn-outline-danger btn-sm shadow-sm"
+                          style={{ 
+                            padding: 'clamp(0.12rem, 0.25vw, 0.2rem) clamp(0.25rem, 0.4vw, 0.35rem)',
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)',
+                            borderRadius: '6px'
+                          }}
                           title="Delete"
                         >
-                          <Trash2 style={{ width: '0.6rem', height: '0.6rem' }} />
+                          <Trash2 style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} />
                         </button>
                       </div>
                     </div>
 
-                   
+                    {/* Company Details */}
                     <div className="space-y-1.5 flex-grow-1">
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Mail className="text-secondary" style={{ width: '0.6rem', height: '0.6rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.55rem' }}>Email</span>
-                        <span className="text-light" style={{ fontSize: '0.6rem' }}>{company?.email}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          <Mail className="me-1" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} /> Email
+                        </span>
+                        <span className="text-light" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>{company?.email}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Phone className="text-secondary" style={{ width: '0.6rem', height: '0.6rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.55rem' }}>Phone</span>
-                        <span className="text-light" style={{ fontSize: '0.6rem' }}>{company?.phone || 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          <Phone className="me-1" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} /> Phone
+                        </span>
+                        <span className="text-light" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>{company?.phone || 'N/A'}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Award className="text-secondary" style={{ width: '0.6rem', height: '0.6rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.55rem' }}>Min CGPA</span>
-                        <span className="text-primary fw-bold" style={{ fontSize: '0.6rem' }}>{company?.minCgpa || 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          <Award className="me-1" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} /> Min CGPA
+                        </span>
+                        <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>{company?.minCgpa || 'N/A'}</span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Users className="text-secondary" style={{ width: '0.6rem', height: '0.6rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.55rem' }}>Open Roles</span>
-                        <span className="text-success fw-bold" style={{ fontSize: '0.6rem' }}>{company?.openRoles || 0}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          <Users className="me-1" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} /> Open Roles
+                        </span>
+                        <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>{company?.openRoles || 0}</span>
                       </div>
                       {company?.address && (
-                        <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                          <MapPin className="text-secondary" style={{ width: '0.6rem', height: '0.6rem' }} />
-                          <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.55rem' }}>Location</span>
-                          <span className="text-light" style={{ fontSize: '0.6rem' }}>{company?.address}</span>
+                        <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                          <span className="text-secondary small" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                            <MapPin className="me-1" style={{ 
+                              width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                              height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                            }} /> Location
+                          </span>
+                          <span className="text-light" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>{company?.address}</span>
                         </div>
                       )}
                     </div>
 
-                   
+                    {/* Description */}
                     {company?.description && (
                       <div className="mt-2 pt-2 border-top border-secondary">
-                        <p className="text-secondary small mb-0" style={{ fontSize: '0.55rem' }}>
-                          {company.description.substring(0, 80)}...
+                        <p className="text-secondary small mb-0" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          {company.description.substring(0, 60)}...
                         </p>
                       </div>
                     )}
 
-                   
+                    {/* Website */}
                     {company?.website && (
-                      <div className="mt-2">
+                      <div className="mt-1">
                         <a href={company.website} target="_blank" rel="noopener noreferrer" 
-                           className="text-primary text-decoration-none small d-flex align-items-center gap-1" style={{ fontSize: '0.55rem' }}>
-                          <Globe style={{ width: '0.6rem', height: '0.6rem' }} />
-                          Visit Website <ArrowUpRight style={{ width: '0.5rem', height: '0.5rem' }} />
+                           className="text-primary text-decoration-none small d-flex align-items-center gap-1" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                          <Globe style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                          }} />
+                          Visit Website <ArrowUpRight style={{ 
+                            width: 'clamp(0.4rem, 0.6vw, 0.5rem)', 
+                            height: 'clamp(0.4rem, 0.6vw, 0.5rem)' 
+                          }} />
                         </a>
                       </div>
                     )}
@@ -541,35 +671,42 @@ export default function AdminCompaniesTab({ token }) {
         </div>
       )}
 
-     
+      {/* Add Modal - Responsive */}
       {showAddModal && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(10px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
           <div className="card border-0 shadow-2xl rounded-4" style={{ 
-            maxWidth: '600px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 90vw, 600px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: 'rgba(20,20,30,0.95)',
-            backdropFilter: 'blur(20px)'
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.05)'
           }}>
-            <div className="card-body p-4">
+            <div className="card-body p-3 p-md-4">
               <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
-                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2">
-                  <Building2 className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Building2 className="text-primary" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Add New Company
                 </h5>
-                <button onClick={() => setShowAddModal(false)} className="btn btn-close btn-close-white"></button>
+                <button onClick={() => setShowAddModal(false)} className="btn btn-close btn-close-white" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               <form onSubmit={handleAddCompany}>
-                <div className="row g-3">
+                <div className="row g-2 g-md-3">
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Company Name *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Company Name *
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
@@ -577,11 +714,13 @@ export default function AdminCompaniesTab({ token }) {
                       value={newCompany.name}
                       onChange={(e) => setNewCompany({...newCompany, name: e.target.value})}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Email *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Email *
+                    </label>
                     <input 
                       type="email" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
@@ -589,27 +728,31 @@ export default function AdminCompaniesTab({ token }) {
                       value={newCompany.email}
                       onChange={(e) => setNewCompany({...newCompany, email: e.target.value})}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Phone</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Phone
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="+91 9876543210"
                       value={newCompany.phone}
                       onChange={(e) => setNewCompany({...newCompany, phone: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Industry</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Industry
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-dark text-light border-secondary"
                       value={newCompany.industry}
                       onChange={(e) => setNewCompany({...newCompany, industry: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="Technology">Technology</option>
                       <option value="E-commerce">E-commerce</option>
@@ -621,12 +764,14 @@ export default function AdminCompaniesTab({ token }) {
                     </select>
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Tier</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Tier
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-dark text-light border-secondary"
                       value={newCompany.tier}
                       onChange={(e) => setNewCompany({...newCompany, tier: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="Product">Product</option>
                       <option value="Services">Services</option>
@@ -634,66 +779,78 @@ export default function AdminCompaniesTab({ token }) {
                     </select>
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Min CGPA</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Min CGPA
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="7.0"
                       value={newCompany.minCgpa}
                       onChange={(e) => setNewCompany({...newCompany, minCgpa: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Open Roles</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Open Roles
+                    </label>
                     <input 
                       type="number" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="0"
                       value={newCompany.openRoles}
                       onChange={(e) => setNewCompany({...newCompany, openRoles: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
-                  <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Address</label>
+                  <div className="col-12">
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Address
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="City, Country"
                       value={newCompany.address}
                       onChange={(e) => setNewCompany({...newCompany, address: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Website</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Website
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="https://company.com"
                       value={newCompany.website}
                       onChange={(e) => setNewCompany({...newCompany, website: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Description</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Description
+                    </label>
                     <textarea 
                       rows={2}
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="Company description..."
                       value={newCompany.description}
                       onChange={(e) => setNewCompany({...newCompany, description: e.target.value})}
-                      style={{ fontSize: '0.8rem', resize: 'none' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                     />
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2">
-                  <button onClick={() => setShowAddModal(false)} type="button" className="btn btn-secondary flex-grow-1">Cancel</button>
-                  <button type="submit" className="btn btn-primary flex-grow-1 shadow-lg shadow-primary/20 transition-all hover:scale-105" disabled={loading}>
-                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: '0.8rem', height: '0.8rem' }} /> : <Plus style={{ width: '0.8rem', height: '0.8rem' }} />}
+                <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2 flex-wrap">
+                  <button onClick={() => setShowAddModal(false)} type="button" className="btn btn-secondary flex-grow-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary flex-grow-1 shadow-lg shadow-primary/20" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }} disabled={loading}>
+                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> : <Plus style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />}
                     {loading ? 'Adding...' : 'Add Company'}
                   </button>
                 </div>
@@ -703,35 +860,42 @@ export default function AdminCompaniesTab({ token }) {
         </div>
       )}
 
-     
+      {/* Edit Modal - Responsive */}
       {showEditModal && editingCompany && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(10px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
           <div className="card border-0 shadow-2xl rounded-4" style={{ 
-            maxWidth: '600px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 90vw, 600px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: 'rgba(20,20,30,0.95)',
-            backdropFilter: 'blur(20px)'
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.05)'
           }}>
-            <div className="card-body p-4">
+            <div className="card-body p-3 p-md-4">
               <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
-                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2">
-                  <Edit2 className="text-warning" style={{ width: '1.2rem', height: '1.2rem' }} />
+                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Edit2 className="text-warning" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Edit Company
                 </h5>
-                <button onClick={() => setShowEditModal(false)} className="btn btn-close btn-close-white"></button>
+                <button onClick={() => setShowEditModal(false)} className="btn btn-close btn-close-white" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               <form onSubmit={handleUpdateCompany}>
-                <div className="row g-3">
+                <div className="row g-2 g-md-3">
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Company Name *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Company Name *
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
@@ -739,11 +903,13 @@ export default function AdminCompaniesTab({ token }) {
                       value={newCompany.name}
                       onChange={(e) => setNewCompany({...newCompany, name: e.target.value})}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Email *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Email *
+                    </label>
                     <input 
                       type="email" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
@@ -751,27 +917,31 @@ export default function AdminCompaniesTab({ token }) {
                       value={newCompany.email}
                       onChange={(e) => setNewCompany({...newCompany, email: e.target.value})}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Phone</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Phone
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="+91 9876543210"
                       value={newCompany.phone}
                       onChange={(e) => setNewCompany({...newCompany, phone: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Industry</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Industry
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-dark text-light border-secondary"
                       value={newCompany.industry}
                       onChange={(e) => setNewCompany({...newCompany, industry: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="Technology">Technology</option>
                       <option value="E-commerce">E-commerce</option>
@@ -783,12 +953,14 @@ export default function AdminCompaniesTab({ token }) {
                     </select>
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Tier</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Tier
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-dark text-light border-secondary"
                       value={newCompany.tier}
                       onChange={(e) => setNewCompany({...newCompany, tier: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="Product">Product</option>
                       <option value="Services">Services</option>
@@ -796,66 +968,78 @@ export default function AdminCompaniesTab({ token }) {
                     </select>
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Min CGPA</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Min CGPA
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="7.0"
                       value={newCompany.minCgpa}
                       onChange={(e) => setNewCompany({...newCompany, minCgpa: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Open Roles</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Open Roles
+                    </label>
                     <input 
                       type="number" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="0"
                       value={newCompany.openRoles}
                       onChange={(e) => setNewCompany({...newCompany, openRoles: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
-                  <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Address</label>
+                  <div className="col-12">
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Address
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="City, Country"
                       value={newCompany.address}
                       onChange={(e) => setNewCompany({...newCompany, address: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Website</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Website
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="https://company.com"
                       value={newCompany.website}
                       onChange={(e) => setNewCompany({...newCompany, website: e.target.value})}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Description</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Description
+                    </label>
                     <textarea 
                       rows={2}
                       className="form-control form-control-sm bg-dark text-light border-secondary" 
                       placeholder="Company description..."
                       value={newCompany.description}
                       onChange={(e) => setNewCompany({...newCompany, description: e.target.value})}
-                      style={{ fontSize: '0.8rem', resize: 'none' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                     />
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2">
-                  <button onClick={() => setShowEditModal(false)} type="button" className="btn btn-secondary flex-grow-1">Cancel</button>
-                  <button type="submit" className="btn btn-primary flex-grow-1 shadow-lg shadow-primary/20 transition-all hover:scale-105" disabled={loading}>
-                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: '0.8rem', height: '0.8rem' }} /> : <Save style={{ width: '0.8rem', height: '0.8rem' }} />}
+                <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2 flex-wrap">
+                  <button onClick={() => setShowEditModal(false)} type="button" className="btn btn-secondary flex-grow-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary flex-grow-1 shadow-lg shadow-primary/20" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }} disabled={loading}>
+                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> : <Save style={{ width: 'clamp(0.7rem, 1.2vw, 0.8rem)', height: 'clamp(0.7rem, 1.2vw, 0.8rem)' }} />}
                     {loading ? 'Updating...' : 'Update Company'}
                   </button>
                 </div>
@@ -865,102 +1049,149 @@ export default function AdminCompaniesTab({ token }) {
         </div>
       )}
 
-      
+      {/* Details Modal - Responsive */}
       {showDetailsModal && selectedCompany && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(10px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
           <div className="card border-0 shadow-2xl rounded-4" style={{ 
-            maxWidth: '500px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 85vw, 500px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: 'rgba(20,20,30,0.95)',
-            backdropFilter: 'blur(20px)'
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.05)'
           }}>
-            <div className="card-body p-4">
+            <div className="card-body p-3 p-md-4">
               <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
-                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2">
-                  <Building2 className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Building2 className="text-primary" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Company Details
                 </h5>
-                <button onClick={() => setShowDetailsModal(false)} className="btn btn-close btn-close-white"></button>
+                <button onClick={() => setShowDetailsModal(false)} className="btn btn-close btn-close-white" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               <div className="text-center mb-3">
                 <div className="d-inline-flex align-items-center justify-content-center rounded-circle" style={{ 
-                  width: '64px', height: '64px',
+                  width: 'clamp(50px, 10vw, 64px)', 
+                  height: 'clamp(50px, 10vw, 64px)',
                   background: getCompanyColor(selectedCompany?.name),
-                  fontSize: '1.5rem',
+                  fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
                   fontWeight: 'bold',
                   color: '#fff',
                   boxShadow: `0 4px 20px ${getCompanyColor(selectedCompany?.name)}50`
                 }}>
                   {getCompanyInitial(selectedCompany?.name)}
                 </div>
-                <h5 className="text-light fw-bold mt-2">{selectedCompany?.name}</h5>
+                <h5 className="text-light fw-bold mt-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.05rem)' }}>
+                  {selectedCompany?.name}
+                </h5>
                 <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap">
-                  <span className={`badge bg-${getTierColor(selectedCompany?.tier)} bg-opacity-10 text-${getTierColor(selectedCompany?.tier)} border border-${getTierColor(selectedCompany?.tier)}`}>
+                  <span className={`badge bg-${getTierColor(selectedCompany?.tier)} bg-opacity-10 text-${getTierColor(selectedCompany?.tier)} border border-${getTierColor(selectedCompany?.tier)}`}
+                        style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                     {selectedCompany?.tier}
                   </span>
-                  <span className="badge bg-secondary bg-opacity-20 text-secondary border border-secondary">
+                  <span className="badge bg-secondary bg-opacity-20 text-secondary border border-secondary" style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                     {selectedCompany?.industry || 'N/A'}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><Mail className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Email</span>
-                  <span className="text-light">{selectedCompany?.email}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Mail className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Email
+                  </span>
+                  <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany?.email}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><Phone className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Phone</span>
-                  <span className="text-light">{selectedCompany?.phone || 'N/A'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Phone className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Phone
+                  </span>
+                  <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany?.phone || 'N/A'}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><MapPin className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Address</span>
-                  <span className="text-light">{selectedCompany?.address || 'N/A'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <MapPin className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Address
+                  </span>
+                  <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany?.address || 'N/A'}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><Globe className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Website</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Globe className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Website
+                  </span>
                   {selectedCompany?.website ? (
-                    <a href={selectedCompany.website} target="_blank" rel="noopener noreferrer" className="text-primary text-decoration-none small">
+                    <a href={selectedCompany.website} target="_blank" rel="noopener noreferrer" className="text-primary text-decoration-none small" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
                       Visit
                     </a>
                   ) : (
-                    <span className="text-light">N/A</span>
+                    <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>N/A</span>
                   )}
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><Award className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Min CGPA</span>
-                  <span className="text-primary fw-bold">{selectedCompany?.minCgpa || 'N/A'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Award className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Min CGPA
+                  </span>
+                  <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany?.minCgpa || 'N/A'}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary"><Users className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Open Roles</span>
-                  <span className="text-success fw-bold">{selectedCompany?.openRoles || 0}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Users className="me-1" style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.8rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.8rem)' 
+                    }} /> Open Roles
+                  </span>
+                  <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany?.openRoles || 0}</span>
                 </div>
                 {selectedCompany?.description && (
                   <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary d-block mb-1">Description</span>
-                    <span className="text-light small">{selectedCompany.description}</span>
+                    <span className="text-secondary d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Description
+                    </span>
+                    <span className="text-light small" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedCompany.description}</span>
                   </div>
                 )}
               </div>
 
-              <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2">
-                <button onClick={() => setShowDetailsModal(false)} className="btn btn-secondary flex-grow-1">Close</button>
+              <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2 flex-wrap">
+                <button onClick={() => setShowDetailsModal(false)} className="btn btn-secondary flex-grow-1" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  Close
+                </button>
                 <button 
                   onClick={() => {
                     setShowDetailsModal(false);
                     handleEditCompany(selectedCompany);
                   }}
-                  className="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-lg shadow-warning/20 transition-all hover:scale-105"
+                  className="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-lg shadow-warning/20"
+                  style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}
                 >
-                  <Edit2 style={{ width: '0.9rem', height: '0.9rem' }} /> Edit
+                  <Edit2 style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                  }} /> Edit
                 </button>
               </div>
             </div>
@@ -968,7 +1199,7 @@ export default function AdminCompaniesTab({ token }) {
         </div>
       )}
 
-      
+      {/* CSS */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -988,18 +1219,6 @@ export default function AdminCompaniesTab({ token }) {
           transition: all 0.3s ease;
         }
         
-        .hover\\:translate-y-1:hover {
-          transform: translateY(-4px);
-        }
-        
-        .hover\\:translate-y-2:hover {
-          transform: translateY(-8px);
-        }
-        
-        .hover\\:scale-105:hover {
-          transform: scale(1.05);
-        }
-        
         .space-y-1.5 > * + * {
           margin-top: 0.375rem;
         }
@@ -1007,24 +1226,7 @@ export default function AdminCompaniesTab({ token }) {
         .space-y-2 > * + * {
           margin-top: 0.5rem;
         }
-        
-        .card {
-          transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-        }
-        
-        .form-control, .form-select {
-          transition: all 0.3s ease;
-        }
-        
-        .form-control:focus, .form-select:focus {
-          border-color: rgba(79, 70, 229, 0.5) !important;
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
-        }
-        
+
         .min-w-0 {
           min-width: 0;
         }
@@ -1035,6 +1237,28 @@ export default function AdminCompaniesTab({ token }) {
           white-space: nowrap;
         }
         
+        .card {
+          transition: all 0.3s ease;
+        }
+        
+        .form-control, .form-select {
+          transition: all 0.3s ease;
+          background-color: rgba(0,0,0,0.3) !important;
+          border: 1px solid rgba(255,255,255,0.1);
+          color: #ffffff !important;
+        }
+        
+        .form-control:focus, .form-select:focus {
+          border-color: rgba(79, 70, 229, 0.5) !important;
+          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+          background-color: rgba(0,0,0,0.4) !important;
+        }
+        
+        .form-control::placeholder {
+          color: rgba(255,255,255,0.3) !important;
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
           width: 4px;
         }
@@ -1047,6 +1271,33 @@ export default function AdminCompaniesTab({ token }) {
         ::-webkit-scrollbar-thumb {
           background: rgba(79, 70, 229, 0.3);
           border-radius: 10px;
+        }
+
+        @media (max-width: 576px) {
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.15rem 0.3rem !important;
+          }
+          .badge {
+            padding: 0.1rem 0.3rem !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
       `}</style>
     </div>

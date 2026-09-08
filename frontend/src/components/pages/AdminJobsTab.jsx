@@ -8,11 +8,9 @@ import {
   ArrowUpRight, Zap, X
 } from 'lucide-react';
 
-
 const API_URL = 'http://localhost:5000/api';
 
 export default function AdminJobsTab({ token }) {
-  
   const [jobs, setJobs] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,15 +18,13 @@ export default function AdminJobsTab({ token }) {
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [filterType, setFilterType] = useState('ALL');
   const [error, setError] = useState(null);
-  
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [editJob, setEditJob] = useState(null);
-  
- 
+
   const [newJob, setNewJob] = useState({ 
     title: '',
     company: '',
@@ -43,7 +39,6 @@ export default function AdminJobsTab({ token }) {
     positions: 1,
     status: 'Active'
   });
-
 
   const sampleJobs = [
     {
@@ -93,7 +88,6 @@ export default function AdminJobsTab({ token }) {
     }
   ];
 
-
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     try {
       setLoading(true);
@@ -128,7 +122,6 @@ export default function AdminJobsTab({ token }) {
     }
   };
 
- 
   const fetchJobs = async () => {
     try {
       const data = await apiCall('/jobs');
@@ -160,7 +153,6 @@ export default function AdminJobsTab({ token }) {
     }
   };
 
- 
   useEffect(() => {
     if (token) {
       fetchJobs();
@@ -170,9 +162,6 @@ export default function AdminJobsTab({ token }) {
     }
   }, [token]);
 
-  
-  
- 
   const handleAddJob = async (e) => {
     e.preventDefault();
     if (!newJob.title || !newJob.company || !newJob.location) {
@@ -203,7 +192,6 @@ export default function AdminJobsTab({ token }) {
         fetchJobs();
       }
     } catch (error) {
-     
       const company = companies.find(c => c._id === newJob.company);
       const newJobData = {
         _id: Date.now().toString(),
@@ -227,7 +215,6 @@ export default function AdminJobsTab({ token }) {
     }
   };
 
- 
   const handleUpdateJob = async () => {
     if (!editJob) return;
 
@@ -254,7 +241,6 @@ export default function AdminJobsTab({ token }) {
         fetchJobs();
       }
     } catch (error) {
-      
       setJobs(jobs.map(job => 
         job._id === editJob._id ? { ...editJob } : job
       ));
@@ -264,7 +250,6 @@ export default function AdminJobsTab({ token }) {
     }
   };
 
- 
   const handleDeleteJob = async (id) => {
     if (!window.confirm('Are you sure you want to delete this job?')) return;
 
@@ -280,7 +265,6 @@ export default function AdminJobsTab({ token }) {
     }
   };
 
- 
   const resetForm = () => {
     setNewJob({
       title: '',
@@ -298,7 +282,6 @@ export default function AdminJobsTab({ token }) {
     });
   };
 
-
   const getStatusColor = (status) => {
     switch(status) {
       case 'Active': return 'success';
@@ -311,10 +294,10 @@ export default function AdminJobsTab({ token }) {
 
   const getStatusIcon = (status) => {
     switch(status) {
-      case 'Active': return <CheckCircle className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Closed': return <XCircle className="text-danger" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Pending': return <Clock className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'On Hold': return <AlertCircle className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Active': return <CheckCircle className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Closed': return <XCircle className="text-danger" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Pending': return <Clock className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'On Hold': return <AlertCircle className="text-info" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
       default: return null;
     }
   };
@@ -334,12 +317,10 @@ export default function AdminJobsTab({ token }) {
     return company ? company.name : 'N/A';
   };
 
- 
   const totalJobs = jobs.length;
   const activeJobs = jobs.filter(j => j.status === 'Active' || j.status === 'active').length;
   const closedJobs = jobs.filter(j => j.status === 'Closed' || j.status === 'closed').length;
   const totalPositions = jobs.reduce((sum, j) => sum + (j.positions || 0), 0);
-
 
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.title?.toLowerCase().includes(searchQuery?.toLowerCase() || '') ||
@@ -350,26 +331,35 @@ export default function AdminJobsTab({ token }) {
     return matchesSearch && matchesStatus && matchesType;
   });
 
- 
   return (
     <div className="animate-fadeIn">
-     
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      {/* Header */}
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
         <div>
-          <h5 className="text-dark fw-bold m-0">Jobs</h5>
-          <p className="text-secondary small m-0">Manage all job listings</p>
+          <h5 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+            Jobs
+          </h5>
+          <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+            Manage all job listings
+          </p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
           className="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
-          style={{ borderRadius: '10px', fontWeight: '600' }}
+          style={{ 
+            borderRadius: '10px', 
+            fontWeight: '600',
+            fontSize: 'clamp(0.6rem, 1vw, 0.7rem)',
+            padding: 'clamp(0.25rem, 0.5vw, 0.35rem) clamp(0.6rem, 1.2vw, 0.8rem)'
+          }}
         >
-          <Plus style={{ width: '0.8rem', height: '0.8rem' }} /> Create Job
+          <Plus style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> 
+          <span className="d-none d-sm-inline">Create Job</span>
         </button>
       </div>
 
-     
-      <div className="row g-3 mb-4">
+      {/* Stats Cards */}
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
           { label: "Total Jobs", value: totalJobs, color: "primary", icon: Briefcase },
           { label: "Active Jobs", value: activeJobs, color: "success", icon: CheckCircle },
@@ -378,22 +368,45 @@ export default function AdminJobsTab({ token }) {
         ].map((stat, i) => {
           const Icon = stat.icon;
           const bgColors = {
-            primary: 'rgba(59,130,246,0.1)',
-            success: 'rgba(34,197,94,0.1)',
-            danger: 'rgba(239,68,68,0.1)',
-            info: 'rgba(6,182,212,0.1)'
+            primary: 'rgba(59,130,246,0.08)',
+            success: 'rgba(34,197,94,0.08)',
+            danger: 'rgba(239,68,68,0.08)',
+            info: 'rgba(6,182,212,0.08)'
           };
           return (
             <div key={i} className="col-6 col-lg-3">
-              <div className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-1" style={{ background: '#ffffff' }}>
-                <div className="card-body p-3">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100" style={{ 
+                background: '#ffffff', 
+                border: '1px solid #e9ecef',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
+              }}
+              >
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.5rem' }}>{stat.label}</span>
-                    <div className={`p-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                    <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
+                      {stat.label}
+                    </span>
+                    <div className={`p-1 p-md-2 rounded-3`} style={{ 
+                      background: bgColors[stat.color], 
+                      border: `1px solid ${bgColors[stat.color]}` 
+                    }}>
+                      <Icon className={`text-${stat.color}`} style={{ 
+                        width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                        height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                      }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>{stat.value}</h4>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ 
+                    fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' 
+                  }}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -401,28 +414,43 @@ export default function AdminJobsTab({ token }) {
         })}
       </div>
 
-     
-      <div className="card border-0 shadow-sm rounded-4 mb-4" style={{ background: '#ffffff' }}>
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-3 align-items-center">
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: '300px' }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+      {/* Search & Filter */}
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <div className="d-flex align-items-center gap-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1" style={{ maxWidth: 'clamp(160px, 35vw, 300px)' }}>
+              <Search className="text-secondary" style={{ 
+                width: 'clamp(0.7rem, 1.1vw, 0.8rem)', 
+                height: 'clamp(0.7rem, 1.1vw, 0.8rem)' 
+              }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-dark" 
-                placeholder="Search jobs..." 
+                placeholder="Search..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.75rem', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.75rem)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0' 
+                }}
               />
             </div>
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light">
-              <Filter className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1 flex-md-grow-0">
+              <Filter className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-dark" 
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '140px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(90px, 15vw, 140px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem' 
+                }}
               >
                 <option value="ALL">All Status</option>
                 <option value="Active">Active</option>
@@ -430,13 +458,21 @@ export default function AdminJobsTab({ token }) {
                 <option value="Pending">Pending</option>
               </select>
             </div>
-            <div className="d-flex align-items-center gap-2 bg-white px-3 py-2 rounded-3 border border-light">
-              <Briefcase className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-white px-2 px-md-3 py-1 py-md-2 rounded-3 border border-light flex-grow-1 flex-md-grow-0">
+              <Briefcase className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-dark" 
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '140px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(90px, 15vw, 140px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem' 
+                }}
               >
                 <option value="ALL">All Types</option>
                 <option value="full-time">Full Time</option>
@@ -447,106 +483,175 @@ export default function AdminJobsTab({ token }) {
             </div>
             <button 
               onClick={() => { fetchJobs(); fetchCompanies(); }}
-              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm transition-all hover:scale-105"
+              className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm"
+              style={{ 
+                fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)', 
+                padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.4rem, 0.8vw, 0.6rem)' 
+              }}
             >
-              <RefreshCw style={{ width: '0.8rem', height: '0.8rem' }} /> Refresh
+              <RefreshCw style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.8rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.8rem)' 
+              }} /> 
+              <span className="d-none d-sm-inline">Refresh</span>
             </button>
           </div>
         </div>
       </div>
 
-     
+      {/* Jobs Grid */}
       {loading && filteredJobs.length === 0 ? (
         <div className="text-center py-5">
-          <Loader2 className="spinner-border text-primary" style={{ width: '2rem', height: '2rem' }} />
-          <p className="text-secondary mt-2">Loading jobs...</p>
+          <Loader2 className="spinner-border text-primary" style={{ width: 'clamp(1.5rem, 3vw, 2rem)', height: 'clamp(1.5rem, 3vw, 2rem)' }} />
+          <p className="text-secondary mt-2" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 0.85rem)' }}>Loading jobs...</p>
         </div>
       ) : filteredJobs.length === 0 ? (
-        <div className="card border-0 shadow-sm rounded-4 text-center p-5" style={{ background: '#ffffff' }}>
-          <Briefcase className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No jobs found</h6>
-          <p className="text-secondary small">Try adjusting your search or filters</p>
-          <button className="btn btn-primary btn-sm mt-2" onClick={() => setShowAddModal(true)}>
-            <Plus style={{ width: '0.8rem', height: '0.8rem' }} /> Create First Job
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ background: '#ffffff', border: '1px solid #e9ecef' }}>
+          <Briefcase className="text-secondary mx-auto" style={{ 
+            width: 'clamp(2rem, 4vw, 3rem)', 
+            height: 'clamp(2rem, 4vw, 3rem)' 
+          }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>No jobs found</h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>Try adjusting your search or filters</p>
+          <button className="btn btn-primary btn-sm mt-2" onClick={() => setShowAddModal(true)} style={{ fontSize: 'clamp(0.65rem, 1vw, 0.75rem)' }}>
+            <Plus style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Create First Job
           </button>
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="row g-2 g-md-3 g-lg-4">
           {filteredJobs.map((job, index) => (
-            <div key={job._id || index} className="col-md-6 col-lg-4">
+            <div key={job._id || index} className="col-sm-6 col-xl-4">
               <div 
-                className="card border-0 shadow-sm rounded-4 h-100 transition-all hover:translate-y-2"
+                className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100"
                 style={{ 
                   background: '#ffffff',
-                  animation: `slideUp ${0.3 + index * 0.05}s ease-out forwards`
+                  border: '1px solid #e9ecef',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0,0,0,0.075)';
                 }}
               >
-                <div className="card-body p-4 d-flex flex-column">
-                 
-                  <div className="d-flex justify-content-between align-items-start mb-3">
+                <div className="card-body p-3 p-md-4 d-flex flex-column">
+                  {/* Header */}
+                  <div className="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2 mb-md-3">
                     <div className="d-flex align-items-center gap-2">
-                      <div className="p-2 rounded-3" style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
-                        <Briefcase className="text-primary" style={{ width: '1rem', height: '1rem' }} />
+                      <div className="p-1 p-md-2 rounded-3 flex-shrink-0" style={{ 
+                        background: 'rgba(59,130,246,0.1)', 
+                        border: '1px solid rgba(59,130,246,0.2)' 
+                      }}>
+                        <Briefcase className="text-primary" style={{ 
+                          width: 'clamp(0.8rem, 1.2vw, 1rem)', 
+                          height: 'clamp(0.8rem, 1.2vw, 1rem)' 
+                        }} />
                       </div>
-                      <div>
-                        <h6 className="fw-bold text-dark m-0" style={{ fontSize: '0.85rem' }}>{job.title}</h6>
-                        <span className="text-secondary" style={{ fontSize: '0.55rem' }}>{job.company?.name || getCompanyName(job.company)}</span>
+                      <div className="min-w-0">
+                        <h6 className="fw-bold text-dark m-0" style={{ 
+                          fontSize: 'clamp(0.75rem, 1.2vw, 0.85rem)' 
+                        }}>
+                          {job.title}
+                        </h6>
+                        <span className="text-secondary" style={{ 
+                          fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' 
+                        }}>
+                          {job.company?.name || getCompanyName(job.company)}
+                        </span>
                       </div>
                     </div>
-                    <span className={`badge bg-${getStatusColor(job.status)} bg-opacity-10 text-${getStatusColor(job.status)} border border-${getStatusColor(job.status)} d-inline-flex align-items-center gap-1`} style={{ fontSize: '0.55rem' }}>
+                    <span className={`badge bg-${getStatusColor(job.status)} bg-opacity-10 text-${getStatusColor(job.status)} border border-${getStatusColor(job.status)} d-inline-flex align-items-center gap-1 flex-shrink-0`} 
+                          style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.55rem)' }}>
                       {getStatusIcon(job.status)}
                       {job.status || 'Active'}
                     </span>
                   </div>
 
-                 
-                  <div className="space-y-2 flex-grow-1">
-                    <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                      <span className="text-secondary small"><MapPin style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} /> Location</span>
-                      <span className="text-dark">{job.location || 'N/A'}</span>
+                  {/* Job Details */}
+                  <div className="space-y-1.5 flex-grow-1">
+                    <div className="d-flex flex-wrap justify-content-between p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                        <MapPin style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} /> Location
+                      </span>
+                      <span className="text-dark" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>{job.location || 'N/A'}</span>
                     </div>
-                    <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                      <span className="text-secondary small"><DollarSign style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} /> Salary</span>
-                      <span className="text-success fw-bold">{job.salary || 'N/A'}</span>
+                    <div className="d-flex flex-wrap justify-content-between p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                        <DollarSign style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} /> Salary
+                      </span>
+                      <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>{job.salary || 'N/A'}</span>
                     </div>
-                    <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                      <span className="text-secondary small"><Briefcase style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} /> Type</span>
-                      <span className="text-info">{getTypeLabel(job.type)}</span>
+                    <div className="d-flex flex-wrap justify-content-between p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                        <Briefcase style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} /> Type
+                      </span>
+                      <span className="text-info" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>{getTypeLabel(job.type)}</span>
                     </div>
-                    <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                      <span className="text-secondary small"><Users style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} /> Positions</span>
-                      <span className="text-primary fw-bold">{job.positions || 0}</span>
+                    <div className="d-flex flex-wrap justify-content-between p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                      <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                        <Users style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} /> Positions
+                      </span>
+                      <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>{job.positions || 0}</span>
                     </div>
                     {job.deadline && (
-                      <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                        <span className="text-secondary small"><Calendar style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} /> Deadline</span>
-                        <span className="text-warning">{new Date(job.deadline).toLocaleDateString()}</span>
+                      <div className="d-flex flex-wrap justify-content-between p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(0,0,0,0.02)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          <Calendar style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} /> Deadline
+                        </span>
+                        <span className="text-warning" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          {new Date(job.deadline).toLocaleDateString()}
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
+                  {/* Actions */}
+                  <div className="mt-3 pt-2 pt-md-3 border-top border-light d-flex gap-2">
                     <button 
                       onClick={() => { setSelectedJob(job); setShowDetailModal(true); }}
-                      className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm transition-all hover:scale-105"
-                      style={{ fontSize: '0.65rem', borderRadius: '8px' }}
+                      className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm"
+                      style={{ 
+                        fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                        borderRadius: '8px', 
+                        padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.3rem, 0.5vw, 0.4rem)' 
+                      }}
                     >
-                      <Eye style={{ width: '0.7rem', height: '0.7rem' }} /> View
+                      <Eye style={{ 
+                        width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                        height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                      }} /> View
                     </button>
                     <button 
                       onClick={() => { setEditJob({ ...job }); setShowEditModal(true); }}
-                      className="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center gap-1 shadow-sm transition-all hover:scale-105"
-                      style={{ fontSize: '0.65rem', borderRadius: '8px' }}
+                      className="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center gap-1 shadow-sm"
+                      style={{ 
+                        fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                        borderRadius: '8px', 
+                        padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.3rem, 0.5vw, 0.4rem)' 
+                      }}
                     >
-                      <Edit2 style={{ width: '0.7rem', height: '0.7rem' }} />
+                      <Edit2 style={{ 
+                        width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                        height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                      }} />
                     </button>
                     <button 
                       onClick={() => handleDeleteJob(job._id)}
-                      className="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-1 shadow-sm transition-all hover:scale-105"
-                      style={{ fontSize: '0.65rem', borderRadius: '8px' }}
+                      className="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-1 shadow-sm"
+                      style={{ 
+                        fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                        borderRadius: '8px', 
+                        padding: 'clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.3rem, 0.5vw, 0.4rem)' 
+                      }}
                       disabled={loading}
                     >
-                      <Trash2 style={{ width: '0.7rem', height: '0.7rem' }} />
+                      <Trash2 style={{ 
+                        width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                        height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                      }} />
                     </button>
                   </div>
                 </div>
@@ -556,37 +661,40 @@ export default function AdminJobsTab({ token }) {
         </div>
       )}
 
-     
+      {/* Add Modal - Responsive */}
       {showAddModal && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(5px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
           <div className="card border-0 shadow-lg rounded-4" style={{ 
-            maxWidth: '650px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 90vw, 650px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: '#ffffff'
           }}>
-            <div className="card-body p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-light pb-3">
-                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2">
-                  <Briefcase className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+            <div className="card-body p-3 p-md-4">
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 border-bottom border-light pb-3">
+                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Briefcase className="text-primary" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Create New Job
                 </h5>
-                <button 
-                  onClick={() => setShowAddModal(false)} 
-                  className="btn btn-close"
-                ></button>
+                <button onClick={() => setShowAddModal(false)} className="btn btn-close" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               <form onSubmit={handleAddJob}>
-                <div className="row g-3">
+                <div className="row g-2 g-md-3">
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Job Title *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Job Title *
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
@@ -594,17 +702,19 @@ export default function AdminJobsTab({ token }) {
                       value={newJob.title}
                       onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Company *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Company *
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-white text-dark border-light" 
                       value={newJob.company}
                       onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="">Select Company</option>
                       {companies.map(c => (
@@ -613,29 +723,35 @@ export default function AdminJobsTab({ token }) {
                     </select>
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Description</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Description
+                    </label>
                     <textarea 
-                      rows={3}
+                      rows={2}
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       placeholder="Job description..."
                       value={newJob.description}
                       onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
-                      style={{ fontSize: '0.8rem', resize: 'none' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Requirements</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Requirements
+                    </label>
                     <textarea 
                       rows={2}
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       placeholder="Job requirements..."
                       value={newJob.requirements}
                       onChange={(e) => setNewJob({ ...newJob, requirements: e.target.value })}
-                      style={{ fontSize: '0.8rem', resize: 'none' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Location *</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Location *
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
@@ -643,27 +759,31 @@ export default function AdminJobsTab({ token }) {
                       value={newJob.location}
                       onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
                       required
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Salary</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Salary
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       placeholder="8 LPA"
                       value={newJob.salary}
                       onChange={(e) => setNewJob({ ...newJob, salary: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-4">
-                    <label className="text-secondary small fw-bold d-block mb-1">Job Type</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Job Type
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-white text-dark border-light" 
                       value={newJob.type}
                       onChange={(e) => setNewJob({ ...newJob, type: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="full-time">Full Time</option>
                       <option value="part-time">Part Time</option>
@@ -672,18 +792,22 @@ export default function AdminJobsTab({ token }) {
                     </select>
                   </div>
                   <div className="col-4">
-                    <label className="text-secondary small fw-bold d-block mb-1">Category</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Category
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       placeholder="IT, Finance"
                       value={newJob.category}
                       onChange={(e) => setNewJob({ ...newJob, category: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-4">
-                    <label className="text-secondary small fw-bold d-block mb-1">Positions</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Positions
+                    </label>
                     <input 
                       type="number" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
@@ -691,37 +815,43 @@ export default function AdminJobsTab({ token }) {
                       value={newJob.positions}
                       onChange={(e) => setNewJob({ ...newJob, positions: e.target.value })}
                       min="1"
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Experience</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Experience
+                    </label>
                     <input 
                       type="text" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       placeholder="2-4 years"
                       value={newJob.experience}
                       onChange={(e) => setNewJob({ ...newJob, experience: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-6">
-                    <label className="text-secondary small fw-bold d-block mb-1">Deadline</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Deadline
+                    </label>
                     <input 
                       type="date" 
                       className="form-control form-control-sm bg-white text-dark border-light" 
                       value={newJob.deadline}
                       onChange={(e) => setNewJob({ ...newJob, deadline: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     />
                   </div>
                   <div className="col-12">
-                    <label className="text-secondary small fw-bold d-block mb-1">Status</label>
+                    <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      Status
+                    </label>
                     <select 
                       className="form-select form-select-sm bg-white text-dark border-light" 
                       value={newJob.status}
                       onChange={(e) => setNewJob({ ...newJob, status: e.target.value })}
-                      style={{ fontSize: '0.8rem' }}
+                      style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                     >
                       <option value="Active">Active</option>
                       <option value="Pending">Pending</option>
@@ -731,22 +861,12 @@ export default function AdminJobsTab({ token }) {
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
-                  <button 
-                    onClick={() => setShowAddModal(false)} 
-                    type="button" 
-                    className="btn btn-secondary flex-grow-1"
-                    style={{ borderRadius: '10px', fontWeight: '600' }}
-                  >
+                <div className="mt-3 pt-3 border-top border-light d-flex gap-2 flex-wrap">
+                  <button onClick={() => setShowAddModal(false)} type="button" className="btn btn-secondary flex-grow-1" style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
                     Cancel
                   </button>
-                  <button 
-                    type="submit" 
-                    className="btn btn-primary flex-grow-1 shadow-sm transition-all hover:scale-105" 
-                    disabled={loading}
-                    style={{ borderRadius: '10px', fontWeight: '600' }}
-                  >
-                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: '0.8rem', height: '0.8rem' }} /> : <Plus style={{ width: '0.8rem', height: '0.8rem' }} />}
+                  <button type="submit" className="btn btn-primary flex-grow-1 shadow-sm" disabled={loading} style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                    {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> : <Plus style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />}
                     {loading ? 'Creating...' : 'Create Job'}
                   </button>
                 </div>
@@ -756,48 +876,56 @@ export default function AdminJobsTab({ token }) {
         </div>
       )}
 
-      
+      {/* Edit Modal - Responsive */}
       {showEditModal && editJob && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(5px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
           <div className="card border-0 shadow-lg rounded-4" style={{ 
-            maxWidth: '650px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 90vw, 650px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: '#ffffff'
           }}>
-            <div className="card-body p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-light pb-3">
-                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2">
-                  <Edit2 className="text-warning" style={{ width: '1.2rem', height: '1.2rem' }} />
+            <div className="card-body p-3 p-md-4">
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 border-bottom border-light pb-3">
+                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Edit2 className="text-warning" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Edit Job
                 </h5>
-                <button onClick={() => setShowEditModal(false)} className="btn btn-close"></button>
+                <button onClick={() => setShowEditModal(false)} className="btn btn-close" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
-              <div className="row g-3">
+              <div className="row g-2 g-md-3">
                 <div className="col-12">
-                  <label className="text-secondary small fw-bold d-block mb-1">Job Title *</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Job Title *
+                  </label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.title || ''}
                     onChange={(e) => setEditJob({ ...editJob, title: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-12">
-                  <label className="text-secondary small fw-bold d-block mb-1">Company</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Company
+                  </label>
                   <select 
                     className="form-select form-select-sm bg-white text-dark border-light" 
                     value={editJob.company || ''}
                     onChange={(e) => setEditJob({ ...editJob, company: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   >
                     <option value="">Select Company</option>
                     {companies.map(c => (
@@ -806,52 +934,62 @@ export default function AdminJobsTab({ token }) {
                   </select>
                 </div>
                 <div className="col-12">
-                  <label className="text-secondary small fw-bold d-block mb-1">Description</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Description
+                  </label>
                   <textarea 
-                    rows={3}
+                    rows={2}
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.description || ''}
                     onChange={(e) => setEditJob({ ...editJob, description: e.target.value })}
-                    style={{ fontSize: '0.8rem', resize: 'none' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                   />
                 </div>
                 <div className="col-12">
-                  <label className="text-secondary small fw-bold d-block mb-1">Requirements</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Requirements
+                  </label>
                   <textarea 
                     rows={2}
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.requirements || ''}
                     onChange={(e) => setEditJob({ ...editJob, requirements: e.target.value })}
-                    style={{ fontSize: '0.8rem', resize: 'none' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px', resize: 'none' }}
                   />
                 </div>
                 <div className="col-6">
-                  <label className="text-secondary small fw-bold d-block mb-1">Location *</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Location *
+                  </label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.location || ''}
                     onChange={(e) => setEditJob({ ...editJob, location: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-6">
-                  <label className="text-secondary small fw-bold d-block mb-1">Salary</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Salary
+                  </label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.salary || ''}
                     onChange={(e) => setEditJob({ ...editJob, salary: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-4">
-                  <label className="text-secondary small fw-bold d-block mb-1">Job Type</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Job Type
+                  </label>
                   <select 
                     className="form-select form-select-sm bg-white text-dark border-light" 
                     value={editJob.type || 'full-time'}
                     onChange={(e) => setEditJob({ ...editJob, type: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   >
                     <option value="full-time">Full Time</option>
                     <option value="part-time">Part Time</option>
@@ -860,53 +998,63 @@ export default function AdminJobsTab({ token }) {
                   </select>
                 </div>
                 <div className="col-4">
-                  <label className="text-secondary small fw-bold d-block mb-1">Category</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Category
+                  </label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.category || ''}
                     onChange={(e) => setEditJob({ ...editJob, category: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-4">
-                  <label className="text-secondary small fw-bold d-block mb-1">Positions</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Positions
+                  </label>
                   <input 
                     type="number" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.positions || 1}
                     onChange={(e) => setEditJob({ ...editJob, positions: e.target.value })}
                     min="1"
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-6">
-                  <label className="text-secondary small fw-bold d-block mb-1">Experience</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Experience
+                  </label>
                   <input 
                     type="text" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.experience || ''}
                     onChange={(e) => setEditJob({ ...editJob, experience: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-6">
-                  <label className="text-secondary small fw-bold d-block mb-1">Deadline</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Deadline
+                  </label>
                   <input 
                     type="date" 
                     className="form-control form-control-sm bg-white text-dark border-light" 
                     value={editJob.deadline || ''}
                     onChange={(e) => setEditJob({ ...editJob, deadline: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   />
                 </div>
                 <div className="col-12">
-                  <label className="text-secondary small fw-bold d-block mb-1">Status</label>
+                  <label className="text-secondary small fw-bold d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                    Status
+                  </label>
                   <select 
                     className="form-select form-select-sm bg-white text-dark border-light" 
                     value={editJob.status || 'Active'}
                     onChange={(e) => setEditJob({ ...editJob, status: e.target.value })}
-                    style={{ fontSize: '0.8rem' }}
+                    style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)', borderRadius: '10px' }}
                   >
                     <option value="Active">Active</option>
                     <option value="Pending">Pending</option>
@@ -916,10 +1064,12 @@ export default function AdminJobsTab({ token }) {
                 </div>
               </div>
 
-              <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
-                <button onClick={() => setShowEditModal(false)} className="btn btn-secondary flex-grow-1" style={{ borderRadius: '10px', fontWeight: '600' }}>Cancel</button>
-                <button onClick={handleUpdateJob} className="btn btn-primary flex-grow-1 shadow-sm transition-all hover:scale-105" disabled={loading} style={{ borderRadius: '10px', fontWeight: '600' }}>
-                  {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: '0.8rem', height: '0.8rem' }} /> : <Save style={{ width: '0.8rem', height: '0.8rem' }} />}
+              <div className="mt-3 pt-3 border-top border-light d-flex gap-2 flex-wrap">
+                <button onClick={() => setShowEditModal(false)} className="btn btn-secondary flex-grow-1" style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  Cancel
+                </button>
+                <button onClick={handleUpdateJob} className="btn btn-primary flex-grow-1 shadow-sm" disabled={loading} style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  {loading ? <Loader2 className="spinner-border spinner-border-sm" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> : <Save style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} />}
                   {loading ? 'Updating...' : 'Update Job'}
                 </button>
               </div>
@@ -928,99 +1078,141 @@ export default function AdminJobsTab({ token }) {
         </div>
       )}
 
-      
+      {/* Detail Modal - Responsive */}
       {showDetailModal && selectedJob && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(5px)',
-          animation: 'fadeIn 0.3s ease'
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
         }}>
-          <div className="card border-0 shadow-lg rounded-4" style={{ maxWidth: '550px', width: '95%', maxHeight: '90vh', overflowY: 'auto', background: '#ffffff' }}>
-            <div className="card-body p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-light pb-3">
-                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2">
-                  <Briefcase className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+          <div className="card border-0 shadow-lg rounded-4" style={{ 
+            maxWidth: 'clamp(320px, 85vw, 550px)', 
+            width: '100%', 
+            maxHeight: '90vh', 
+            overflowY: 'auto', 
+            background: '#ffffff'
+          }}>
+            <div className="card-body p-3 p-md-4">
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 border-bottom border-light pb-3">
+                <h5 className="text-dark fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Briefcase className="text-primary" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Job Details
                 </h5>
-                <button onClick={() => setShowDetailModal(false)} className="btn btn-close"></button>
+                <button onClick={() => setShowDetailModal(false)} className="btn btn-close" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               <div className="d-flex align-items-center gap-3 mb-3">
-                <div className="d-inline-flex align-items-center justify-content-center rounded-circle" style={{ 
-                  width: '48px', height: '48px',
+                <div className="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style={{ 
+                  width: 'clamp(40px, 7vw, 48px)', 
+                  height: 'clamp(40px, 7vw, 48px)',
                   background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1rem, 2vw, 1.2rem)',
                   fontWeight: 'bold',
                   color: '#fff'
                 }}>
                   {selectedJob.title?.charAt(0) || 'J'}
                 </div>
-                <div>
-                  <h5 className="text-dark fw-bold m-0">{selectedJob.title}</h5>
-                  <span className="text-secondary">{selectedJob.company?.name || getCompanyName(selectedJob.company)}</span>
+                <div className="min-w-0">
+                  <h5 className="text-dark fw-bold m-0" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.05rem)' }}>
+                    {selectedJob.title}
+                  </h5>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+                    {selectedJob.company?.name || getCompanyName(selectedJob.company)}
+                  </span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                  <span className="text-secondary"><Briefcase className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Type</span>
-                  <span className="text-info">{getTypeLabel(selectedJob.type)}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Briefcase className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Type
+                  </span>
+                  <span className="text-info" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{getTypeLabel(selectedJob.type)}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                  <span className="text-secondary"><MapPin className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Location</span>
-                  <span className="text-dark">{selectedJob.location || 'N/A'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <MapPin className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Location
+                  </span>
+                  <span className="text-dark" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.location || 'N/A'}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                  <span className="text-secondary"><DollarSign className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Salary</span>
-                  <span className="text-success fw-bold">{selectedJob.salary || 'N/A'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <DollarSign className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Salary
+                  </span>
+                  <span className="text-success fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.salary || 'N/A'}</span>
                 </div>
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                  <span className="text-secondary"><Users className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Positions</span>
-                  <span className="text-primary fw-bold">{selectedJob.positions || 0}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <Users className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Positions
+                  </span>
+                  <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.positions || 0}</span>
                 </div>
                 {selectedJob.experience && (
-                  <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                    <span className="text-secondary"><Award className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Experience</span>
-                    <span className="text-dark">{selectedJob.experience}</span>
+                  <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                    <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                      <Award className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Experience
+                    </span>
+                    <span className="text-dark" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.experience}</span>
                   </div>
                 )}
                 {selectedJob.deadline && (
-                  <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                    <span className="text-secondary"><Calendar className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Deadline</span>
-                    <span className="text-warning">{new Date(selectedJob.deadline).toLocaleDateString()}</span>
+                  <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                    <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                      <Calendar className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Deadline
+                    </span>
+                    <span className="text-warning" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                      {new Date(selectedJob.deadline).toLocaleDateString()}
+                    </span>
                   </div>
                 )}
                 {selectedJob.description && (
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                    <span className="text-secondary d-block mb-1"><FileText className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Description</span>
-                    <span className="text-dark small">{selectedJob.description}</span>
+                    <span className="text-secondary d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      <FileText className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Description
+                    </span>
+                    <span className="text-dark small" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.description}</span>
                   </div>
                 )}
                 {selectedJob.requirements && (
                   <div className="p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                    <span className="text-secondary d-block mb-1"><CheckCircle className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Requirements</span>
-                    <span className="text-dark small">{selectedJob.requirements}</span>
+                    <span className="text-secondary d-block mb-1" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                      <CheckCircle className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Requirements
+                    </span>
+                    <span className="text-dark small" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>{selectedJob.requirements}</span>
                   </div>
                 )}
-                <div className="d-flex justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
-                  <span className="text-secondary"><CheckCircle className="me-1" style={{ width: '0.8rem', height: '0.8rem' }} /> Status</span>
-                  <span className={`text-${getStatusColor(selectedJob.status)}`}>{selectedJob.status || 'Active'}</span>
+                <div className="d-flex flex-wrap justify-content-between p-2 rounded-3" style={{ background: 'rgba(0,0,0,0.03)' }}>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    <CheckCircle className="me-1" style={{ width: 'clamp(0.6rem, 1vw, 0.8rem)', height: 'clamp(0.6rem, 1vw, 0.8rem)' }} /> Status
+                  </span>
+                  <span className={`text-${getStatusColor(selectedJob.status)}`} style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                    {selectedJob.status || 'Active'}
+                  </span>
                 </div>
               </div>
 
-              <div className="mt-3 pt-3 border-top border-light d-flex gap-2">
-                <button onClick={() => setShowDetailModal(false)} className="btn btn-secondary flex-grow-1" style={{ borderRadius: '10px', fontWeight: '600' }}>Close</button>
+              <div className="mt-3 pt-3 border-top border-light d-flex gap-2 flex-wrap">
+                <button onClick={() => setShowDetailModal(false)} className="btn btn-secondary flex-grow-1" style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}>
+                  Close
+                </button>
                 <button 
                   onClick={() => {
                     setShowDetailModal(false);
                     setEditJob({ ...selectedJob });
                     setShowEditModal(true);
                   }}
-                  className="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm transition-all hover:scale-105"
-                  style={{ borderRadius: '10px', fontWeight: '600' }}
+                  className="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-1 shadow-sm"
+                  style={{ borderRadius: '10px', fontWeight: '600', fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', padding: '0.35rem 0.7rem' }}
                 >
-                  <Edit2 style={{ width: '0.9rem', height: '0.9rem' }} /> Edit
+                  <Edit2 style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                  }} /> Edit
                 </button>
               </div>
             </div>
@@ -1028,7 +1220,7 @@ export default function AdminJobsTab({ token }) {
         </div>
       )}
 
-     
+      {/* CSS */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -1060,6 +1252,10 @@ export default function AdminJobsTab({ token }) {
           transform: scale(1.05);
         }
         
+        .space-y-1.5 > * + * {
+          margin-top: 0.375rem;
+        }
+        
         .space-y-2 > * + * {
           margin-top: 0.5rem;
         }
@@ -1081,12 +1277,35 @@ export default function AdminJobsTab({ token }) {
           box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
         }
         
-        .spinner-border {
-          animation: spinner-border 0.75s linear infinite;
+        .min-w-0 {
+          min-width: 0;
         }
-        
-        @keyframes spinner-border {
-          to { transform: rotate(360deg); }
+
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.15rem 0.3rem !important;
+          }
+          .badge {
+            padding: 0.1rem 0.3rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
         
         ::-webkit-scrollbar {

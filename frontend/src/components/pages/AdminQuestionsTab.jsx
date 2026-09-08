@@ -1,4 +1,3 @@
-// src/components/AdminQuestionsTab.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Plus, Eye, Calendar, Search, Filter, 
@@ -12,7 +11,6 @@ import {
 const API_URL = 'http://localhost:5000/api';
 
 export default function AdminQuestionsTab({ token }) {
-
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -40,7 +38,6 @@ export default function AdminQuestionsTab({ token }) {
 
   const categories = ['All', 'Aptitude', 'C/C++', 'Java', 'Python', 'DBMS', 'Technical', 'Logical', 'Verbal'];
 
- 
   const [newQuestion, setNewQuestion] = useState({
     category: 'Aptitude',
     difficulty: 'Medium',
@@ -53,7 +50,6 @@ export default function AdminQuestionsTab({ token }) {
     explanation: '',
     tags: []
   });
-
 
   const sampleQuestions = [
     { 
@@ -113,7 +109,6 @@ export default function AdminQuestionsTab({ token }) {
     },
   ];
 
- 
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     try {
       setLoading(true);
@@ -147,14 +142,12 @@ export default function AdminQuestionsTab({ token }) {
     } catch (error) {
       setError(error.message);
       showToast(error.message, 'error');
-      // Use sample data if API fails
       return { success: true, data: { questions: sampleQuestions, pagination: { page: 1, totalPages: 1, total: sampleQuestions.length, limit: 10 } } };
     } finally {
       setLoading(false);
     }
   };
 
- 
   const fetchQuestions = async (page = 1) => {
     try {
       const params = new URLSearchParams({
@@ -180,14 +173,11 @@ export default function AdminQuestionsTab({ token }) {
       }
     } catch (error) {
       console.error('Error fetching questions:', error);
-      // Use sample data
       setQuestions(sampleQuestions);
       setFilteredQuestions(sampleQuestions);
     }
   };
 
-
-  
   const handleAddQuestion = async (e) => {
     e.preventDefault();
     
@@ -229,7 +219,6 @@ export default function AdminQuestionsTab({ token }) {
         await fetchQuestions(pagination.currentPage);
       }
     } catch (error) {
-      // Add to local state if API fails
       const newQ = {
         id: `Q-${Date.now().toString().slice(-4)}`,
         ...newQuestion,
@@ -275,7 +264,6 @@ export default function AdminQuestionsTab({ token }) {
         await fetchQuestions(pagination.currentPage);
       }
     } catch (error) {
-      // Update locally
       setQuestions(questions.map(q => 
         (q.id === editQuestion.id || q._id === editQuestion._id) ? editQuestion : q
       ));
@@ -301,7 +289,6 @@ export default function AdminQuestionsTab({ token }) {
         await fetchQuestions(pagination.currentPage);
       }
     } catch (error) {
-      // Delete locally
       setQuestions(questions.filter(q => q.id !== deleteTarget && q._id !== deleteTarget));
       setFilteredQuestions(filteredQuestions.filter(q => q.id !== deleteTarget && q._id !== deleteTarget));
       showToast('✅ Question deleted locally!', 'success');
@@ -310,7 +297,6 @@ export default function AdminQuestionsTab({ token }) {
     }
   };
 
- 
   const showToast = (message, type = 'info') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
@@ -380,7 +366,6 @@ export default function AdminQuestionsTab({ token }) {
     }
   };
 
-
   useEffect(() => {
     fetchQuestions(1);
   }, []);
@@ -392,11 +377,9 @@ export default function AdminQuestionsTab({ token }) {
     return () => clearTimeout(debounceTimer);
   }, [searchQuery, selectedCategory]);
 
- 
   const totalQuestions = questions.length;
   const publishedCount = questions.filter(q => q.status === 'Published').length;
   const draftCount = questions.filter(q => q.status === 'Draft').length;
-
 
   return (
     <div className="questions-container">
@@ -410,8 +393,8 @@ export default function AdminQuestionsTab({ token }) {
         </div>
       )}
 
-      {/* Stats Cards */}
-      <div className="row g-3 mb-4">
+      {/* Stats Cards - Responsive */}
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
           { label: "Total Questions", value: totalQuestions, color: "primary", icon: BookOpen },
           { label: "Published", value: publishedCount, color: "success", icon: CheckCircle },
@@ -419,17 +402,23 @@ export default function AdminQuestionsTab({ token }) {
           { label: "Categories", value: categories.length - 1, color: "info", icon: Layers },
         ].map((stat, i) => {
           const Icon = stat.icon;
+          const bgColors = {
+            primary: 'rgba(59,130,246,0.08)',
+            success: 'rgba(34,197,94,0.08)',
+            warning: 'rgba(234,179,8,0.08)',
+            info: 'rgba(6,182,212,0.08)'
+          };
           return (
             <div key={i} className="col-6 col-lg-3">
-              <div className="stat-card" style={{ background: '#ffffff' }}>
+              <div className="stat-card">
                 <div className="stat-card-body">
                   <div className="stat-header">
-                    <span className="stat-label" style={{ color: '#6b7280' }}>{stat.label}</span>
+                    <span className="stat-label">{stat.label}</span>
                     <div className={`stat-icon-wrapper stat-icon-${stat.color}`}>
                       <Icon className={`stat-icon text-${stat.color}`} />
                     </div>
                   </div>
-                  <h4 className={`stat-value text-${stat.color}`} style={{ color: stat.color === 'primary' ? '#3b82f6' : stat.color === 'success' ? '#22c55e' : stat.color === 'warning' ? '#eab308' : '#06b6d4' }}>{stat.value}</h4>
+                  <h4 className={`stat-value text-${stat.color}`}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -437,16 +426,15 @@ export default function AdminQuestionsTab({ token }) {
         })}
       </div>
 
-      {/* Search & Filter */}
-      <div className="search-filter-card" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
+      {/* Search & Filter - Responsive */}
+      <div className="search-filter-card">
         <div className="search-filter-body">
           <div className="search-filter-container">
-            <div className="search-wrapper" style={{ background: '#f3f4f6', border: '1px solid #e5e7eb' }}>
-              <Search className="search-icon" style={{ color: '#6b7280' }} />
+            <div className="search-wrapper" style={{ maxWidth: 'clamp(160px, 35vw, 320px)' }}>
+              <Search className="search-icon" />
               <input 
                 type="text" 
                 className="search-input" 
-                style={{ color: '#1f2937' }}
                 placeholder="Search questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -456,13 +444,13 @@ export default function AdminQuestionsTab({ token }) {
               )}
             </div>
             
-            <div className="filter-wrapper" style={{ background: '#f3f4f6', border: '1px solid #e5e7eb' }}>
-              <Filter className="filter-icon" style={{ color: '#6b7280' }} />
+            <div className="filter-wrapper">
+              <Filter className="filter-icon" />
               <select 
                 className="filter-select"
-                style={{ color: '#1f2937' }}
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
+                style={{ minWidth: 'clamp(80px, 15vw, 120px)' }}
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -474,7 +462,6 @@ export default function AdminQuestionsTab({ token }) {
               onClick={() => fetchQuestions(1)}
               className="btn-refresh"
               title="Refresh"
-              style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', color: '#3b82f6' }}
             >
               <RefreshCw size={16} />
             </button>
@@ -485,27 +472,27 @@ export default function AdminQuestionsTab({ token }) {
                 setShowAddModal(true);
               }}
               className="btn-add"
-              style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: 'white' }}
             >
-              <Plus size={16} /> Add Question
+              <Plus size={16} /> 
+              <span className="d-none d-sm-inline">Add Question</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Questions List */}
-      <div className="questions-list-card" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
+      {/* Questions List - Responsive */}
+      <div className="questions-list-card">
         <div className="questions-list-body">
           {loading && filteredQuestions.length === 0 ? (
             <div className="text-center py-5">
               <Loader2 className="spin" size={40} style={{ color: '#4f46e5' }} />
-              <p className="text-secondary mt-3" style={{ color: '#6b7280' }}>Loading questions...</p>
+              <p className="text-secondary mt-3">Loading questions...</p>
             </div>
           ) : filteredQuestions.length === 0 ? (
             <div className="text-center py-5">
-              <BookOpen size={48} className="text-secondary mb-3" style={{ color: '#6b7280' }} />
-              <h6 className="text-secondary" style={{ color: '#6b7280' }}>No questions found</h6>
-              <p className="text-secondary small" style={{ color: '#6b7280' }}>Try adjusting your search or filters</p>
+              <BookOpen size={48} className="text-secondary mb-3" />
+              <h6 className="text-secondary">No questions found</h6>
+              <p className="text-secondary small">Try adjusting your search or filters</p>
               <button 
                 className="btn btn-primary btn-sm mt-2"
                 onClick={() => { resetNewQuestion(); setShowAddModal(true); }}
@@ -516,7 +503,7 @@ export default function AdminQuestionsTab({ token }) {
             </div>
           ) : (
             <>
-              <div className="question-header" style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
+              <div className="question-header">
                 <div className="question-select-all">
                   <input
                     type="checkbox"
@@ -526,9 +513,9 @@ export default function AdminQuestionsTab({ token }) {
                   />
                 </div>
                 <div className="question-info">Question</div>
-                <div className="question-meta">Category</div>
-                <div className="question-meta">Difficulty</div>
-                <div className="question-meta">Status</div>
+                <div className="question-meta d-none d-sm-block">Category</div>
+                <div className="question-meta d-none d-md-block">Difficulty</div>
+                <div className="question-meta d-none d-md-block">Status</div>
                 <div className="question-actions">Actions</div>
               </div>
 
@@ -539,10 +526,6 @@ export default function AdminQuestionsTab({ token }) {
                   <div 
                     key={id} 
                     className={`question-item ${isSelected ? 'selected' : ''}`}
-                    style={{ 
-                      background: isSelected ? 'rgba(59,130,246,0.05)' : 'rgba(0,0,0,0.02)',
-                      border: isSelected ? '1px solid rgba(59,130,246,0.3)' : '1px solid rgba(0,0,0,0.04)'
-                    }}
                   >
                     <div className="question-select">
                       <input
@@ -555,18 +538,19 @@ export default function AdminQuestionsTab({ token }) {
                     
                     <div className="question-content">
                       <div className="question-text">
-                        <span className="question-id" style={{ color: '#6b7280' }}>#{id}</span>
-                        <span className="question-title" style={{ color: '#1f2937' }}>{q.question}</span>
+                        <span className="question-id">#{id}</span>
+                        <span className="question-title">{q.question}</span>
                       </div>
                       <div className="question-badges">
-                        <span className="badge-category" style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.2)' }}>{q.category}</span>
+                        <span className="badge-category d-sm-none">{q.category}</span>
+                        <span className="badge-category d-none d-sm-inline-block">{q.category}</span>
                         <span className={`badge-difficulty badge-${getDifficultyColor(q.difficulty)}`}>
                           {q.difficulty}
                         </span>
                         <span className={`badge-status badge-${getStatusColor(q.status)}`}>
                           {q.status}
                         </span>
-                        <span className="badge-date" style={{ color: '#6b7280' }}>
+                        <span className="badge-date d-none d-lg-inline-flex">
                           <Calendar size={12} /> {formatDate(q.createdAt)}
                         </span>
                       </div>
@@ -577,7 +561,6 @@ export default function AdminQuestionsTab({ token }) {
                         onClick={() => { setSelectedQuestion(q); setShowDetailModal(true); }}
                         className="action-btn action-view"
                         title="View"
-                        style={{ color: '#6b7280' }}
                       >
                         <Eye size={16} />
                       </button>
@@ -585,7 +568,6 @@ export default function AdminQuestionsTab({ token }) {
                         onClick={() => { setEditQuestion({ ...q }); setShowEditModal(true); }}
                         className="action-btn action-edit"
                         title="Edit"
-                        style={{ color: '#6b7280' }}
                       >
                         <Edit2 size={16} />
                       </button>
@@ -593,7 +575,6 @@ export default function AdminQuestionsTab({ token }) {
                         onClick={() => { setDeleteTarget(id); setShowDeleteModal(true); }}
                         className="action-btn action-delete"
                         title="Delete"
-                        style={{ color: '#6b7280' }}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -606,25 +587,24 @@ export default function AdminQuestionsTab({ token }) {
         </div>
       </div>
 
-     
+      {/* Add Modal - Responsive */}
       {showAddModal && (
-        <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)' }}>
-          <div className="modal-container" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
-            <div className="modal-header" style={{ borderBottom: '1px solid #e5e7eb', background: '#ffffff' }}>
-              <h5 className="modal-title" style={{ color: '#1f2937' }}>
-                <Plus size={20} className="text-primary" style={{ color: '#3b82f6' }} />
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <Plus size={20} className="text-primary" />
                 Add New Question
               </h5>
-              <button onClick={() => { setShowAddModal(false); resetNewQuestion(); }} className="modal-close" style={{ color: '#6b7280' }}>×</button>
+              <button onClick={() => { setShowAddModal(false); resetNewQuestion(); }} className="modal-close">×</button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleAddQuestion}>
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Question *</label>
+                  <label>Question *</label>
                   <textarea
                     rows={3}
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={newQuestion.question}
                     onChange={(e) => setNewQuestion({ ...newQuestion, question: e.target.value })}
                     placeholder="Enter your question here..."
@@ -632,12 +612,11 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="row g-2">
-                  <div className="col-md-4">
+                  <div className="col-6 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Category</label>
+                      <label>Category</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={newQuestion.category}
                         onChange={(e) => setNewQuestion({ ...newQuestion, category: e.target.value })}
                       >
@@ -647,12 +626,11 @@ export default function AdminQuestionsTab({ token }) {
                       </select>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-6 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Difficulty</label>
+                      <label>Difficulty</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={newQuestion.difficulty}
                         onChange={(e) => setNewQuestion({ ...newQuestion, difficulty: e.target.value })}
                       >
@@ -662,12 +640,11 @@ export default function AdminQuestionsTab({ token }) {
                       </select>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-12 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Status</label>
+                      <label>Status</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={newQuestion.status}
                         onChange={(e) => setNewQuestion({ ...newQuestion, status: e.target.value })}
                       >
@@ -679,14 +656,13 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Options *</label>
+                  <label>Options *</label>
                   {newQuestion.options.map((opt, index) => (
                     <div key={index} className="option-input">
-                      <span className="option-label" style={{ color: '#6b7280' }}>{String.fromCharCode(65 + index)}.</span>
+                      <span className="option-label">{String.fromCharCode(65 + index)}.</span>
                       <input
                         type="text"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={opt}
                         onChange={(e) => {
                           const newOptions = [...newQuestion.options];
@@ -700,11 +676,10 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Correct Answer *</label>
+                  <label>Correct Answer *</label>
                   <input
                     type="text"
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={newQuestion.answer}
                     onChange={(e) => setNewQuestion({ ...newQuestion, answer: e.target.value })}
                     placeholder="Enter the correct answer"
@@ -712,27 +687,25 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="row g-2">
-                  <div className="col-md-6">
+                  <div className="col-6">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Marks</label>
+                      <label>Marks</label>
                       <input
                         type="number"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={newQuestion.marks}
                         onChange={(e) => setNewQuestion({ ...newQuestion, marks: parseInt(e.target.value) || 0 })}
                         min="0"
                       />
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-6">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Negative Marks</label>
+                      <label>Negative Marks</label>
                       <input
                         type="number"
                         step="0.25"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={newQuestion.negativeMarks}
                         onChange={(e) => setNewQuestion({ ...newQuestion, negativeMarks: parseFloat(e.target.value) || 0 })}
                         min="0"
@@ -742,20 +715,19 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Explanation (Optional)</label>
+                  <label>Explanation (Optional)</label>
                   <textarea
                     rows={2}
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={newQuestion.explanation}
                     onChange={(e) => setNewQuestion({ ...newQuestion, explanation: e.target.value })}
                     placeholder="Add an explanation..."
                   />
                 </div>
 
-                <div className="modal-footer" style={{ borderTop: '1px solid #e5e7eb' }}>
-                  <button type="button" className="btn-secondary" style={{ background: '#f3f4f6', color: '#4b5563' }} onClick={() => { setShowAddModal(false); resetNewQuestion(); }}>Cancel</button>
-                  <button type="submit" className="btn-primary" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: 'white' }} disabled={loading}>
+                <div className="modal-footer">
+                  <button type="button" className="btn-secondary" onClick={() => { setShowAddModal(false); resetNewQuestion(); }}>Cancel</button>
+                  <button type="submit" className="btn-primary" disabled={loading}>
                     {loading ? <Loader2 className="spin" size={16} /> : <Plus size={16} />}
                     Add Question
                   </button>
@@ -766,24 +738,24 @@ export default function AdminQuestionsTab({ token }) {
         </div>
       )}
 
-     
+      {/* Detail Modal - Responsive */}
       {showDetailModal && selectedQuestion && (
-        <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)' }}>
-          <div className="modal-container" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
-            <div className="modal-header" style={{ borderBottom: '1px solid #e5e7eb', background: '#ffffff' }}>
-              <h5 className="modal-title" style={{ color: '#1f2937' }}>
-                <Eye size={20} className="text-info" style={{ color: '#06b6d4' }} />
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <Eye size={20} className="text-info" />
                 Question Details
               </h5>
-              <button onClick={() => setShowDetailModal(false)} className="modal-close" style={{ color: '#6b7280' }}>×</button>
+              <button onClick={() => setShowDetailModal(false)} className="modal-close">×</button>
             </div>
             <div className="modal-body">
               <div className="d-flex flex-wrap gap-2 mb-3">
-                <span className="badge-category" style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.2)' }}>{selectedQuestion.category}</span>
+                <span className="badge-category">{selectedQuestion.category}</span>
                 <span className={`badge-difficulty badge-${getDifficultyColor(selectedQuestion.difficulty)}`}>
                   {selectedQuestion.difficulty}
                 </span>
-                <span className="badge bg-secondary bg-opacity-20 text-secondary border border-secondary" style={{ background: 'rgba(107,114,128,0.1)', color: '#6b7280', border: '1px solid rgba(107,114,128,0.2)' }}>
+                <span className="badge-status" style={{ background: 'rgba(107,114,128,0.1)', color: '#6b7280', border: '1px solid rgba(107,114,128,0.2)' }}>
                   ID: {selectedQuestion.id || selectedQuestion._id}
                 </span>
                 <span className={`badge-status badge-${getStatusColor(selectedQuestion.status)}`}>
@@ -791,93 +763,91 @@ export default function AdminQuestionsTab({ token }) {
                 </span>
               </div>
 
-              <div className="view-section" style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '10px' }}>
-                <label style={{ color: '#6b7280' }}>Question</label>
-                <p className="view-text" style={{ color: '#1f2937' }}>{selectedQuestion.question}</p>
+              <div className="view-section">
+                <label>Question</label>
+                <p className="view-text">{selectedQuestion.question}</p>
               </div>
 
-              <div className="view-section" style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '10px' }}>
-                <label style={{ color: '#6b7280' }}>Options</label>
+              <div className="view-section">
+                <label>Options</label>
                 {selectedQuestion.options.map((opt, i) => (
-                  <div key={i} className={`option-item ${opt === selectedQuestion.answer ? 'correct' : ''}`} style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)' }}>
-                    <span className="option-letter" style={{ color: '#6b7280' }}>{String.fromCharCode(65 + i)}.</span>
-                    <span className={`option-text ${opt === selectedQuestion.answer ? 'correct' : ''}`} style={{ color: '#1f2937' }}>{opt}</span>
+                  <div key={i} className={`option-item ${opt === selectedQuestion.answer ? 'correct' : ''}`}>
+                    <span className="option-letter">{String.fromCharCode(65 + i)}.</span>
+                    <span className={`option-text ${opt === selectedQuestion.answer ? 'correct' : ''}`}>{opt}</span>
                     {opt === selectedQuestion.answer && (
-                      <CheckCircle size={16} className="text-success ms-auto" style={{ color: '#22c55e' }} />
+                      <CheckCircle size={16} className="text-success ms-auto" />
                     )}
                   </div>
                 ))}
               </div>
 
-              <div className="view-section correct-answer" style={{ background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '10px' }}>
-                <label className="text-success" style={{ color: '#22c55e' }}>
+              <div className="view-section correct-answer">
+                <label className="text-success">
                   <CheckCircle size={14} className="me-1" />
                   Correct Answer
                 </label>
-                <p className="text-success fw-bold" style={{ color: '#22c55e' }}>{selectedQuestion.answer}</p>
+                <p className="text-success fw-bold">{selectedQuestion.answer}</p>
               </div>
 
               {selectedQuestion.explanation && (
-                <div className="view-section" style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '10px' }}>
-                  <label style={{ color: '#6b7280' }}>Explanation</label>
-                  <p className="view-text" style={{ color: '#1f2937' }}>{selectedQuestion.explanation}</p>
+                <div className="view-section">
+                  <label>Explanation</label>
+                  <p className="view-text">{selectedQuestion.explanation}</p>
                 </div>
               )}
 
               <div className="row g-2 mt-2">
                 <div className="col-6">
-                  <div className="view-meta" style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '10px' }}>
-                    <label style={{ color: '#6b7280' }}><Calendar size={12} className="me-1" /> Created</label>
-                    <p style={{ color: '#1f2937' }}>{formatDate(selectedQuestion.createdAt)}</p>
+                  <div className="view-meta">
+                    <label><Calendar size={12} className="me-1" /> Created</label>
+                    <p>{formatDate(selectedQuestion.createdAt)}</p>
                   </div>
                 </div>
                 <div className="col-6">
-                  <div className="view-meta" style={{ background: 'rgba(0,0,0,0.03)', borderRadius: '10px' }}>
-                    <label style={{ color: '#6b7280' }}><Users size={12} className="me-1" /> Created By</label>
-                    <p style={{ color: '#1f2937' }}>{selectedQuestion.createdBy || 'Admin'}</p>
+                  <div className="view-meta">
+                    <label><Users size={12} className="me-1" /> Created By</label>
+                    <p>{selectedQuestion.createdBy || 'Admin'}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="modal-footer" style={{ borderTop: '1px solid #e5e7eb' }}>
-                <button onClick={() => setShowDetailModal(false)} className="btn-secondary w-100" style={{ background: '#f3f4f6', color: '#4b5563' }}>Close</button>
+              <div className="modal-footer">
+                <button onClick={() => setShowDetailModal(false)} className="btn-secondary w-100">Close</button>
               </div>
             </div>
           </div>
         </div>
       )}
 
-     
+      {/* Edit Modal - Responsive */}
       {showEditModal && editQuestion && (
-        <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)' }}>
-          <div className="modal-container" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
-            <div className="modal-header" style={{ borderBottom: '1px solid #e5e7eb', background: '#ffffff' }}>
-              <h5 className="modal-title" style={{ color: '#1f2937' }}>
-                <Edit2 size={20} className="text-warning" style={{ color: '#eab308' }} />
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <Edit2 size={20} className="text-warning" />
                 Edit Question
               </h5>
-              <button onClick={() => { setShowEditModal(false); setEditQuestion(null); }} className="modal-close" style={{ color: '#6b7280' }}>×</button>
+              <button onClick={() => { setShowEditModal(false); setEditQuestion(null); }} className="modal-close">×</button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleUpdateQuestion}>
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Question *</label>
+                  <label>Question *</label>
                   <textarea
                     rows={3}
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={editQuestion.question}
                     onChange={(e) => setEditQuestion({ ...editQuestion, question: e.target.value })}
                   />
                 </div>
 
                 <div className="row g-2">
-                  <div className="col-md-4">
+                  <div className="col-6 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Category</label>
+                      <label>Category</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={editQuestion.category}
                         onChange={(e) => setEditQuestion({ ...editQuestion, category: e.target.value })}
                       >
@@ -887,12 +857,11 @@ export default function AdminQuestionsTab({ token }) {
                       </select>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-6 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Difficulty</label>
+                      <label>Difficulty</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={editQuestion.difficulty}
                         onChange={(e) => setEditQuestion({ ...editQuestion, difficulty: e.target.value })}
                       >
@@ -902,12 +871,11 @@ export default function AdminQuestionsTab({ token }) {
                       </select>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-12 col-md-4">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Status</label>
+                      <label>Status</label>
                       <select
                         className="form-select"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={editQuestion.status}
                         onChange={(e) => setEditQuestion({ ...editQuestion, status: e.target.value })}
                       >
@@ -920,14 +888,13 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Options *</label>
+                  <label>Options *</label>
                   {editQuestion.options.map((opt, index) => (
                     <div key={index} className="option-input">
-                      <span className="option-label" style={{ color: '#6b7280' }}>{String.fromCharCode(65 + index)}.</span>
+                      <span className="option-label">{String.fromCharCode(65 + index)}.</span>
                       <input
                         type="text"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={opt}
                         onChange={(e) => {
                           const newOptions = [...editQuestion.options];
@@ -940,37 +907,34 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Correct Answer *</label>
+                  <label>Correct Answer *</label>
                   <input
                     type="text"
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={editQuestion.answer}
                     onChange={(e) => setEditQuestion({ ...editQuestion, answer: e.target.value })}
                   />
                 </div>
 
                 <div className="row g-2">
-                  <div className="col-md-6">
+                  <div className="col-6">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Marks</label>
+                      <label>Marks</label>
                       <input
                         type="number"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={editQuestion.marks}
                         onChange={(e) => setEditQuestion({ ...editQuestion, marks: parseInt(e.target.value) || 0 })}
                       />
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-6">
                     <div className="form-group">
-                      <label style={{ color: '#4b5563' }}>Negative Marks</label>
+                      <label>Negative Marks</label>
                       <input
                         type="number"
                         step="0.25"
                         className="form-control"
-                        style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                         value={editQuestion.negativeMarks}
                         onChange={(e) => setEditQuestion({ ...editQuestion, negativeMarks: parseFloat(e.target.value) || 0 })}
                       />
@@ -979,19 +943,18 @@ export default function AdminQuestionsTab({ token }) {
                 </div>
 
                 <div className="form-group">
-                  <label style={{ color: '#4b5563' }}>Explanation (Optional)</label>
+                  <label>Explanation (Optional)</label>
                   <textarea
                     rows={2}
                     className="form-control"
-                    style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#1f2937' }}
                     value={editQuestion.explanation}
                     onChange={(e) => setEditQuestion({ ...editQuestion, explanation: e.target.value })}
                   />
                 </div>
 
-                <div className="modal-footer" style={{ borderTop: '1px solid #e5e7eb' }}>
-                  <button type="button" className="btn-secondary" style={{ background: '#f3f4f6', color: '#4b5563' }} onClick={() => { setShowEditModal(false); setEditQuestion(null); }}>Cancel</button>
-                  <button type="submit" className="btn-warning" style={{ background: '#eab308', color: 'white' }} disabled={loading}>
+                <div className="modal-footer">
+                  <button type="button" className="btn-secondary" onClick={() => { setShowEditModal(false); setEditQuestion(null); }}>Cancel</button>
+                  <button type="submit" className="btn-warning" disabled={loading}>
                     {loading ? <Loader2 className="spin" size={16} /> : <Save size={16} />}
                     Update Question
                   </button>
@@ -1002,27 +965,27 @@ export default function AdminQuestionsTab({ token }) {
         </div>
       )}
 
-      
+      {/* Delete Modal - Responsive */}
       {showDeleteModal && (
-        <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)' }}>
-          <div className="modal-container modal-sm" style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}>
-            <div className="modal-header" style={{ borderBottom: '1px solid #e5e7eb', background: '#ffffff' }}>
-              <h5 className="modal-title" style={{ color: '#1f2937' }}>
-                <AlertCircle size={20} className="text-danger" style={{ color: '#ef4444' }} />
+        <div className="modal-overlay">
+          <div className="modal-container modal-sm">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <AlertCircle size={20} className="text-danger" />
                 Delete Question
               </h5>
-              <button onClick={() => { setShowDeleteModal(false); setDeleteTarget(null); }} className="modal-close" style={{ color: '#6b7280' }}>×</button>
+              <button onClick={() => { setShowDeleteModal(false); setDeleteTarget(null); }} className="modal-close">×</button>
             </div>
             <div className="modal-body text-center">
-              <div className="confirm-icon" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
-                <Trash2 size={32} className="text-danger" style={{ color: '#ef4444' }} />
+              <div className="confirm-icon">
+                <Trash2 size={32} className="text-danger" />
               </div>
-              <p className="text-light mb-2" style={{ color: '#1f2937' }}>Are you sure you want to delete this question?</p>
-              <p className="text-secondary small" style={{ color: '#6b7280' }}>This action cannot be undone.</p>
+              <p className="text-light mb-2">Are you sure you want to delete this question?</p>
+              <p className="text-secondary small">This action cannot be undone.</p>
             </div>
-            <div className="modal-footer" style={{ borderTop: '1px solid #e5e7eb' }}>
-              <button onClick={() => { setShowDeleteModal(false); setDeleteTarget(null); }} className="btn-secondary" style={{ background: '#f3f4f6', color: '#4b5563' }}>Cancel</button>
-              <button onClick={handleDeleteQuestion} className="btn-danger" style={{ background: '#ef4444', color: 'white' }} disabled={loading}>
+            <div className="modal-footer">
+              <button onClick={() => { setShowDeleteModal(false); setDeleteTarget(null); }} className="btn-secondary">Cancel</button>
+              <button onClick={handleDeleteQuestion} className="btn-danger" disabled={loading}>
                 {loading ? <Loader2 className="spin" size={16} /> : <Trash2 size={16} />}
                 Delete
               </button>
@@ -1031,7 +994,7 @@ export default function AdminQuestionsTab({ token }) {
         </div>
       )}
 
-     
+      {/* CSS */}
       <style>{`
         .questions-container {
           padding: 0;
@@ -1044,8 +1007,8 @@ export default function AdminQuestionsTab({ token }) {
           top: 20px;
           right: 20px;
           z-index: 99999;
-          min-width: 300px;
-          padding: 16px 20px;
+          min-width: clamp(280px, 80vw, 300px);
+          padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 20px);
           border-radius: 12px;
           background: #ffffff;
           border: 1px solid #e5e7eb;
@@ -1062,6 +1025,7 @@ export default function AdminQuestionsTab({ token }) {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 12px;
         }
         .toast-content button {
           background: none;
@@ -1091,7 +1055,7 @@ export default function AdminQuestionsTab({ token }) {
           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .stat-card-body {
-          padding: 16px 20px;
+          padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 20px);
         }
         .stat-header {
           display: flex;
@@ -1101,13 +1065,13 @@ export default function AdminQuestionsTab({ token }) {
         }
         .stat-label {
           color: #6b7280;
-          font-size: 0.55rem;
+          font-size: clamp(0.45rem, 0.8vw, 0.55rem);
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
         .stat-icon-wrapper {
-          padding: 8px;
+          padding: clamp(6px, 1vw, 8px);
           border-radius: 10px;
           border: 1px solid rgba(0,0,0,0.06);
         }
@@ -1115,8 +1079,8 @@ export default function AdminQuestionsTab({ token }) {
         .stat-icon-success { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); }
         .stat-icon-warning { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.2); }
         .stat-icon-info { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.2); }
-        .stat-icon { width: 0.9rem; height: 0.9rem; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; margin: 0; }
+        .stat-icon { width: clamp(0.7rem, 1.2vw, 0.9rem); height: clamp(0.7rem, 1.2vw, 0.9rem); }
+        .stat-value { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 700; margin: 0; }
 
         /* Search & Filter */
         .search-filter-card {
@@ -1126,22 +1090,21 @@ export default function AdminQuestionsTab({ token }) {
           background: #ffffff;
         }
         .search-filter-body {
-          padding: 12px 16px;
+          padding: clamp(10px, 2vw, 16px);
         }
         .search-filter-container {
           display: flex;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 8px;
           align-items: center;
         }
         .search-wrapper {
           flex: 1;
-          min-width: 180px;
-          max-width: 320px;
+          min-width: 140px;
           display: flex;
           align-items: center;
           background: #f3f4f6;
-          padding: 8px 14px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 2vw, 14px);
           border-radius: 10px;
           border: 1px solid #e5e7eb;
           transition: all 0.3s ease;
@@ -1152,15 +1115,15 @@ export default function AdminQuestionsTab({ token }) {
         }
         .search-icon {
           color: #6b7280;
-          width: 16px;
-          height: 16px;
+          width: clamp(14px, 1.2vw, 16px);
+          height: clamp(14px, 1.2vw, 16px);
           margin-right: 8px;
         }
         .search-input {
           background: transparent;
           border: none;
           color: #1f2937;
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1.2vw, 0.8rem);
           width: 100%;
           outline: none;
         }
@@ -1182,23 +1145,23 @@ export default function AdminQuestionsTab({ token }) {
           align-items: center;
           gap: 8px;
           background: #f3f4f6;
-          padding: 8px 14px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 2vw, 14px);
           border-radius: 10px;
           border: 1px solid #e5e7eb;
         }
         .filter-icon {
           color: #6b7280;
-          width: 16px;
-          height: 16px;
+          width: clamp(14px, 1.2vw, 16px);
+          height: clamp(14px, 1.2vw, 16px);
         }
         .filter-select {
           background: transparent;
           border: none;
           color: #1f2937;
-          font-size: 0.75rem;
+          font-size: clamp(0.65rem, 1vw, 0.75rem);
           outline: none;
           cursor: pointer;
-          min-width: 100px;
+          min-width: 80px;
         }
         .filter-select option {
           background: #ffffff;
@@ -1209,7 +1172,7 @@ export default function AdminQuestionsTab({ token }) {
           background: rgba(59,130,246,0.1);
           border: 1px solid rgba(59,130,246,0.2);
           color: #3b82f6;
-          padding: 8px 12px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px);
           border-radius: 10px;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -1225,10 +1188,10 @@ export default function AdminQuestionsTab({ token }) {
           background: linear-gradient(135deg, #4f46e5, #7c3aed);
           border: none;
           color: white;
-          padding: 10px 20px;
+          padding: clamp(8px, 1.5vw, 10px) clamp(16px, 2.5vw, 20px);
           border-radius: 10px;
           font-weight: 600;
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1.2vw, 0.8rem);
           cursor: pointer;
           transition: all 0.3s ease;
           display: flex;
@@ -1249,7 +1212,7 @@ export default function AdminQuestionsTab({ token }) {
           background: #ffffff;
         }
         .questions-list-body {
-          padding: 20px;
+          padding: clamp(12px, 2vw, 20px);
         }
 
         .question-header {
@@ -1259,7 +1222,7 @@ export default function AdminQuestionsTab({ token }) {
           padding: 10px 16px;
           border-bottom: 1px solid #e5e7eb;
           color: #6b7280;
-          font-size: 0.65rem;
+          font-size: clamp(0.55rem, 0.9vw, 0.65rem);
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -1270,7 +1233,7 @@ export default function AdminQuestionsTab({ token }) {
           display: grid;
           grid-template-columns: 30px 1fr 100px 80px 80px 120px;
           gap: 12px;
-          padding: 12px 16px;
+          padding: clamp(8px, 1.5vw, 12px) clamp(12px, 2vw, 16px);
           border-radius: 10px;
           margin-bottom: 6px;
           background: rgba(0,0,0,0.02);
@@ -1288,8 +1251,8 @@ export default function AdminQuestionsTab({ token }) {
         }
 
         .checkbox {
-          width: 16px;
-          height: 16px;
+          width: clamp(14px, 1.5vw, 16px);
+          height: clamp(14px, 1.5vw, 16px);
           accent-color: #4f46e5;
           cursor: pointer;
         }
@@ -1303,15 +1266,16 @@ export default function AdminQuestionsTab({ token }) {
           align-items: center;
           gap: 8px;
           margin-bottom: 4px;
+          flex-wrap: wrap;
         }
         .question-id {
           color: #6b7280;
-          font-size: 0.65rem;
+          font-size: clamp(0.55rem, 0.8vw, 0.65rem);
           font-weight: 600;
         }
         .question-title {
           color: #1f2937;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.2vw, 0.85rem);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1325,7 +1289,7 @@ export default function AdminQuestionsTab({ token }) {
         .badge-category {
           padding: 2px 10px;
           border-radius: 20px;
-          font-size: 0.55rem;
+          font-size: clamp(0.45rem, 0.7vw, 0.55rem);
           font-weight: 600;
           background: rgba(59,130,246,0.1);
           color: #3b82f6;
@@ -1334,7 +1298,7 @@ export default function AdminQuestionsTab({ token }) {
         .badge-difficulty {
           padding: 2px 10px;
           border-radius: 20px;
-          font-size: 0.55rem;
+          font-size: clamp(0.45rem, 0.7vw, 0.55rem);
           font-weight: 600;
         }
         .badge-success { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
@@ -1344,7 +1308,7 @@ export default function AdminQuestionsTab({ token }) {
         .badge-status {
           padding: 2px 10px;
           border-radius: 20px;
-          font-size: 0.55rem;
+          font-size: clamp(0.45rem, 0.7vw, 0.55rem);
           font-weight: 600;
         }
         .badge-date {
@@ -1352,7 +1316,7 @@ export default function AdminQuestionsTab({ token }) {
           align-items: center;
           gap: 4px;
           color: #6b7280;
-          font-size: 0.55rem;
+          font-size: clamp(0.45rem, 0.7vw, 0.55rem);
           padding: 2px 8px;
         }
 
@@ -1363,7 +1327,7 @@ export default function AdminQuestionsTab({ token }) {
           justify-content: flex-end;
         }
         .action-btn {
-          padding: 4px 8px;
+          padding: clamp(2px, 0.4vw, 4px) clamp(6px, 1vw, 8px);
           border-radius: 6px;
           border: none;
           background: transparent;
@@ -1392,20 +1356,21 @@ export default function AdminQuestionsTab({ token }) {
           justify-content: center;
           z-index: 9999;
           animation: fadeIn 0.3s ease;
+          padding: 1rem;
         }
         .modal-container {
           background: #ffffff;
           border-radius: 20px;
-          max-width: 650px;
-          width: 95%;
+          max-width: clamp(340px, 90vw, 650px);
+          width: 100%;
           max-height: 90vh;
           overflow-y: auto;
           border: 1px solid #e5e7eb;
           box-shadow: 0 20px 60px rgba(0,0,0,0.2);
         }
-        .modal-container.modal-sm { max-width: 450px; }
+        .modal-container.modal-sm { max-width: clamp(320px, 85vw, 450px); }
         .modal-header {
-          padding: 20px 24px;
+          padding: clamp(16px, 2.5vw, 20px) clamp(16px, 3vw, 24px);
           border-bottom: 1px solid #e5e7eb;
           display: flex;
           justify-content: space-between;
@@ -1418,7 +1383,7 @@ export default function AdminQuestionsTab({ token }) {
         .modal-title {
           color: #1f2937;
           font-weight: 700;
-          font-size: 1.1rem;
+          font-size: clamp(0.95rem, 2vw, 1.1rem);
           margin: 0;
           display: flex;
           align-items: center;
@@ -1434,34 +1399,35 @@ export default function AdminQuestionsTab({ token }) {
         }
         .modal-close:hover { color: #1f2937; }
         .modal-body {
-          padding: 24px;
+          padding: clamp(16px, 2.5vw, 24px);
         }
         .modal-footer {
-          padding: 16px 24px;
+          padding: clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px);
           border-top: 1px solid #e5e7eb;
           display: flex;
           gap: 12px;
           justify-content: flex-end;
+          flex-wrap: wrap;
         }
 
         .form-group {
-          margin-bottom: 16px;
+          margin-bottom: clamp(12px, 1.5vw, 16px);
         }
         .form-group label {
           display: block;
           color: #4b5563;
-          font-size: 0.75rem;
+          font-size: clamp(0.65rem, 1vw, 0.75rem);
           font-weight: 600;
           margin-bottom: 4px;
         }
         .form-control, .form-select {
           width: 100%;
-          padding: 8px 12px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px);
           background: #f3f4f6;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           color: #1f2937;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.2vw, 0.85rem);
           transition: all 0.3s ease;
         }
         .form-control:focus, .form-select:focus {
@@ -1478,7 +1444,7 @@ export default function AdminQuestionsTab({ token }) {
         .option-label {
           color: #6b7280;
           font-weight: 600;
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1vw, 0.8rem);
           min-width: 20px;
         }
         textarea.form-control {
@@ -1487,11 +1453,11 @@ export default function AdminQuestionsTab({ token }) {
         }
 
         .btn-primary, .btn-secondary, .btn-danger, .btn-warning {
-          padding: 8px 24px;
+          padding: clamp(6px, 1vw, 8px) clamp(16px, 2.5vw, 24px);
           border: none;
           border-radius: 8px;
           font-weight: 600;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.2vw, 0.85rem);
           cursor: pointer;
           transition: all 0.3s ease;
           display: inline-flex;
@@ -1534,13 +1500,13 @@ export default function AdminQuestionsTab({ token }) {
         .view-section {
           background: rgba(0,0,0,0.03);
           border-radius: 10px;
-          padding: 16px;
+          padding: clamp(12px, 1.5vw, 16px);
           margin-bottom: 12px;
         }
         .view-section label {
           display: block;
           color: #6b7280;
-          font-size: 0.7rem;
+          font-size: clamp(0.6rem, 0.9vw, 0.7rem);
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -1549,13 +1515,13 @@ export default function AdminQuestionsTab({ token }) {
         .view-text {
           color: #1f2937;
           margin: 0;
-          font-size: 0.9rem;
+          font-size: clamp(0.8rem, 1.2vw, 0.9rem);
         }
         .option-item {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 8px 12px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px);
           border-radius: 6px;
           margin-bottom: 4px;
           background: rgba(0,0,0,0.02);
@@ -1568,12 +1534,12 @@ export default function AdminQuestionsTab({ token }) {
         .option-letter {
           color: #6b7280;
           font-weight: 600;
-          font-size: 0.8rem;
+          font-size: clamp(0.7rem, 1vw, 0.8rem);
           min-width: 24px;
         }
         .option-text {
           color: #1f2937;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.2vw, 0.85rem);
         }
         .option-text.correct {
           color: #22c55e;
@@ -1586,24 +1552,24 @@ export default function AdminQuestionsTab({ token }) {
         .view-meta {
           background: rgba(0,0,0,0.03);
           border-radius: 10px;
-          padding: 8px 12px;
+          padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px);
         }
         .view-meta label {
           display: block;
           color: #6b7280;
-          font-size: 0.6rem;
+          font-size: clamp(0.5rem, 0.8vw, 0.6rem);
           font-weight: 600;
           text-transform: uppercase;
         }
         .view-meta p {
           color: #1f2937;
           margin: 0;
-          font-size: 0.85rem;
+          font-size: clamp(0.75rem, 1.2vw, 0.85rem);
         }
 
         .confirm-icon {
-          width: 64px;
-          height: 64px;
+          width: clamp(56px, 10vw, 64px);
+          height: clamp(56px, 10vw, 64px);
           background: rgba(239,68,68,0.1);
           border: 1px solid rgba(239,68,68,0.2);
           border-radius: 50%;
@@ -1613,14 +1579,7 @@ export default function AdminQuestionsTab({ token }) {
           margin: 0 auto 16px;
         }
 
-        @media (max-width: 992px) {
-          .question-header, .question-item {
-            grid-template-columns: 30px 1fr auto;
-          }
-          .question-header .question-meta,
-          .question-item .question-meta { display: none; }
-        }
-
+        /* Responsive overrides */
         @media (max-width: 768px) {
           .search-filter-container {
             flex-direction: column;
@@ -1630,6 +1589,50 @@ export default function AdminQuestionsTab({ token }) {
           .btn-add { width: 100%; justify-content: center; margin-left: 0; }
           .stat-card-body { padding: 12px; }
           .stat-value { font-size: 1.2rem; }
+          .question-header, .question-item {
+            grid-template-columns: 30px 1fr auto;
+            gap: 8px;
+          }
+          .question-header .question-meta,
+          .question-item .question-meta { display: none; }
+        }
+
+        @media (max-width: 576px) {
+          .question-header, .question-item {
+            grid-template-columns: 24px 1fr auto;
+            gap: 6px;
+            padding: 8px 10px;
+          }
+          .question-title {
+            font-size: 0.75rem;
+          }
+          .question-badges {
+            gap: 2px;
+          }
+          .badge-category, .badge-difficulty, .badge-status {
+            font-size: 0.4rem;
+            padding: 1px 6px;
+          }
+          .action-btn {
+            padding: 2px 4px;
+          }
+          .action-btn svg {
+            width: 14px;
+            height: 14px;
+          }
+          .modal-body {
+            padding: 12px;
+          }
+          .modal-footer {
+            flex-direction: column;
+          }
+          .modal-footer .btn-primary,
+          .modal-footer .btn-secondary,
+          .modal-footer .btn-danger,
+          .modal-footer .btn-warning {
+            width: 100%;
+            justify-content: center;
+          }
         }
 
         ::-webkit-scrollbar { width: 4px; }

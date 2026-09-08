@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Bell, Search, User, Settings, HelpCircle, 
   Menu, X, ChevronDown, Calendar, Clock,
-  Shield, Zap, Sparkles, Crown, Globe
+  Shield, Zap, Sparkles, Crown, Globe, LogOut
 } from 'lucide-react';
 
 export default function AdminTopNavbar({ activeTab }) {
@@ -29,12 +29,12 @@ export default function AdminTopNavbar({ activeTab }) {
         background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%)',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         backdropFilter: 'blur(20px)',
-        padding: '0.75rem 1.5rem',
-        minHeight: '64px'
+        padding: 'clamp(0.5rem, 1.5vh, 0.75rem) clamp(0.75rem, 2vw, 1.5rem)',
+        minHeight: 'clamp(56px, 8vh, 64px)'
       }}
     >
       {/* Left Section */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-2 gap-md-3">
         {/* Mobile Menu Button */}
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -42,8 +42,11 @@ export default function AdminTopNavbar({ activeTab }) {
           style={{ 
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.05)',
-            width: '36px',
-            height: '36px'
+            width: 'clamp(32px, 5vw, 36px)',
+            height: 'clamp(32px, 5vw, 36px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
@@ -55,58 +58,69 @@ export default function AdminTopNavbar({ activeTab }) {
           }}
         >
           {isMobileMenuOpen ? (
-            <X style={{ width: '1rem', height: '1rem' }} />
+            <X style={{ width: 'clamp(0.9rem, 1.5vw, 1rem)', height: 'clamp(0.9rem, 1.5vw, 1rem)' }} />
           ) : (
-            <Menu style={{ width: '1rem', height: '1rem' }} />
+            <Menu style={{ width: 'clamp(0.9rem, 1.5vw, 1rem)', height: 'clamp(0.9rem, 1.5vw, 1rem)' }} />
           )}
         </button>
 
         {/* Module Info */}
         <div className="d-flex align-items-center gap-2">
-          <div className="p-1.5 rounded-3 d-none d-sm-flex" style={{ 
+          <div className="p-1 p-md-1.5 rounded-3 d-none d-sm-flex" style={{ 
             background: 'rgba(59, 130, 246, 0.1)',
             border: '1px solid rgba(59, 130, 246, 0.2)'
           }}>
-            <Shield className="text-primary" style={{ width: '0.9rem', height: '0.9rem' }} />
+            <Shield className="text-primary" style={{ 
+              width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+              height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+            }} />
           </div>
-          <h6 className="text-secondary text-uppercase fw-bold m-0" style={{ 
-            fontSize: '0.6rem', 
+          <h6 className="text-secondary text-uppercase fw-bold m-0 d-none d-sm-block" style={{ 
+            fontSize: 'clamp(0.45rem, 0.7vw, 0.6rem)', 
             letterSpacing: '0.1em',
             fontWeight: '700'
           }}>
-            
+            Admin
           </h6>
           <span 
-            className="badge text-uppercase px-3 py-1.5 shadow-lg"
+            className="badge text-uppercase px-2 px-md-3 py-1 py-md-1.5 shadow-lg"
             style={{ 
-              fontSize: '0.6rem',
+              fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)',
               fontWeight: '700',
               background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
               color: '#ffffff',
               borderRadius: '20px',
               boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
-              letterSpacing: '0.05em'
+              letterSpacing: '0.05em',
+              whiteSpace: 'nowrap'
             }}
           >
-            {activeTab}
+            <span className="d-none d-sm-inline">{activeTab}</span>
+            <span className="d-sm-none">{activeTab.substring(0, 3)}</span>
             <span className="d-inline-block ms-1">
-              <Sparkles style={{ width: '0.6rem', height: '0.6rem' }} />
+              <Sparkles style={{ 
+                width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+              }} />
             </span>
           </span>
         </div>
       </div>
 
       {/* Right Section */}
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex align-items-center gap-1 gap-md-2">
         {/* Search Button */}
         <button 
           onClick={() => setShowSearch(!showSearch)}
-          className="btn btn-sm p-2 rounded-3 text-secondary hover:text-white transition-all d-none d-sm-flex"
+          className="btn btn-sm p-1 p-md-2 rounded-3 text-secondary hover:text-white transition-all d-none d-sm-flex"
           style={{ 
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.05)',
-            width: '36px',
-            height: '36px'
+            width: 'clamp(30px, 5vw, 36px)',
+            height: 'clamp(30px, 5vw, 36px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
@@ -117,23 +131,33 @@ export default function AdminTopNavbar({ activeTab }) {
             e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
           }}
         >
-          <Search style={{ width: '0.9rem', height: '0.9rem' }} />
+          <Search style={{ 
+            width: 'clamp(0.8rem, 1.2vw, 0.9rem)', 
+            height: 'clamp(0.8rem, 1.2vw, 0.9rem)' 
+          }} />
         </button>
 
         {/* Search Bar - Expanded */}
         {showSearch && (
-          <div className="d-flex align-items-center gap-2 px-3 py-1.5 rounded-3 animate-slide-in" style={{
+          <div className="d-flex align-items-center gap-2 px-2 px-md-3 py-1 py-md-1.5 rounded-3 animate-slide-in" style={{
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(59, 130, 246, 0.2)',
-            maxWidth: '200px',
+            maxWidth: 'clamp(140px, 40vw, 200px)',
             transition: 'all 0.3s ease'
           }}>
-            <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+            <Search className="text-secondary" style={{ 
+              width: 'clamp(0.7rem, 1vw, 0.8rem)', 
+              height: 'clamp(0.7rem, 1vw, 0.8rem)' 
+            }} />
             <input 
               type="text" 
               className="form-control form-control-sm bg-transparent border-0 text-light" 
               placeholder="Search..." 
-              style={{ fontSize: '0.7rem', width: '120px' }}
+              style={{ 
+                fontSize: 'clamp(0.6rem, 0.9vw, 0.7rem)', 
+                width: 'clamp(80px, 25vw, 120px)',
+                padding: '0.1rem 0'
+              }}
               autoFocus
             />
           </div>
@@ -143,12 +167,15 @@ export default function AdminTopNavbar({ activeTab }) {
         <div className="position-relative">
           <button 
             onClick={() => setShowNotifications(!showNotifications)}
-            className="btn btn-sm p-2 rounded-3 text-secondary hover:text-white transition-all position-relative"
+            className="btn btn-sm p-1 p-md-2 rounded-3 text-secondary hover:text-white transition-all position-relative"
             style={{ 
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
-              width: '36px',
-              height: '36px'
+              width: 'clamp(30px, 5vw, 36px)',
+              height: 'clamp(30px, 5vw, 36px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
@@ -159,11 +186,14 @@ export default function AdminTopNavbar({ activeTab }) {
               e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
             }}
           >
-            <Bell style={{ width: '0.9rem', height: '0.9rem' }} />
+            <Bell style={{ 
+              width: 'clamp(0.8rem, 1.2vw, 0.9rem)', 
+              height: 'clamp(0.8rem, 1.2vw, 0.9rem)' 
+            }} />
             {unreadCount > 0 && (
               <span className="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger" style={{ 
-                fontSize: '0.45rem',
-                padding: '0.15rem 0.4rem',
+                fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)',
+                padding: 'clamp(0.1rem, 0.2vw, 0.15rem) clamp(0.3rem, 0.5vw, 0.4rem)',
                 boxShadow: '0 4px 10px rgba(239, 68, 68, 0.3)',
                 animation: 'pulse-badge 2s ease-in-out infinite'
               }}>
@@ -177,18 +207,20 @@ export default function AdminTopNavbar({ activeTab }) {
             <div 
               className="position-absolute end-0 mt-2 p-2 rounded-3 shadow-2xl animate-slide-down"
               style={{
-                width: '320px',
+                width: 'clamp(280px, 85vw, 320px)',
+                maxWidth: '95vw',
                 background: 'rgba(15, 23, 42, 0.95)',
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255,255,255,0.05)',
                 maxHeight: '400px',
                 overflowY: 'auto',
-                zIndex: 1000
+                zIndex: 1000,
+                right: '0'
               }}
             >
-              <div className="d-flex justify-content-between align-items-center px-2 py-2 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-                <span className="text-light fw-bold" style={{ fontSize: '0.65rem' }}>Notifications</span>
-                <span className="text-secondary" style={{ fontSize: '0.5rem', cursor: 'pointer' }}>Mark all read</span>
+              <div className="d-flex flex-wrap justify-content-between align-items-center px-2 py-2 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+                <span className="text-light fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>Notifications</span>
+                <span className="text-secondary" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)', cursor: 'pointer' }}>Mark all read</span>
               </div>
               {notifications.map(notif => (
                 <div 
@@ -206,20 +238,20 @@ export default function AdminTopNavbar({ activeTab }) {
                     e.currentTarget.style.background = notif.read ? 'transparent' : 'rgba(59, 130, 246, 0.05)';
                   }}
                 >
-                  <div className="flex-grow-1">
-                    <span className="text-light" style={{ fontSize: '0.65rem' }}>{notif.title}</span>
-                    <span className="text-secondary d-block" style={{ fontSize: '0.5rem' }}>
-                      <Clock className="me-1" style={{ width: '0.5rem', height: '0.5rem' }} />
+                  <div className="flex-grow-1 min-w-0">
+                    <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.8vw, 0.65rem)' }}>{notif.title}</span>
+                    <span className="text-secondary d-flex align-items-center" style={{ fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)' }}>
+                      <Clock className="me-1" style={{ width: 'clamp(0.4rem, 0.6vw, 0.5rem)', height: 'clamp(0.4rem, 0.6vw, 0.5rem)' }} />
                       {notif.time}
                     </span>
                   </div>
                   {!notif.read && (
-                    <span className="rounded-circle bg-primary mt-1" style={{ width: '6px', height: '6px' }}></span>
+                    <span className="rounded-circle bg-primary mt-1 flex-shrink-0" style={{ width: '6px', height: '6px' }}></span>
                   )}
                 </div>
               ))}
               <div className="text-center pt-2 border-top" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-                <span className="text-secondary" style={{ fontSize: '0.5rem', cursor: 'pointer' }}>View all notifications</span>
+                <span className="text-secondary" style={{ fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)', cursor: 'pointer' }}>View all notifications</span>
               </div>
             </div>
           )}
@@ -229,11 +261,11 @@ export default function AdminTopNavbar({ activeTab }) {
         <div className="position-relative">
           <button 
             onClick={() => setShowProfile(!showProfile)}
-            className="d-flex align-items-center gap-2 btn btn-sm p-1 rounded-3 transition-all"
+            className="d-flex align-items-center gap-1 gap-md-2 btn btn-sm p-1 rounded-3 transition-all"
             style={{ 
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
-              padding: '0.2rem 0.5rem 0.2rem 0.2rem'
+              padding: 'clamp(0.1rem, 0.3vw, 0.2rem) clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.1rem, 0.3vw, 0.2rem) clamp(0.15rem, 0.3vw, 0.2rem)'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
@@ -244,18 +276,24 @@ export default function AdminTopNavbar({ activeTab }) {
               e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
             }}
           >
-            <div className="d-flex align-items-center justify-content-center rounded-circle" style={{
-              width: '28px',
-              height: '28px',
+            <div className="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style={{
+              width: 'clamp(24px, 4vw, 28px)',
+              height: 'clamp(24px, 4vw, 28px)',
               background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-              fontSize: '0.6rem',
+              fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)',
               fontWeight: 'bold',
               color: '#fff'
             }}>
               A
             </div>
-            <span className="text-light d-none d-sm-inline" style={{ fontSize: '0.6rem', fontWeight: '500' }}>Admin</span>
-            <ChevronDown className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <span className="text-light d-none d-sm-inline" style={{ 
+              fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+              fontWeight: '500' 
+            }}>Admin</span>
+            <ChevronDown className="text-secondary flex-shrink-0" style={{ 
+              width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+              height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+            }} />
           </button>
 
           {/* Profile Dropdown */}
@@ -263,26 +301,32 @@ export default function AdminTopNavbar({ activeTab }) {
             <div 
               className="position-absolute end-0 mt-2 p-2 rounded-3 shadow-2xl animate-slide-down"
               style={{
-                width: '220px',
+                width: 'clamp(180px, 60vw, 220px)',
                 background: 'rgba(15, 23, 42, 0.95)',
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255,255,255,0.05)',
-                zIndex: 1000
+                zIndex: 1000,
+                right: '0'
               }}
             >
               <div className="text-center p-2 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
                 <div className="d-flex align-items-center justify-content-center rounded-circle mx-auto" style={{
-                  width: '40px',
-                  height: '40px',
+                  width: 'clamp(36px, 6vw, 40px)',
+                  height: 'clamp(36px, 6vw, 40px)',
                   background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                  fontSize: '0.9rem',
+                  fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)',
                   fontWeight: 'bold',
                   color: '#fff'
                 }}>
                   A
                 </div>
-                <span className="text-light d-block" style={{ fontSize: '0.7rem', fontWeight: '600' }}>System Root Admin</span>
-                <span className="text-secondary" style={{ fontSize: '0.5rem' }}>admin@system.edu</span>
+                <span className="text-light d-block" style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                  fontWeight: '600' 
+                }}>System Root Admin</span>
+                <span className="text-secondary" style={{ 
+                  fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)' 
+                }}>admin@system.edu</span>
               </div>
               <div className="mt-1">
                 {[
@@ -299,7 +343,8 @@ export default function AdminTopNavbar({ activeTab }) {
                         background: 'transparent',
                         border: 'none',
                         color: '#94a3b8',
-                        fontSize: '0.6rem'
+                        fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)',
+                        textAlign: 'left'
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
@@ -310,7 +355,10 @@ export default function AdminTopNavbar({ activeTab }) {
                         e.currentTarget.style.color = '#94a3b8';
                       }}
                     >
-                      <Icon style={{ width: '0.8rem', height: '0.8rem' }} />
+                      <Icon style={{ 
+                        width: 'clamp(0.7rem, 1vw, 0.8rem)', 
+                        height: 'clamp(0.7rem, 1vw, 0.8rem)' 
+                      }} />
                       {item.label}
                     </button>
                   );
@@ -323,7 +371,8 @@ export default function AdminTopNavbar({ activeTab }) {
                     background: 'transparent',
                     border: 'none',
                     color: '#f87171',
-                    fontSize: '0.6rem'
+                    fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)',
+                    textAlign: 'left'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
@@ -332,7 +381,10 @@ export default function AdminTopNavbar({ activeTab }) {
                     e.currentTarget.style.background = 'transparent';
                   }}
                 >
-                  <LogOut style={{ width: '0.8rem', height: '0.8rem' }} />
+                  <LogOut style={{ 
+                    width: 'clamp(0.7rem, 1vw, 0.8rem)', 
+                    height: 'clamp(0.7rem, 1vw, 0.8rem)' 
+                  }} />
                   Logout
                 </button>
               </div>
@@ -340,47 +392,62 @@ export default function AdminTopNavbar({ activeTab }) {
           )}
         </div>
 
-        {/* Status Badges */}
-        <div className="d-none d-lg-flex align-items-center gap-2">
+        {/* Status Badges - Hide on mobile/tablet */}
+        <div className="d-none d-xl-flex align-items-center gap-2">
           <span 
-            className="badge px-3 py-1.5 rounded-pill"
+            className="badge px-2 px-md-3 py-1 py-md-1.5 rounded-pill"
             style={{ 
-              fontSize: '0.5rem',
+              fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)',
               fontWeight: '600',
               background: 'rgba(34, 197, 94, 0.1)',
               color: '#4ade80',
               border: '1px solid rgba(34, 197, 94, 0.2)'
             }}
           >
-            <span className="d-inline-block rounded-circle bg-success me-1" style={{ width: '0.35rem', height: '0.35rem' }}></span>
+            <span className="d-inline-block rounded-circle bg-success me-1" style={{ 
+              width: 'clamp(0.25rem, 0.4vw, 0.35rem)', 
+              height: 'clamp(0.25rem, 0.4vw, 0.35rem)' 
+            }}></span>
             Online
           </span>
           <span 
-            className="badge px-3 py-1.5 rounded-pill"
+            className="badge px-2 px-md-3 py-1 py-md-1.5 rounded-pill d-none d-lg-inline-block"
             style={{ 
-              fontSize: '0.5rem',
+              fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)',
               fontWeight: '600',
               background: 'rgba(255,255,255,0.03)',
               color: '#94a3b8',
               border: '1px solid rgba(255,255,255,0.05)'
             }}
           >
-            <Crown className="me-1" style={{ width: '0.6rem', height: '0.6rem' }} />
+            <Crown className="me-1" style={{ 
+              width: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+              height: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+            }} />
             Admin
           </span>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-md-none"
+          style={{ zIndex: 998 }}
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
 
       {/* CSS Animations */}
       <style>{`
         @keyframes slide-down {
           from {
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(0.95);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
           }
         }
         
@@ -415,6 +482,10 @@ export default function AdminTopNavbar({ activeTab }) {
         .hover-bg-light:hover {
           background: rgba(255,255,255,0.03) !important;
         }
+
+        .min-w-0 {
+          min-width: 0;
+        }
         
         /* Scrollbar for notifications */
         .overflow-y-auto::-webkit-scrollbar {
@@ -435,11 +506,16 @@ export default function AdminTopNavbar({ activeTab }) {
           background: rgba(59, 130, 246, 0.5);
         }
         
-        /* Form control focus */
         .form-control:focus {
           border-color: rgba(59, 130, 246, 0.5) !important;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
           outline: none !important;
+        }
+
+        @media (max-width: 576px) {
+          .shadow-2xl {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+          }
         }
       `}</style>
     </header>

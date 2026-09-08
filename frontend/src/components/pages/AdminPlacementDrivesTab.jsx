@@ -29,7 +29,6 @@ export default function StudentPlacementDrives({ token }) {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [studentId, setStudentId] = useState(localStorage.getItem('studentId'));
 
- 
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     try {
       setLoading(true);
@@ -64,7 +63,6 @@ export default function StudentPlacementDrives({ token }) {
     }
   };
 
-
   const fetchDrives = async () => {
     try {
       const data = await apiCall('/placement-drives');
@@ -88,14 +86,12 @@ export default function StudentPlacementDrives({ token }) {
     }
   };
 
-  // Load data on mount
   useEffect(() => {
     if (token) {
       fetchDrives();
       fetchStats();
     }
   }, [token]);
-
 
   const handleApply = async (driveId) => {
     if (!studentId) {
@@ -115,7 +111,6 @@ export default function StudentPlacementDrives({ token }) {
     }
   };
 
- 
   const getStatusColor = (status) => {
     switch(status) {
       case 'Eligible': return 'success';
@@ -129,25 +124,24 @@ export default function StudentPlacementDrives({ token }) {
 
   const getStatusIcon = (status) => {
     switch(status) {
-      case 'Selected': return <CheckCircle className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Rejected': return <XCircle className="text-danger" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Shortlisted': return <UserCheck className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Applied': return <Clock className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Eligible': return <Sparkles className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Selected': return <CheckCircle className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Rejected': return <XCircle className="text-danger" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Shortlisted': return <UserCheck className="text-warning" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Applied': return <Clock className="text-info" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Eligible': return <Sparkles className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
       default: return null;
     }
   };
 
   const getWorkModeIcon = (mode) => {
     switch(mode) {
-      case 'Onsite': return <Building2 className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Hybrid': return <Monitor className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      case 'Remote': return <Wifi className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />;
-      default: return <Home className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />;
+      case 'Onsite': return <Building2 className="text-primary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Hybrid': return <Monitor className="text-info" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      case 'Remote': return <Wifi className="text-success" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
+      default: return <Home className="text-secondary" style={{ width: 'clamp(0.6rem, 1vw, 0.7rem)', height: 'clamp(0.6rem, 1vw, 0.7rem)' }} />;
     }
   };
 
-  // Filter drives
   const filteredDrives = drives.filter(drive => {
     const matchesSearch = drive?.company?.toLowerCase().includes(searchQuery?.toLowerCase() || '') ||
                           drive?.role?.toLowerCase().includes(searchQuery?.toLowerCase() || '');
@@ -156,25 +150,28 @@ export default function StudentPlacementDrives({ token }) {
     return matchesSearch && matchesStatus && matchesWorkMode;
   });
 
- 
   return (
     <div className="animate-fadeIn">
       {/* Welcome Section */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mb-md-4">
         <div>
-          <h5 className="text-light fw-bold m-0">Placement Drives</h5>
-          <p className="text-secondary small m-0">Find and apply to top company drives</p>
+          <h5 className="text-light fw-bold m-0" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
+            Placement Drives
+          </h5>
+          <p className="text-secondary small m-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+            Find and apply to top company drives
+          </p>
         </div>
         <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2">
-            <Sparkles style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.3rem' }} />
-            {stats.eligible || 0} New Opportunities
+          <span className="badge bg-success bg-opacity-10 text-success border border-success px-2 px-md-3 py-1 py-md-2" style={{ fontSize: 'clamp(0.5rem, 0.9vw, 0.6rem)' }}>
+            <Sparkles style={{ width: 'clamp(0.5rem, 0.8vw, 0.7rem)', height: 'clamp(0.5rem, 0.8vw, 0.7rem)', marginRight: '0.2rem' }} />
+            {stats.eligible || 0} New
           </span>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="row g-3 mb-4">
+      <div className="row g-2 g-md-3 mb-3 mb-md-4">
         {[
           { label: "Total Drives", value: stats.totalDrives || 0, color: "primary", icon: Briefcase },
           { label: "Eligible", value: stats.eligible || 0, color: "success", icon: Sparkles },
@@ -191,15 +188,39 @@ export default function StudentPlacementDrives({ token }) {
           };
           return (
             <div key={i} className="col-6 col-lg">
-              <div className="card border-0 shadow-lg rounded-4 h-100 transition-all hover:translate-y-1" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-                <div className="card-body p-3">
+              <div className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100" style={{ 
+                background: 'rgba(20,20,30,0.6)', 
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              >
+                <div className="card-body p-2 p-md-3">
                   <div className="d-flex align-items-center justify-content-between">
-                    <span className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.5rem' }}>{stat.label}</span>
-                    <div className={`p-2 rounded-3`} style={{ background: bgColors[stat.color], border: `1px solid ${bgColors[stat.color]}` }}>
-                      <Icon className={`text-${stat.color}`} style={{ width: '0.9rem', height: '0.9rem' }} />
+                    <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: 'clamp(0.4rem, 0.7vw, 0.5rem)' }}>
+                      {stat.label}
+                    </span>
+                    <div className={`p-1 p-md-2 rounded-3`} style={{ 
+                      background: bgColors[stat.color], 
+                      border: `1px solid ${bgColors[stat.color]}` 
+                    }}>
+                      <Icon className={`text-${stat.color}`} style={{ 
+                        width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                        height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                      }} />
                     </div>
                   </div>
-                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ fontSize: '1.5rem' }}>{stat.value}</h4>
+                  <h4 className={`fw-bold text-${stat.color} mb-0`} style={{ 
+                    fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' 
+                  }}>{stat.value}</h4>
                 </div>
               </div>
             </div>
@@ -208,108 +229,181 @@ export default function StudentPlacementDrives({ token }) {
       </div>
 
       {/* Search & Filter */}
-      <div className="card border-0 shadow-lg rounded-4 mb-4" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-        <div className="card-body p-3">
-          <div className="d-flex flex-wrap gap-3 align-items-center">
-            <div className="d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded-3 border border-secondary flex-grow-1" style={{ maxWidth: '300px' }}>
-              <Search className="text-secondary" style={{ width: '0.8rem', height: '0.8rem' }} />
+      <div className="card border-0 shadow-sm rounded-3 rounded-md-4 mb-3 mb-md-4" style={{ 
+        background: 'rgba(20,20,30,0.6)', 
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.05)'
+      }}>
+        <div className="card-body p-2 p-md-3">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <div className="d-flex align-items-center gap-2 bg-dark px-2 px-md-3 py-1 py-md-2 rounded-3 border border-secondary flex-grow-1" style={{ 
+              maxWidth: 'clamp(160px, 35vw, 300px)',
+              borderColor: 'rgba(255,255,255,0.1) !important'
+            }}>
+              <Search className="text-secondary" style={{ 
+                width: 'clamp(0.7rem, 1.1vw, 0.8rem)', 
+                height: 'clamp(0.7rem, 1.1vw, 0.8rem)' 
+              }} />
               <input 
                 type="text" 
                 className="form-control form-control-sm bg-transparent border-0 text-light" 
-                placeholder="Search companies..." 
+                placeholder="Search..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.75rem', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.6rem, 1vw, 0.75rem)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0',
+                  color: '#ffffff !important'
+                }}
               />
             </div>
-            <div className="d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded-3 border border-secondary">
-              <Filter className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-dark px-2 px-md-3 py-1 py-md-2 rounded-3 border border-secondary flex-grow-1 flex-md-grow-0" style={{
+              borderColor: 'rgba(255,255,255,0.1) !important'
+            }}>
+              <Filter className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-light" 
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '120px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(90px, 15vw, 120px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem',
+                  color: '#ffffff !important'
+                }}
               >
-                <option value="ALL">All Status</option>
-                <option value="Eligible">Eligible</option>
-                <option value="Applied">Applied</option>
-                <option value="Shortlisted">Shortlisted</option>
-                <option value="Selected">Selected</option>
-                <option value="Rejected">Rejected</option>
+                <option value="ALL" style={{ background: '#1a1a2e', color: '#ffffff' }}>All Status</option>
+                <option value="Eligible" style={{ background: '#1a1a2e', color: '#ffffff' }}>Eligible</option>
+                <option value="Applied" style={{ background: '#1a1a2e', color: '#ffffff' }}>Applied</option>
+                <option value="Shortlisted" style={{ background: '#1a1a2e', color: '#ffffff' }}>Shortlisted</option>
+                <option value="Selected" style={{ background: '#1a1a2e', color: '#ffffff' }}>Selected</option>
+                <option value="Rejected" style={{ background: '#1a1a2e', color: '#ffffff' }}>Rejected</option>
               </select>
             </div>
-            <div className="d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded-3 border border-secondary">
-              <Building2 className="text-secondary" style={{ width: '0.7rem', height: '0.7rem' }} />
+            <div className="d-flex align-items-center gap-1 gap-md-2 bg-dark px-2 px-md-3 py-1 py-md-2 rounded-3 border border-secondary flex-grow-1 flex-md-grow-0" style={{
+              borderColor: 'rgba(255,255,255,0.1) !important'
+            }}>
+              <Building2 className="text-secondary" style={{ 
+                width: 'clamp(0.6rem, 1vw, 0.7rem)', 
+                height: 'clamp(0.6rem, 1vw, 0.7rem)' 
+              }} />
               <select 
                 className="form-select form-select-sm bg-transparent border-0 text-light" 
                 value={filterWorkMode}
                 onChange={(e) => setFilterWorkMode(e.target.value)}
-                style={{ fontSize: '0.75rem', width: '110px', outline: 'none' }}
+                style={{ 
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.75rem)', 
+                  width: 'clamp(80px, 12vw, 110px)', 
+                  outline: 'none', 
+                  padding: '0.1rem 0.4rem',
+                  color: '#ffffff !important'
+                }}
               >
-                <option value="ALL">All Modes</option>
-                <option value="Onsite">Onsite</option>
-                <option value="Hybrid">Hybrid</option>
-                <option value="Remote">Remote</option>
+                <option value="ALL" style={{ background: '#1a1a2e', color: '#ffffff' }}>All Modes</option>
+                <option value="Onsite" style={{ background: '#1a1a2e', color: '#ffffff' }}>Onsite</option>
+                <option value="Hybrid" style={{ background: '#1a1a2e', color: '#ffffff' }}>Hybrid</option>
+                <option value="Remote" style={{ background: '#1a1a2e', color: '#ffffff' }}>Remote</option>
               </select>
             </div>
-            <span className="text-secondary small ms-auto">{filteredDrives.length} drives found</span>
+            <span className="text-secondary small ms-auto d-none d-md-block" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.65rem)' }}>
+              {filteredDrives.length} found
+            </span>
           </div>
         </div>
       </div>
 
       {/* Drives Cards Grid */}
       {filteredDrives.length === 0 ? (
-        <div className="card border-0 shadow-lg rounded-4 text-center p-5" style={{ background: 'rgba(20,20,30,0.6)', backdropFilter: 'blur(10px)' }}>
-          <Briefcase className="text-secondary mx-auto" style={{ width: '3rem', height: '3rem' }} />
-          <h6 className="text-secondary mt-3">No drives found</h6>
-          <p className="text-secondary small">Try adjusting your search or filters</p>
+        <div className="card border-0 shadow-sm rounded-4 text-center p-3 p-md-5" style={{ 
+          background: 'rgba(20,20,30,0.6)', 
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255,255,255,0.05)'
+        }}>
+          <Briefcase className="text-secondary mx-auto" style={{ 
+            width: 'clamp(2rem, 4vw, 3rem)', 
+            height: 'clamp(2rem, 4vw, 3rem)' 
+          }} />
+          <h6 className="text-secondary mt-3" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>No drives found</h6>
+          <p className="text-secondary small" style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.8rem)' }}>Try adjusting your search or filters</p>
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="row g-2 g-md-3 g-lg-4">
           {filteredDrives.map((drive, index) => {
             const companyInitial = drive?.company?.charAt(0) || 'C';
             
             return (
-              <div key={drive?._id || index} className="col-md-6 col-lg-4">
+              <div key={drive?._id || index} className="col-sm-6 col-xl-4">
                 <div 
-                  className="card border-0 shadow-lg rounded-4 h-100 transition-all hover:translate-y-2"
+                  className="card border-0 shadow-sm rounded-3 rounded-md-4 h-100"
                   style={{ 
                     background: 'rgba(20,20,30,0.6)', 
                     backdropFilter: 'blur(10px)',
-                    animation: `slideUp ${0.3 + index * 0.05}s ease-out forwards`
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  <div className="card-body p-4 d-flex flex-column">
+                  <div className="card-body p-3 p-md-4 d-flex flex-column">
                     {/* Header */}
-                    <div className="d-flex align-items-start gap-3 mb-3">
+                    <div className="d-flex align-items-start gap-2 gap-md-3 mb-2 mb-md-3">
                       <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
-                        width: '48px', 
-                        height: '48px',
+                        width: 'clamp(36px, 6vw, 48px)', 
+                        height: 'clamp(36px, 6vw, 48px)',
                         background: drive?.color || 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                        fontSize: '1.2rem',
+                        fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)',
                         fontWeight: 'bold',
                         color: '#fff'
                       }}>
                         {companyInitial}
                       </div>
                       <div className="flex-grow-1 min-w-0">
-                        <h6 className="fw-bold text-light m-0" style={{ fontSize: '0.95rem' }}>{drive?.company}</h6>
-                        <span className="text-secondary" style={{ fontSize: '0.6rem' }}>{drive?.role}</span>
-                        <div className="d-flex align-items-center gap-1 mt-1 flex-wrap">
-                          <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1" style={{ fontSize: '0.5rem' }}>
+                        <h6 className="fw-bold text-light m-0" style={{ 
+                          fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)' 
+                        }}>
+                          {drive?.company}
+                        </h6>
+                        <span className="text-secondary" style={{ 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' 
+                        }}>
+                          {drive?.role}
+                        </span>
+                        <div className="d-flex flex-wrap align-items-center gap-1 mt-1">
+                          <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1" style={{ 
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)' 
+                          }}>
                             {getWorkModeIcon(drive?.workMode)}
                             {drive?.workMode || 'N/A'}
                           </span>
-                          <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1" style={{ fontSize: '0.5rem' }}>
-                            <GraduationCap style={{ width: '0.6rem', height: '0.6rem' }} />
-                            {drive?.minCgpa || 'N/A'}+ CGPA
+                          <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1" style={{ 
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)' 
+                          }}>
+                            <GraduationCap style={{ 
+                              width: 'clamp(0.4rem, 0.6vw, 0.6rem)', 
+                              height: 'clamp(0.4rem, 0.6vw, 0.6rem)' 
+                            }} />
+                            {drive?.minCgpa || 'N/A'}+
                           </span>
                         </div>
                       </div>
                       <div className="d-flex flex-column align-items-end gap-1 flex-shrink-0">
                         <span 
                           className={`badge bg-${getStatusColor(drive?.status)} bg-opacity-10 text-${getStatusColor(drive?.status)} border border-${getStatusColor(drive?.status)} d-inline-flex align-items-center gap-1`}
-                          style={{ fontSize: '0.5rem', padding: '0.2rem 0.4rem' }}
+                          style={{ 
+                            fontSize: 'clamp(0.4rem, 0.6vw, 0.5rem)', 
+                            padding: '0.15rem 0.3rem' 
+                          }}
                         >
                           {getStatusIcon(drive?.status)}
                           {drive?.status || 'N/A'}
@@ -319,25 +413,49 @@ export default function StudentPlacementDrives({ token }) {
 
                     {/* Details */}
                     <div className="space-y-1.5 flex-grow-1">
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <DollarSign className="text-primary" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Package</span>
-                        <span className="text-primary fw-bold" style={{ fontSize: '0.7rem' }}>{drive?.package || 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          <DollarSign className="text-primary" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Package
+                        </span>
+                        <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.7rem)' }}>
+                          {drive?.package || 'N/A'}
+                        </span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <MapPin className="text-info" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Location</span>
-                        <span className="text-light" style={{ fontSize: '0.65rem' }}>{drive?.location || 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          <MapPin className="text-info" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Location
+                        </span>
+                        <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                          {drive?.location || 'N/A'}
+                        </span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Calendar className="text-warning" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Deadline</span>
-                        <span className="text-light" style={{ fontSize: '0.65rem' }}>{drive?.regDeadline ? new Date(drive.regDeadline).toLocaleDateString() : 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          <Calendar className="text-warning" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Deadline
+                        </span>
+                        <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                          {drive?.regDeadline ? new Date(drive.regDeadline).toLocaleDateString() : 'N/A'}
+                        </span>
                       </div>
-                      <div className="d-flex align-items-center gap-2 p-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                        <Users className="text-success" style={{ width: '0.7rem', height: '0.7rem' }} />
-                        <span className="text-secondary small flex-grow-1" style={{ fontSize: '0.6rem' }}>Openings</span>
-                        <span className="text-light" style={{ fontSize: '0.65rem' }}>{drive?.openings || 'N/A'}</span>
+                      <div className="d-flex flex-wrap justify-content-between align-items-center p-1 p-md-1.5 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                        <span className="text-secondary small" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)' }}>
+                          <Users className="text-success" style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Openings
+                        </span>
+                        <span className="text-light" style={{ fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)' }}>
+                          {drive?.openings || 'N/A'}
+                        </span>
                       </div>
                     </div>
 
@@ -346,14 +464,22 @@ export default function StudentPlacementDrives({ token }) {
                       <div className="mt-2">
                         <div className="d-flex flex-wrap gap-1">
                           {drive.requiredSkills.slice(0, 3).map((skill, i) => (
-                            <span key={i} className="badge bg-dark text-secondary border border-secondary" style={{ fontSize: '0.45rem' }}>
-                              <Code style={{ width: '0.5rem', height: '0.5rem', marginRight: '0.2rem' }} />
+                            <span key={i} className="badge bg-dark text-secondary border border-secondary" style={{ 
+                              fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)' 
+                            }}>
+                              <Code style={{ 
+                                width: 'clamp(0.4rem, 0.6vw, 0.5rem)', 
+                                height: 'clamp(0.4rem, 0.6vw, 0.5rem)', 
+                                marginRight: '0.1rem' 
+                              }} />
                               {skill}
                             </span>
                           ))}
                           {drive.requiredSkills.length > 3 && (
-                            <span className="badge bg-dark text-secondary border border-secondary" style={{ fontSize: '0.45rem' }}>
-                              +{drive.requiredSkills.length - 3} more
+                            <span className="badge bg-dark text-secondary border border-secondary" style={{ 
+                              fontSize: 'clamp(0.35rem, 0.6vw, 0.45rem)' 
+                            }}>
+                              +{drive.requiredSkills.length - 3}
                             </span>
                           )}
                         </div>
@@ -361,28 +487,53 @@ export default function StudentPlacementDrives({ token }) {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="mt-3 pt-3 border-top border-secondary d-flex gap-2">
+                    <div className="mt-3 pt-2 pt-md-3 border-top border-secondary d-flex gap-2">
                       <button 
                         onClick={() => { setSelectedDrive(drive); setShowDetailModal(true); }}
-                        className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 transition-all hover:scale-105"
-                        style={{ borderRadius: '8px', fontSize: '0.6rem', fontWeight: '600' }}
+                        className="btn btn-outline-info btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1"
+                        style={{ 
+                          borderRadius: '8px', 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                          fontWeight: '600', 
+                          padding: '0.25rem 0.4rem' 
+                        }}
                       >
-                        <Eye style={{ width: '0.7rem', height: '0.7rem' }} /> View Details
+                        <Eye style={{ 
+                          width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                          height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                        }} /> View
                       </button>
                       <button 
                         onClick={() => handleApply(drive._id)}
-                        className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 transition-all hover:scale-105 ${drive?.status === 'Selected' ? 'btn-success' : drive?.status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
-                        style={{ borderRadius: '8px', fontSize: '0.6rem', fontWeight: '600' }}
+                        className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 ${drive?.status === 'Selected' ? 'btn-success' : drive?.status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
+                        style={{ 
+                          borderRadius: '8px', 
+                          fontSize: 'clamp(0.5rem, 0.8vw, 0.6rem)', 
+                          fontWeight: '600', 
+                          padding: '0.25rem 0.4rem' 
+                        }}
                         disabled={drive?.status === 'Selected' || drive?.status === 'Applied' || drive?.status === 'Shortlisted'}
                       >
                         {drive?.status === 'Selected' ? (
-                          <><CheckCircle style={{ width: '0.7rem', height: '0.7rem' }} /> Selected</>
+                          <><CheckCircle style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Selected</>
                         ) : drive?.status === 'Applied' ? (
-                          <><Clock style={{ width: '0.7rem', height: '0.7rem' }} /> Applied</>
+                          <><Clock style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Applied</>
                         ) : drive?.status === 'Shortlisted' ? (
-                          <><UserCheck style={{ width: '0.7rem', height: '0.7rem' }} /> Shortlisted</>
+                          <><UserCheck style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Shortlisted</>
                         ) : (
-                          <><ExternalLink style={{ width: '0.7rem', height: '0.7rem' }} /> Apply Now</>
+                          <><ExternalLink style={{ 
+                            width: 'clamp(0.5rem, 0.8vw, 0.7rem)', 
+                            height: 'clamp(0.5rem, 0.8vw, 0.7rem)' 
+                          }} /> Apply</>
                         )}
                       </button>
                     </div>
@@ -394,52 +545,67 @@ export default function StudentPlacementDrives({ token }) {
         </div>
       )}
 
-     
+      {/* Detail Modal - Responsive */}
       {showDetailModal && selectedDrive && (
         <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ 
           zIndex: 9999, 
           background: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(10px)',
-          animation: 'fadeIn 0.3s ease'
-        }}>
+          animation: 'fadeIn 0.3s ease',
+          padding: '1rem'
+        }}
+        onClick={() => setShowDetailModal(false)}
+        >
           <div className="card border-0 shadow-2xl rounded-4" style={{ 
-            maxWidth: '700px', 
-            width: '95%', 
+            maxWidth: 'clamp(320px, 90vw, 700px)', 
+            width: '100%', 
             maxHeight: '90vh', 
             overflowY: 'auto', 
             background: 'rgba(20,20,30,0.95)',
-            backdropFilter: 'blur(20px)'
-          }}>
-            <div className="card-body p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
-                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2">
-                  <Briefcase className="text-primary" style={{ width: '1.2rem', height: '1.2rem' }} />
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.05)'
+          }}
+          onClick={(e) => e.stopPropagation()}
+          >
+            <div className="card-body p-3 p-md-4">
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 border-bottom border-secondary pb-3">
+                <h5 className="text-light fw-bold m-0 d-flex align-items-center gap-2" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)' }}>
+                  <Briefcase className="text-primary" style={{ 
+                    width: 'clamp(0.9rem, 2vw, 1.2rem)', 
+                    height: 'clamp(0.9rem, 2vw, 1.2rem)' 
+                  }} />
                   Drive Details
                 </h5>
-                <button onClick={() => setShowDetailModal(false)} className="btn btn-close btn-close-white"></button>
+                <button onClick={() => setShowDetailModal(false)} className="btn btn-close btn-close-white" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.9rem)' }}></button>
               </div>
 
               {/* Company Header */}
               <div className="d-flex align-items-center gap-3 mb-3">
-                <div className="d-flex align-items-center justify-content-center rounded-3" style={{ 
-                  width: '56px', 
-                  height: '56px',
+                <div className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0" style={{ 
+                  width: 'clamp(44px, 8vw, 56px)', 
+                  height: 'clamp(44px, 8vw, 56px)',
                   background: selectedDrive?.color || 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                  fontSize: '1.4rem',
+                  fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
                   fontWeight: 'bold',
                   color: '#fff'
                 }}>
                   {selectedDrive?.company?.charAt(0) || 'C'}
                 </div>
-                <div>
-                  <h5 className="text-light fw-bold m-0">{selectedDrive?.company}</h5>
-                  <span className="text-secondary" style={{ fontSize: '0.7rem' }}>{selectedDrive?.role}</span>
-                  <div className="d-flex align-items-center gap-2 mt-1 flex-wrap">
-                    <span className={`badge bg-${getStatusColor(selectedDrive?.status)} bg-opacity-10 text-${getStatusColor(selectedDrive?.status)} border border-${getStatusColor(selectedDrive?.status)} d-inline-flex align-items-center gap-1`}>
+                <div className="min-w-0">
+                  <h5 className="text-light fw-bold m-0" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.05rem)' }}>
+                    {selectedDrive?.company}
+                  </h5>
+                  <span className="text-secondary" style={{ fontSize: 'clamp(0.6rem, 1.2vw, 0.7rem)' }}>
+                    {selectedDrive?.role}
+                  </span>
+                  <div className="d-flex flex-wrap align-items-center gap-2 mt-1">
+                    <span className={`badge bg-${getStatusColor(selectedDrive?.status)} bg-opacity-10 text-${getStatusColor(selectedDrive?.status)} border border-${getStatusColor(selectedDrive?.status)} d-inline-flex align-items-center gap-1`}
+                          style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                       {getStatusIcon(selectedDrive?.status)}
                       {selectedDrive?.status}
                     </span>
-                    <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1">
+                    <span className="badge bg-dark text-secondary border border-secondary d-inline-flex align-items-center gap-1"
+                          style={{ fontSize: 'clamp(0.45rem, 0.8vw, 0.55rem)' }}>
                       {getWorkModeIcon(selectedDrive?.workMode)}
                       {selectedDrive?.workMode}
                     </span>
@@ -451,99 +617,78 @@ export default function StudentPlacementDrives({ token }) {
               <div className="row g-2 mb-3">
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Package</span>
-                    <span className="text-primary fw-bold">{selectedDrive?.package || 'N/A'}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                      Package
+                    </span>
+                    <span className="text-primary fw-bold" style={{ fontSize: 'clamp(0.6rem, 1.2vw, 0.7rem)' }}>
+                      {selectedDrive?.package || 'N/A'}
+                    </span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Location</span>
-                    <span className="text-light">{selectedDrive?.location || 'N/A'}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                      Location
+                    </span>
+                    <span className="text-light" style={{ fontSize: 'clamp(0.6rem, 1.2vw, 0.7rem)' }}>
+                      {selectedDrive?.location || 'N/A'}
+                    </span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Min CGPA</span>
-                    <span className="text-light">{selectedDrive?.minCgpa || 'N/A'}+</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                      Min CGPA
+                    </span>
+                    <span className="text-light" style={{ fontSize: 'clamp(0.6rem, 1.2vw, 0.7rem)' }}>
+                      {selectedDrive?.minCgpa || 'N/A'}+
+                    </span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligible Batch</span>
-                    <span className="text-light">{selectedDrive?.eligibleBatch || 'N/A'}</span>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Openings</span>
-                    <span className="text-light">{selectedDrive?.openings || 'N/A'}</span>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Drive Date</span>
-                    <span className="text-light">{selectedDrive?.driveDate ? new Date(selectedDrive.driveDate).toLocaleDateString() : 'N/A'}</span>
+                    <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                      Openings
+                    </span>
+                    <span className="text-light" style={{ fontSize: 'clamp(0.6rem, 1.2vw, 0.7rem)' }}>
+                      {selectedDrive?.openings || 'N/A'}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Eligible Departments */}
-              {selectedDrive?.eligibleDepts && selectedDrive.eligibleDepts.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligible Departments</span>
-                  <div className="d-flex flex-wrap gap-1 mt-1">
-                    {selectedDrive.eligibleDepts.map((dept, i) => (
-                      <span key={i} className="badge bg-primary bg-opacity-10 text-primary border border-primary" style={{ fontSize: '0.55rem' }}>
-                        {dept}
-                      </span>
-                    ))}
-                  </div>
+              {/* Description */}
+              {selectedDrive?.description && (
+                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                    Description
+                  </span>
+                  <p className="text-secondary small mb-0" style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)' }}>
+                    {selectedDrive.description}
+                  </p>
                 </div>
               )}
 
-              {/* Selection Process */}
-              {selectedDrive?.selectionProcess && selectedDrive.selectionProcess.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Selection Process</span>
-                  <div className="d-flex flex-wrap gap-1 mt-1">
-                    {selectedDrive.selectionProcess.map((step, i) => (
-                      <span key={i} className="badge bg-info bg-opacity-10 text-info border border-info" style={{ fontSize: '0.55rem' }}>
-                        <ListChecks style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.2rem' }} />
-                        {step}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Required Skills */}
+              {/* Skills */}
               {selectedDrive?.requiredSkills && selectedDrive.requiredSkills.length > 0 && (
                 <div className="mb-2">
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Required Skills</span>
+                  <span className="text-secondary small d-block" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' }}>
+                    Required Skills
+                  </span>
                   <div className="d-flex flex-wrap gap-1 mt-1">
                     {selectedDrive.requiredSkills.map((skill, i) => (
-                      <span key={i} className="badge bg-warning bg-opacity-10 text-warning border border-warning" style={{ fontSize: '0.55rem' }}>
-                        <Code style={{ width: '0.6rem', height: '0.6rem', marginRight: '0.2rem' }} />
+                      <span key={i} className="badge bg-warning bg-opacity-10 text-warning border border-warning" style={{ 
+                        fontSize: 'clamp(0.45rem, 0.7vw, 0.55rem)' 
+                      }}>
+                        <Code style={{ 
+                          width: 'clamp(0.4rem, 0.7vw, 0.6rem)', 
+                          height: 'clamp(0.4rem, 0.7vw, 0.6rem)', 
+                          marginRight: '0.1rem' 
+                        }} />
                         {skill}
                       </span>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Description */}
-              {selectedDrive?.description && (
-                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Job Description</span>
-                  <p className="text-secondary small mb-0" style={{ fontSize: '0.7rem' }}>{selectedDrive.description}</p>
-                </div>
-              )}
-
-              {/* Eligibility Criteria */}
-              {selectedDrive?.eligibilityCriteria && (
-                <div className="mb-2 p-2 rounded-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-                  <span className="text-secondary small d-block" style={{ fontSize: '0.55rem' }}>Eligibility Criteria</span>
-                  <p className="text-secondary small mb-0" style={{ fontSize: '0.7rem' }}>{selectedDrive.eligibilityCriteria}</p>
                 </div>
               )}
 
@@ -552,24 +697,55 @@ export default function StudentPlacementDrives({ token }) {
                 <button 
                   onClick={() => handleApply(selectedDrive._id)}
                   className={`btn btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-1 ${selectedDrive?.status === 'Selected' ? 'btn-success' : selectedDrive?.status === 'Applied' ? 'btn-secondary' : 'btn-primary'}`}
-                  style={{ borderRadius: '10px', fontWeight: '600' }}
+                  style={{ 
+                    borderRadius: '10px', 
+                    fontWeight: '600',
+                    fontSize: 'clamp(0.6rem, 1vw, 0.7rem)',
+                    padding: '0.35rem 0.7rem'
+                  }}
                   disabled={selectedDrive?.status === 'Selected' || selectedDrive?.status === 'Applied' || selectedDrive?.status === 'Shortlisted'}
                 >
                   {selectedDrive?.status === 'Selected' ? (
-                    <><CheckCircle style={{ width: '0.9rem', height: '0.9rem' }} /> Selected</>
+                    <><CheckCircle style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                    }} /> Selected</>
                   ) : selectedDrive?.status === 'Applied' ? (
-                    <><Clock style={{ width: '0.9rem', height: '0.9rem' }} /> Applied</>
+                    <><Clock style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                    }} /> Applied</>
                   ) : selectedDrive?.status === 'Shortlisted' ? (
-                    <><UserCheck style={{ width: '0.9rem', height: '0.9rem' }} /> Shortlisted</>
+                    <><UserCheck style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                    }} /> Shortlisted</>
                   ) : (
-                    <><ExternalLink style={{ width: '0.9rem', height: '0.9rem' }} /> Apply Now</>
+                    <><ExternalLink style={{ 
+                      width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                      height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                    }} /> Apply</>
                   )}
                 </button>
-                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ borderRadius: '10px' }}>
-                  <Download style={{ width: '0.9rem', height: '0.9rem' }} /> JD
+                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ 
+                  borderRadius: '10px',
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)',
+                  padding: '0.3rem 0.6rem'
+                }}>
+                  <Download style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                  }} /> JD
                 </button>
-                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ borderRadius: '10px' }}>
-                  <Bell style={{ width: '0.9rem', height: '0.9rem' }} /> Remind
+                <button className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" style={{ 
+                  borderRadius: '10px',
+                  fontSize: 'clamp(0.55rem, 0.9vw, 0.65rem)',
+                  padding: '0.3rem 0.6rem'
+                }}>
+                  <Bell style={{ 
+                    width: 'clamp(0.7rem, 1.2vw, 0.9rem)', 
+                    height: 'clamp(0.7rem, 1.2vw, 0.9rem)' 
+                  }} /> Remind
                 </button>
               </div>
             </div>
@@ -577,7 +753,7 @@ export default function StudentPlacementDrives({ token }) {
         </div>
       )}
 
-      {/* CSS Animations */}
+      {/* CSS */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -623,15 +799,50 @@ export default function StudentPlacementDrives({ token }) {
         
         .form-control, .form-select {
           transition: all 0.3s ease;
+          background-color: rgba(0,0,0,0.3) !important;
+          border: 1px solid rgba(255,255,255,0.1);
+          color: #ffffff !important;
         }
         
         .form-control:focus, .form-select:focus {
           border-color: rgba(79, 70, 229, 0.5) !important;
           box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+          background-color: rgba(0,0,0,0.4) !important;
         }
         
+        .form-control::placeholder {
+          color: rgba(255,255,255,0.3) !important;
+        }
+
         .min-w-0 {
           min-width: 0;
+        }
+
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.75rem !important;
+          }
+          .gap-1 {
+            gap: 0.25rem !important;
+          }
+          .btn {
+            padding: 0.15rem 0.3rem !important;
+          }
+          .badge {
+            padding: 0.1rem 0.3rem !important;
+          }
+          .rounded-3 {
+            border-radius: 8px !important;
+          }
+          .rounded-md-4 {
+            border-radius: 10px !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
+          .card-body {
+            padding: 1rem !important;
+          }
         }
         
         ::-webkit-scrollbar {
